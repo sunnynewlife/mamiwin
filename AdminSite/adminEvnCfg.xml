@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LunaConfigMagt name="LUNA 配置设置">
+	<array key="AppSection" name="应用相关配置">
+            <string key="resource_version" value="20140509001" name="静态资源时间戳"/>
+            <string key="static_domain" value="http://magt.centre.sdo.com/static/" name="静态资源root路径" />
+			
+			<string key="FApp_game_domain" value="http://res.f.sdo.com/static/upload/game_img/" name="游戏图片静态资源root路径" />
+			<string key="FApp_game_pic_path" value="/opt/app/magt.centre.sdo.com/upload/res_f/game_img" name="图片存储路径"/>
+			<string key="FApp_game_package_path" value="/opt/app/magt.centre.sdo.com/upload/res_f/game_version" name="游戏母包存放路径" /> 
+			<string key="FApp_game_packing_uuid" value="9cf18f8a-7628-11e4-b5e8-782bcb015e3f" name="游戏打包接口调用标识" /> 
+			<string key="FApp_game_packing_channel_id" value="G47" name="游戏打包Channel标识 FAppChannel" />
+			<string key="FApp_game_package_src_download" value="http://hjbres.sdoprofile.com/cdn/dsdk/game_package/" name="游戏打包Channel标识" />
+			<string key="FApp_game_packing_callback" value="http://res.f.sdo.com/fAppPackageReport/append" name="推广员打包回调地址" />
+			<string key="FApp_game_packing_callbackCdn" value="http://res.f.sdo.com/fAppPackageReport/appendCdn" name="推广员打包回调地址" />
+			
+			<string key="FApp_msg_ticket" value="ZmVuaG9uZ15fXjEwMDAwXl9eXl9ec05Pc2RtK1BtWTFqenA5emdqYkxoQT09"  name="接口访问凭据" />
+			<string key="FApp_msg_user"	value="fenhong" name="分红APP在消息系统接口访问UID" />
+			<string key="FApp_msg_AppID" value="10000" name="消息系统中分红APP的应用ID标识" />
+	</array>
+	<array key="LunaSection" name="LUNA SDK 配置">
+		<array key="LunaKafka" name="0.8X Kafka 访问配置">
+			<array key="global" name="全局配置">
+				<string key="hostInfo" value="pt-kfk-01.gg.sdodr.pri.sdo.com:9092,pt-kfk-02.gg.sdodr.pri.sdo.com:9092,pt-kfk-03.gg.sdodr.pri.sdo.com:9092" />
+				<string key="topic" value="NotifyService" />
+				<string key="readLength" value="200" />
+			</array>	
+			<array key="special" name="特殊队列参数重载配置">
+			</array>
+		</array>
+		<array key="KafkaQueue" name="消息服务Kafka访问配置">
+			<string key="host" value="10.129.43.98" />
+			<string key="port" value="9094" />
+			<string key="topic" value="NotifyService" />
+			<string key="reqired_ack" value="1" />
+			<string key="timeout" value="3000" />
+			<string key="max_bytes" value="262144" />
+			<string key="partition_ids" value="0"  name="多个id直接使用逗号分隔"/>
+			<array key="special" name="特殊队列参数重载配置">
+			</array>
+		</array>
+		<array key="Logger" name="logger 配置">
+			<string key="level" value="all" name="logger Level 值:info,notice,warning,debug,error,fatal,none,all" />
+			<string key="enableColorLog" value="false" />
+			<string key="logSiteId" value="admin.f.sdo.com" />
+			<array key="appender">
+				<string key="persist" value="luna_lib.log.UDPLogerPersist" />
+				<array key="param">
+					<string key="dir" value="/opt/logs/magt.centre.sdo.com" />
+					<string key="serverIp" value="10.158.26.92" />
+					<string key="serverPort" value="19519" />
+				</array>
+			</array>
+		</array>
+		<array key="Memcache" name="Memcache 配置">
+			<array key="global" name="全局配置">
+				<string key="prefixKey" value="_hjb_admin_f" name="Key前缀" />
+					<array key="host" name="Memcache 地址">
+						<array key="Host1">
+							<string key="ip" value="10.158.132.29" />
+							<string key="port" value="11099" />
+						</array>
+					</array>
+			</array>
+			<array key="special" name="特殊类重载配置">
+				<array key="TencentWx" name="腾讯公众号服务">
+					<string key="prefixKey" value="" name="Key前缀" />
+					<array key="host" name="Memcache 地址">
+						<array key="Host1">
+							<string key="ip" value="10.158.132.29" />
+							<string key="port" value="11099" />
+						</array>
+					</array>
+				</array>
+			</array>
+		</array>
+		<array key="Pdo" name="PDO MySQL 数据库访问配置">
+			<array key="global" name="全局配置">
+				<string key="dsn" value="mysql:host=10.126.7.66;port=3306;dbname=magtAdmin" />
+				<string key="user" value="magtuser" />
+				<string key="pass" value="magt1#3*7xt" />
+			</array>
+			<array key="special" name="特殊类重载配置">
+				<array key="FHDatabase" name="分红数据库">
+					<string key="dsn" value="mysql:host=10.126.7.66;port=3306;dbname=mobilefh" />
+					<string key="user" value="mobilefh" />
+					<string key="pass" value="4e27885189e0b389ba7752aa8cb0f9ca" />
+				</array>
+				<array key="LunaLog" name="Luna日志数据库">
+					<string key="dsn" value="mysql:host=10.126.7.66;port=3306;dbname=LunaLog" />
+					<string key="user" value="lunalog" />
+					<string key="pass" value="c9f398b039ce6a1a9777a89014e981a6" />
+				</array>
+			</array>
+		</array>
+		<array key="LunaCfg" name="配置管理设置">
+			<string key="editAcl" value="127.0.0.1,61.172.240.227,10.240.39.26" />
+			<string key="syncAcl" value="127.0.0.1,10.128.26.41,10.128.26.42,10.128.26.43,10.128.26.44"/>
+			<array key="operatorAcl" name="配置登陆认证">
+				<string key="neil" value="c973c6d1eba9088ef3b7936f42f84daf" />
+			</array>
+			<string key="syncHost" value="10.240.39.26," />
+		</array>
+		<array key="HttpInterface" name="统一调用外部Http接口类定义">
+			<array key="WxPay" name="微信支付">
+				<string key="domain" value="https://api.mch.weixin.qq.com" />
+				<string key="needMd5Sign" value="false" />
+				<string key="signPwd" value="" />
+				<string key="signPosition" value="bottom" />
+				<string key="signParaName" value="sign"/>
+				<string key="signParamJoinChar" value="="/>
+				<string key="responseType" value="xml" />
+				<string key="method" value="POST" />
+				<array key="interface" name="">
+					<array key="SendRedEnvelope" name="发送红包">
+						<string key="url" value="mmpaymkttransfers/sendredpack" />
+					</array>
+					<array key="QueryRedEnvelope" name="查询红包状态">
+						<string key="url" value="mmpaymkttransfers/gethbinfo" />
+					</array>
+				</array>
+			</array>
+			<array key="Tencent" name="微信平台">
+				<string key="domain" value="https://api.weixin.qq.com" />
+				<string key="needMd5Sign" value="false" />
+				<string key="signPwd" value="" />
+				<string key="signPosition" value="bottom" />
+				<string key="signParaName" value="sign"/>
+				<string key="signParamJoinChar" value="="/>
+				<string key="responseType" value="json" />
+				<string key="method" value="GET" />
+				<array key="interface" name="">
+					<array key="AccessToken" name="后台服务访问微信接口凭证">
+						<string key="url" value="cgi-bin/token" />
+					</array>
+					<array key="MenuGet" name="查询自定义菜单接口">
+						<string key="url" value="cgi-bin/menu/get" />
+					</array>
+					<array key="MenuDel" name="删除自定义菜单接口">
+						<string key="url" value="cgi-bin/menu/delete" />
+					</array>
+					<array key="MenuCreate" name="创建自定义菜单接口">
+						<string key="url" value="cgi-bin/menu/create" />
+						<string key="method" value="POST" />
+					</array>	
+					<array key="NotifyMsg" name="向用户推送消息">
+						<string key="method" value="POST" />
+						<string key="url" value="cgi-bin/message/template/send" />
+					</array>
+				</array>
+			</array>
+			<array key="PackingSystem" name="游戏打包平台">
+				<string key="domain" value="http://116.211.21.52" />
+				<string key="needMd5Sign" value="false" />
+				<string key="signPwd" value="" />
+				<string key="signPosition" value="bottom" />
+				<string key="signParaName" value="sign"/>
+				<string key="signParamJoinChar" value="="/>
+				<string key="responseType" value="json" />
+				<string key="method" value="POST" />
+				<array key="interface" name="">
+					<array key="RegisterGame" name="注册打包游戏">
+						<string key="url" value="package/registerGame" />						
+					</array>
+					<array key="CreateTask" name="注册打包游戏版本">
+						<string key="url" value="package/createTask" />						
+					</array>
+					<array key="CreatePromoterPackage" name="生成推广员包">
+						<string key="url" value="misc/createPromoterTask" />						
+					</array>
+					<array key="QueryPromoterTask" name="查询推广员包">
+						<string key="url" value="misc/queryPromoterTask" />						
+					</array>
+					<array key="DeletePromoterTask" name="删除推广员包">
+						<string key="url" value="misc/deletePromoterTask" />						
+					</array>
+				</array>
+			</array>
+			<array key="MessageSystem" name="消息平台">
+				<string key="domain" value="http://10.158.24.53:9875" />
+				<string key="needMd5Sign" value="true" />
+				<string key="signPwd" value="d608%ej@$^2h1g4bf3*#" />
+				<string key="signPosition" value="bottom" />
+				<string key="signParaName" value="signature"/>
+				<string key="signParamJoinChar" value="="/>
+				<string key="signSplitChar"	value="&amp;" />
+				<string key="responseType" value="json" />
+				<string key="method" value="GET" />
+				<array key="interface" name="">
+					<array key="ApiPool" name="消息相关接口">
+						<string key="url" value="apipool" />						
+					</array>
+				</array>
+			</array>
+			
+			<array key="SmsSubmit" name="短信下发">
+				<string key="domain" value="http://open-hps.sdo.com" />
+				<string key="needMd5Sign" value="true" />
+				<string key="signPwd" value="238e1f2954530182000000080758cba0" />
+				<string key="signPosition" value="bottom" />
+				<string key="signParaName" value="signature"/>
+				<string key="signParamJoinChar" value="="/>
+				<string key="responseType" value="json" />
+				<string key="signSplitChar"	value="" />
+				<string key="method" value="GET" />
+				<string key="logBeforeMd5String" value="true" />
+				<array key="interface" name="">
+					<array key="FHSubmit" name="分红下发短信">
+						<string key="url" value="smg/mt/templateSubmit" />	
+						<array key="parameter">
+							<string key="templateId" value="10003314" />
+							<string key="pid" value="200000002081" />
+							<string key="client_id" value="991002416" />
+							<string key="merchant_name" value="991002416_587" />
+							<string key="signature_method" value="MD5" />
+						</array>					
+					</array>
+					<array key="FHTransSuccess" name="提现转账到账短信">
+						<string key="url" value="smg/mt/templateSubmit" />	
+						<array key="parameter">
+							<string key="templateId" value="10003341" />
+							<string key="pid" value="200000002081" />
+							<string key="client_id" value="991002416" />
+							<string key="merchant_name" value="991002416_587" />
+							<string key="signature_method" value="MD5" />
+						</array>					
+					</array>
+					<array key="FHTransFail" name="提现转账退回短信">
+						<string key="url" value="smg/mt/templateSubmit" />	
+						<array key="parameter">
+							<string key="templateId" value="10003342" />
+							<string key="pid" value="200000002081" />
+							<string key="client_id" value="991002416" />
+							<string key="merchant_name" value="991002416_587" />
+							<string key="signature_method" value="MD5" />
+						</array>					
+					</array>
+					<array key="FHApproveFail" name="提现审核退回短信">
+						<string key="url" value="smg/mt/templateSubmit" />	
+						<array key="parameter">
+							<string key="templateId" value="10003343" />
+							<string key="pid" value="200000002081" />
+							<string key="client_id" value="991002416" />
+							<string key="merchant_name" value="991002416_587" />
+							<string key="signature_method" value="MD5" />
+						</array>					
+					</array>
+					<array key="FHPayReturnMsg" name="退款收益收回短信">
+						<string key="url" value="smg/mt/templateSubmit" />	
+						<array key="parameter">
+							<string key="templateId" value="10003405" />
+							<string key="pid" value="200000002081" />
+							<string key="client_id" value="991002416" />
+							<string key="merchant_name" value="991002416_587" />
+							<string key="signature_method" value="MD5" />
+						</array>					
+					</array>										
+				</array>
+			</array>				
+		</array>
+	</array>
+</LunaConfigMagt>

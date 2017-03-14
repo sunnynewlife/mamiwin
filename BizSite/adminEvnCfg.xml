@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LunaConfigMagt name="LUNA 配置设置">
+	<array key="AppSection" name="应用相关配置">
+            <string key="resource_version" value="20140509001" name="静态资源时间戳"/>
+			<string key="share_host" value="http://api.f.sdo.com/s/" />
+			<string key="FApp_game_domain" value="http://res.f.sdo.com/static/upload/game_img/" name="游戏图片静态资源root路径" />
+			<string key="showDevelopingMenu" value="true" name="显示开发中的菜单" />
+			<string key="shownMenuAcl" value="18717927823,18717745314,13917884798,17002101718,18001877247,15172054835,17091266263,13916354020,13361832763,15618730671,15201807063,13611819858,18601740878,15900828187,13681963696,13917786428,13916024624,18019176632" name="菜单显示白名单" />
+	</array>
+	<array key="LunaSection" name="LUNA SDK 配置">
+		<array key="CodeProfile" name="优化代码访问">
+			<string key="defaultClass" value="FAppData" />
+			<array key="profileMethods" name="优化方法的定义">
+				<array key="FAppData" name="方法值缓存">
+					<string key="getSystemConfigItem" value="getSystemConfigItem" />
+					<string key="getQ_MicroPlayerByOpenId" value="getQ_MicroPlayerByOpenId" />
+				</array>
+			</array>
+		</array>
+		<array key="Logger" name="logger 配置">
+			<string key="level" value="all" name="logger Level 值:info,notice,warning,debug,error,fatal,none,all" />
+			<string key="enableColorLog" value="false" />
+			<string key="logSiteId" value="dd.f.sdo.com" />
+			<array key="appender">
+				<string key="persist" value="luna_lib.log.YIILogerDbPersist" />
+				<array key="param">
+					<string key="db_dir" value="/opt/logs/dd.f.sdo.com" />
+					<string key="db_serverIp" value="10.158.26.92" />
+					<string key="db_serverPort" value="19520" />
+				
+					<string key="dir" value="/opt/logs/dd.f.sdo.com" />
+					<string key="serverIp" value="10.158.26.92" />
+					<string key="serverPort" value="19519" />
+					
+					<string key="db_name" value="LunaLog" name="日志库名"	/>
+					<string key="persist_type" value="udp" name="日志入库文本存放位置:file 本机 db_dir 配置项位置，udp 发到 db_serverIp, db_serverPort 定义的服务器" />
+					<string key="non_db" value="udp" name="是否保持日志非入库格式: off 不需要,file 保持本机 dir 配置项位置, udp 保存 serverIp serverPort 定义的服务器" />
+					
+				</array>
+			</array>
+		</array>
+		<array key="HpsClient" name="HpsClient 配置">
+			<array key="global" name="全局配置">
+				<string key="domain" value="http://hps.sdo.com" />
+				<string key="appid"	value="10003187" />
+				<string key="areaid" value="-1" />
+				<string key="user" value="2_293_1080" />
+				<string key="sign_pwd" value="|S+9$9$TBv3t&amp;o]d" />
+			</array>
+			<array key="special" name="特殊类重载配置">
+			</array>
+		</array>
+		<array key="Memcache" name="Memcache 配置">
+			<array key="global" name="全局配置">
+				<string key="prefixKey" value="_hjb.dd.f_" name="Key前缀" />
+					<array key="host" name="Memcache 地址">
+						<array key="Host1">
+							<string key="ip" value="10.158.132.29" />
+							<string key="port" value="11099" />
+						</array>
+					</array>
+			</array>
+			<array key="special" name="特殊类重载配置">
+				<array key="TencentWx" name="腾讯公众号服务">
+					<string key="prefixKey" value="" name="Key前缀" />
+					<array key="host" name="Memcache 地址">
+						<array key="Host1">
+							<string key="ip" value="10.158.132.29" />
+							<string key="port" value="11099" />
+						</array>
+					</array>
+				</array>
+			</array>
+		</array>
+		<array key="Pdo" name="PDO MySQL 数据库访问配置">
+			<array key="global" name="全局配置">
+				<string key="dsn" value="mysql:host=10.126.7.66;port=3306;dbname=mobilefh" />
+				<string key="user" value="mobilefh" />
+				<string key="pass" value="4e27885189e0b389ba7752aa8cb0f9ca" />
+			</array>
+			<array key="special" name="特殊类重载配置">
+				<array key="FHDatabase" name="分红数据库">
+					<string key="dsn" value="mysql:host=10.126.7.66;port=3306;dbname=mobilefh" />
+					<string key="user" value="mobilefh" />
+					<string key="pass" value="4e27885189e0b389ba7752aa8cb0f9ca" />
+				</array>
+			</array>
+		</array>
+		<array key="LunaCfg" name="配置管理设置">
+			<string key="editAcl" value="127.0.0.1,61.172.240.227,10.240.39.26" />
+			<string key="syncAcl" value="127.0.0.1,10.128.26.41,10.128.26.42,10.128.26.43,10.128.26.44"/>
+			<array key="operatorAcl" name="配置登陆认证">
+				<string key="neil" value="c973c6d1eba9088ef3b7936f42f84daf" />
+			</array>
+			<string key="syncHost" value="10.240.39.26," />
+		</array>
+
+		<array key="HttpInterface" name="统一调用外部Http接口类定义">
+			<array key="Tencent" name="微信平台">
+				<string key="domain" value="https://api.weixin.qq.com" />
+				<string key="needMd5Sign" value="false" />
+				<string key="signPwd" value="" />
+				<string key="signPosition" value="bottom" />
+				<string key="signParaName" value="sign"/>
+				<string key="signParamJoinChar" value="="/>
+				<string key="responseType" value="json" />
+				<string key="method" value="GET" />
+				<array key="interface" name="">
+					<array key="PageAccessToken" name="网页授权access_token">
+						<string key="url" value="sns/oauth2/access_token" />
+					</array>
+					<array key="AccessToken" name="后台服务访问微信接口凭证">
+						<string key="url" value="cgi-bin/token" />
+					</array>
+					<array key="JSApiTicket" name="获取JS访问接口票据">
+						<string key="url" value="cgi-bin/ticket/getticket" />
+					</array>
+					<array key="NotifyMsg" name="向用户推送消息">
+						<string key="method" value="POST" />
+						<string key="url" value="cgi-bin/message/template/send" />
+					</array>
+				</array>
+			</array>
+		</array>
+	</array>
+</LunaConfigMagt>
