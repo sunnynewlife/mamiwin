@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LunaConfigMagt name="LUNA 配置设置">
+	<array key="AppSection" name="应用相关配置">
+            <string key="resource_version" value="20140509001" name="静态资源时间戳"/>
+	</array>
+	
+	<array key="LunaSection" name="LUNA SDK 配置">
+		<array key="Logger" name="logger 配置">
+			<string key="level" value="all" name="logger Level 值:info,notice,warning,debug,error,fatal,none,all" />
+			<string key="enableColorLog" value="false" />
+			<string key="logSiteId" value="admin.home.com" />
+			<array key="appender">
+				<string key="persist" value="lib.log.YIILogerPersist" />
+				<array key="param">
+					<string key="dir" value="/Xulong/opt/logs/admin.home.com" />
+				</array>
+			</array>
+		</array>
+		<array key="Memcache" name="Memcache 配置">
+			<array key="global" name="全局配置">
+				<string key="prefixKey" value="_Admin_" name="Key前缀" />
+				<array key="host" name="Memcache 地址">
+					<array key="Host1">
+						<string key="ip" value="127.0.0.1" />
+						<string key="port" value="11211" />
+					</array>
+				</array>
+			</array>
+		</array>
+		<array key="Pdo" name="PDO MySQL 数据库访问配置">
+			<array key="global" name="全局配置">
+				<string key="dsn" value="mysql:host=127.0.0.1;port=3306;dbname=magtadmin" />
+				<string key="user" value="neil" />
+				<string key="pass" value="homework123" />
+			</array>
+			<array key="special" name="特殊类重载配置">
+				<array key="Admin" name="Admin用户和菜单管理">
+					<string key="dsn" value="mysql:host=127.0.0.1;port=3306;dbname=magtadmin" />
+				</array>
+				<array key="BizDatabase" name="业务数据库">
+					<string key="dsn" value="mysql:host=127.0.0.1;port=3306;dbname=biz_info" />
+				</array>
+				<array key="LunaLog" name="网站日志数据库">
+					<string key="dsn" value="mysql:host=127.0.0.1;port=3306;dbname=lunalog" />
+				</array>			
+			</array>
+		</array>
+		<array key="LunaCfg" name="配置管理设置">
+			<string key="editAcl" value="127.0.0.1,61.172.240.227,10.240.39.26" />
+			<string key="syncAcl" value="127.0.0.1,10.128.26.41,10.128.26.42,10.128.26.43,10.128.26.44"/>
+			<array key="operatorAcl" name="配置登陆认证">
+				<string key="neil" value="c973c6d1eba9088ef3b7936f42f84daf" />
+			</array>
+			<string key="syncHost" value="10.240.39.26," />
+		</array>
+		<array key="HttpInterface" name="统一调用外部Http接口类定义">
+			<array key="WxPay" name="微信支付">
+				<string key="domain" value="https://api.mch.weixin.qq.com" />
+				<string key="needMd5Sign" value="false" />
+				<string key="signPwd" value="" />
+				<string key="signPosition" value="bottom" />
+				<string key="signParaName" value="sign"/>
+				<string key="signParamJoinChar" value="="/>
+				<string key="responseType" value="xml" />
+				<string key="method" value="POST" />
+				<array key="interface" name="">
+					<array key="SendRedEnvelope" name="发送红包">
+						<string key="url" value="mmpaymkttransfers/sendredpack" />
+					</array>
+					<array key="QueryRedEnvelope" name="查询红包状态">
+						<string key="url" value="mmpaymkttransfers/gethbinfo" />
+					</array>
+				</array>
+			</array>
+			<array key="Tencent" name="微信平台">
+				<string key="domain" value="https://api.weixin.qq.com" />
+				<string key="needMd5Sign" value="false" />
+				<string key="signPwd" value="" />
+				<string key="signPosition" value="bottom" />
+				<string key="signParaName" value="sign"/>
+				<string key="signParamJoinChar" value="="/>
+				<string key="responseType" value="json" />
+				<string key="method" value="GET" />
+				<array key="interface" name="">
+					<array key="AccessToken" name="后台服务访问微信接口凭证">
+						<string key="url" value="cgi-bin/token" />
+					</array>
+					<array key="MenuGet" name="查询自定义菜单接口">
+						<string key="url" value="cgi-bin/menu/get" />
+					</array>
+					<array key="MenuDel" name="删除自定义菜单接口">
+						<string key="url" value="cgi-bin/menu/delete" />
+					</array>
+					<array key="MenuCreate" name="创建自定义菜单接口">
+						<string key="url" value="cgi-bin/menu/create" />
+						<string key="method" value="POST" />
+					</array>
+					<array key="NotifyMsg" name="向用户推送消息">
+						<string key="method" value="POST" />
+						<string key="url" value="cgi-bin/message/template/send" />
+					</array>
+				</array>
+			</array>	
+		</array>
+	</array>
+</LunaConfigMagt>
