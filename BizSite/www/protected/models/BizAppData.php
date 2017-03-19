@@ -31,4 +31,15 @@ class BizAppData
 		return (LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params)>0);		
 	}
 
+	public function  getMaterialInfoByDownloadId($downloadId,$Return_File_Content=false)
+	{
+		$sql="select File_Title,File_Type,Mime_Type,Original_Name,File_Size from Material_Files where Download_Id=?";
+		if($Return_File_Content){
+			$sql="select File_Title,File_Type,Mime_Type,Original_Name,File_Size,File_Content from Material_Files where Download_Id=?";
+		}
+		$params=array($downloadId);
+		$Material_info=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
+		return (isset($Material_info) && is_array($Material_info) && count($Material_info)>0)?$Material_info:array();
+	}
+	
 }

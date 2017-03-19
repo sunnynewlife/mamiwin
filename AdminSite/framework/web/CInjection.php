@@ -32,7 +32,7 @@ class CInjection
 		$this->CheckUploadFiles();
 	}
 	
-	private $_UPLOAD_FILE_EXTENSION_NAME=array("jpg","JPG","png","PNG","gif","GIF","bmp","BMP","jpeg","JPEG","tif","TIF");
+	private $_UPLOAD_FILE_EXTENSION_NAME=array("jpg","JPG","png","PNG","gif","GIF","bmp","BMP","jpeg","JPEG","tif","TIF","zip","7z","doc","pdf");
 	
 	private function CheckUploadFiles()
 	{

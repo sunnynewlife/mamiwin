@@ -8,6 +8,8 @@
 			<string key="developPhone" value="13014886840" name="开发环境模拟微信OpenId绑定的手机" />
 			<string key="showDevelopingMenu" value="true" name="显示开发中的菜单" />
 			<string key="shownMenuAcl" value="13014886840" name="菜单显示白名单" />
+			
+			<string key="Material_Root" value="/Xulong/homework/mamiwin/BizSite/www/static/material"  />
 	</array>
 	<array key="LunaSection" name="LUNA SDK 配置">
 		<array key="Logger" name="logger 配置">
