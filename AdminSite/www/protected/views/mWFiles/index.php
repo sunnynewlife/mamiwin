@@ -38,6 +38,7 @@
 				<tr>
 					<th width="60px;">素材ID</th>
 					<th width="40px;">类型</th>
+					<th width="90px;">位置</th>
 					<th>内容标题</th>
 					<th width="140px;">原始文件名称</th>
 					<th width="80px;">文件大小</th>
@@ -49,6 +50,7 @@
 			<?php
 $rowsHtmlTag=<<<EndOfRowTag
 <tr>
+	<td>%s</td>
 	<td>%s</td>
 	<td>%s</td>
 	<td>%s</td>
@@ -70,6 +72,7 @@ EndOfRowTag;
 				echo sprintf($rowsHtmlTag,
 					$item["IDX"],
 					DictionaryData::Material_Files_File_Type[$item["File_Type"]],
+					DictionaryData::Material_Files_Location_Type[$item["Location_Type"]],
 					$title,
 					$item["Original_Name"],
 					$item["File_Size"],

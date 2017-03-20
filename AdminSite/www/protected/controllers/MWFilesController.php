@@ -100,34 +100,76 @@ class MWFilesController extends TableMagtController
 		}
 		$this->renderData[$this->_tableName]=$rowData;
 		$submit = trim(Yii::app()->request->getParam('submit',0));
+		$mwData=new MWData();
 		if($submit){
 			$File_Type =Yii::app()->request->getParam("File_Type","1");
 			$File_Title=Yii::app()->request->getParam("File_Title","");
+			$Location_Type=Yii::app()->request->getParam("Location_Type","1");			
 			if(empty($File_Title)){
 				$this->alert('error',"请输入文件内容标题");
 			}else{
-				$mwData=new MWData();
-				$files=$_FILES["File_Content"];
-				if(isset($files["error"]) && $files["error"]==0){
-					$File_Name=$files["name"];
-					$Mime_Type=$files["type"];
-					$File_Size=$files["size"];
-					$File_Path=$files["tmp_name"];
-					$Download_Id=CGuidManager::GetFullGuid();
-						
-					$File_Content = fread(fopen($files["tmp_name"], "r"), $File_Size);
-				
-					if($mwData->updateMaterial_Files_All($File_Title, $File_Type,$Mime_Type,$File_Name,$File_Size, $Download_Id, $File_Content,$value)>0){
-						return $this->exitWithSuccess(sprintf("修改%s成功",$this->_title),$this->_next_url);
-					}
+				$bParameterReady=false;
+				$bUpdateFileContent=false;
+				switch ($Location_Type){
+					case "1":
+						$Mime_Type="text/html";
+						$File_Name="";
+						$File_Content=Yii::app()->request->getParam("Article_Content","");
+						if(empty($File_Content)==false){
+							$File_Size=strlen($File_Content);
+							$bParameterReady=true;
+							$bUpdateFileContent=true;
+						}
+						break;
+					case "2":
+						$bParameterReady=true;
+						if(isset($_FILES["File_Content"])){
+							$files=$_FILES["File_Content"];
+							if(isset($files["error"]) && $files["error"]==0){
+								$File_Name=$files["name"];
+								$Mime_Type=$files["type"];
+								$File_Size=$files["size"];
+								$File_Path=$files["tmp_name"];
+								$File_Content = fread(fopen($files["tmp_name"], "r"), $File_Size);
+								$bUpdateFileContent=true;
+							}
+						}
+						break;
+					case "3":
+						$Mime_Type="application/octet-stream";
+						$File_Name="";
+						$File_Content=Yii::app()->request->getParam("File_Content_URL","");
+						if(empty($File_Content)==false){
+							$File_Size=strlen($File_Content);
+							$bParameterReady=true;
+							$bUpdateFileContent=true;
+						}
+						break;
+					default:
+						break;
 				}
-				else{
-					if($mwData->updateMaterial_Files($File_Title, $File_Type,$value)>0){
-						return $this->exitWithSuccess(sprintf("修改%s成功",$this->_title),$this->_next_url);
+				if($bParameterReady){
+					$Download_Id=CGuidManager::GetFullGuid();
+					if($bUpdateFileContent){
+						if($mwData->updateMaterial_Files_All($File_Title, $File_Type,$Location_Type,$Mime_Type,$File_Name,$File_Size, $Download_Id, $File_Content,$value)>0){
+							return $this->exitWithSuccess(sprintf("修改%s成功",$this->_title),$this->_next_url);
+						}
+					}else{
+						if($mwData->updateMaterial_Files($File_Title, $File_Type,$value)>0){
+							return $this->exitWithSuccess(sprintf("修改%s成功",$this->_title),$this->_next_url);
+						}
 					}
+					
 				}
 				$this->alert('error',sprintf("修改%s失败",$this->_title));
-			}	
+			}
+		}
+		$this->renderData["Material_Content"]="";
+		if($rowData["Location_Type"]==1|| $rowData["Location_Type"]==3){
+			$Material_Content_Info=$mwData->getMaterialInfoByIDX($value);
+			if(count($Material_Content_Info)>0){
+				$this->renderData["Material_Content"]=$Material_Content_Info[0]["File_Content"];
+			}
 		}
 		$this->render("modify",$this->renderData);
 	}

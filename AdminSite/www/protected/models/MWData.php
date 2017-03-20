@@ -23,11 +23,18 @@ class MWData
 		return LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params);
 	}
 	
-	public function updateMaterial_Files_All($File_Title,$File_Type,$Mime_Type,$Original_Name,$File_Size,$Download_Id,$File_Content,$IDX)
+	public function updateMaterial_Files_All($File_Title,$File_Type,$Location_Type,$Mime_Type,$Original_Name,$File_Size,$Download_Id,$File_Content,$IDX)
 	{
-		$sql="update Material_Files set File_Title=?,File_Type=?,Mime_Type=?,Original_Name=?,File_Size=?,Download_Id=?,File_Content=?,Update_Time=now() where IDX=?";
-		$params=array($File_Title,$File_Type,$Mime_Type,$Original_Name,$File_Size,$Download_Id,$File_Content,$IDX);
+		$sql="update Material_Files set File_Title=?,File_Type=?,Location_Type=?,Mime_Type=?,Original_Name=?,File_Size=?,Download_Id=?,File_Content=?,Update_Time=now() where IDX=?";
+		$params=array($File_Title,$File_Type,$Location_Type,$Mime_Type,$Original_Name,$File_Size,$Download_Id,$File_Content,$IDX);
 		return LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params);
 	}
 	
+	public function  getMaterialInfoByIDX($IDX)
+	{
+		$sql="select File_Content from Material_Files where IDX=?";
+		$params=array($IDX);
+		$Material_info=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
+		return (isset($Material_info) && is_array($Material_info) && count($Material_info)>0)?$Material_info:array();
+	}
 }

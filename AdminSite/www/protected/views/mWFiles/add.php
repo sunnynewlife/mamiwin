@@ -27,8 +27,8 @@
 				</select>						
 				<label>文件存储</label> 
 				<select name="Location_Type" onchange="javascript:locationTypeChange();" id="Location_Type">
-					<option value="1">本站点文本</option>
-					<option value="2">本站点非文本文件</option>
+					<option value="1">站点内文本</option>
+					<option value="2">站点内二进制文件</option>
 					<option value="3">外站点URL</option>								
 				</select>	
 				
