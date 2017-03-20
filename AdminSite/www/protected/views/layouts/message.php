@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>首页 - 管理后台 - SDG Game Event Platform Management</title>
+	<title>首页 - 管理后台 - Homework Platform Management</title>
 	<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="">
@@ -53,7 +53,7 @@
 			<ul class="nav pull-right">
 			</ul>
 			<a class="brand" href="/"><span class="first"></span> <span
-				class="second">SDG Game Event Platform Management</span></a>
+				class="second">Homework Platform Management</span></a>
 		</div>
 	</div>
 	<div>
@@ -77,7 +77,7 @@
 					<footer>
 						<hr>
 						<p class="pull-right">
-							<a href="#" target="_blank">SDG Game Event Platform Management.</a> Power By <a href="#" target="_blank">LUNA SDK</a>&copy; 2014							
+							<a href="#" target="_blank">Homework Platform Management.</a> Power By <a href="#" target="_blank">LUNA SDK</a>&copy; 2014							
 						</p>
 					</footer>
 				</div>

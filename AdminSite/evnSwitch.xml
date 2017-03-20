@@ -8,8 +8,8 @@
 				<string key="ip" value="192.168.18.74,192.168.18.64,192.168.1.7" />
 			</array>
 			<array key="adminEvnCfg-dev-neil.xml" name="开发环境">
-				<string key="hostName" value="Home-Neil" />
-				<string key="ip" value="172.27.23.2" />
+				<string key="hostName" value="HOME" />
+				<string key="ip" value="172.27.23.2,192.168.11" />
 			</array>			
 		</array>
 	</array>

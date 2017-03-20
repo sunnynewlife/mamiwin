@@ -16,6 +16,45 @@ class SiteController extends CController
 	public function init()
 	{
 	}
+	//资料文件下载
+	public function actionDownload()
+	{
+		$download_id=Yii::app()->request->getParam('id',"");
+		if(empty($download_id)==false){
+			$bizAppData= new BizAppData();
+			$Material_Info=$bizAppData->getMaterialInfoByDownloadId($download_id);
+			if(count($Material_Info)>0){
+				$appConfig=LunaConfigMagt::getInstance()->getAppConfig();
+				$file_path=$appConfig["Material_Root"]."/".$download_id;
+				$File_Content;
+				if(file_exists($file_path)==false){
+					$Material_Info=$bizAppData->getMaterialInfoByDownloadId($download_id,true);
+					if(count($Material_Info)>0){
+						if($material_file=fopen($file_path,"wb")){
+							$File_Content=$Material_Info[0]["File_Content"];
+							fwrite($material_file,$File_Content);
+							fclose($material_file);
+						}						
+					}
+				}else{
+					if($material_file=fopen($file_path,"rb")){
+						$File_Content=fread($material_file,$Material_Info[0]["File_Size"]);
+						fclose($material_file);
+					}
+				}
+				if(empty($File_Content)==false){
+					Header("Content-type:".$Material_Info[0]["Mime_Type"]);
+					Header("Accept-Ranges: bytes");
+					Header("Accept-Length: ".$Material_Info[0]["File_Size"]);
+					Header("Content-Disposition: attachment; filename=" . $Material_Info[0]["Original_Name"]);
+					echo $File_Content;
+					return ;					
+				}				
+			}
+		}
+		echo "I'm sorry,cannot find the $download_id resource.";
+	}
+	
 	
 	public function actionRegist()
 	{
