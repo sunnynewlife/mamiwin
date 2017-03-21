@@ -37,4 +37,63 @@ class MWData
 		$Material_info=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
 		return (isset($Material_info) && is_array($Material_info) && count($Material_info)>0)?$Material_info:array();
 	}
+	
+	public function getAbility_Type()
+	{
+		$sql="select * from  Ability_Type";
+		$params=array();
+		$Ability_Type=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
+		return (isset($Ability_Type) && is_array($Ability_Type) && count($Ability_Type)>0)?$Ability_Type:array();
+	}
+	
+	public function getMaterial_Files()
+	{
+		$sql="select * from  V_Material_Files";
+		$params=array();
+		$Material_Files=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
+		return (isset($Material_Files) && is_array($Material_Files) && count($Material_Files)>0)?$Material_Files:array();		
+	}
+	
+	public function insertTask_Material($Task_Type,$Task_Title,$Task_Status,$Min_Time,$Max_Time,$Min_Age,$Max_Age,$Child_Gender,$Parent_Gender,$Parent_Marriage,$Only_Children,$Matrial_IDX,$AbilityIds)
+	{
+		if(empty($Matrial_IDX)){
+			$sql="insert into Task_Material (Task_Type,Task_Title,Task_Status,Min_Time,Max_Time,Min_Age,Max_Age,Child_Gender,Parent_Gender,Parent_Marriage,Only_Children,Create_Time,Update_Time) values (?,?,?,?,?,?,?,?,?,?,?,now(),now())";
+			$params=array($Task_Type,$Task_Title,$Task_Status,$Min_Time,$Max_Time,$Min_Age,$Max_Age,$Child_Gender,$Parent_Gender,$Parent_Marriage,$Only_Children);
+		}else{
+			$sql="insert into Task_Material (Task_Type,Task_Title,Task_Status,Min_Time,Max_Time,Min_Age,Max_Age,Child_Gender,Parent_Gender,Parent_Marriage,Only_Children,Create_Time,Update_Time,Matrial_IDX) values (?,?,?,?,?,?,?,?,?,?,?,now(),now(),? )";
+			$params=array($Task_Type,$Task_Title,$Task_Status,$Min_Time,$Max_Time,$Min_Age,$Max_Age,$Child_Gender,$Parent_Gender,$Parent_Marriage,$Only_Children,$Matrial_IDX);
+		}
+		$pdo=LunaPdo::GetInstance($this->_PDO_NODE_NAME);
+		$pdo->beginTransaction();
+		if($pdo->exec_with_prepare($sql,$params)>0){
+			$Task_IDX=$pdo->lastInsertId();
+			foreach ($AbilityIds as $Ability_IDX){
+				$sql="insert into Task_Ability (Task_IDX,Ability_IDX,Create_Time,Update_Time) values (?,?,now(),now())";
+				$params=array($Task_IDX,$Ability_IDX);
+				$pdo->exec_with_prepare($sql,$params);
+			}
+			$pdo->commit(); 
+			return true;
+		}else{
+			$pdo->rollBack();
+		}
+		return false;
+	}
+	
+	public function getTask_Material($IDX)
+	{
+		$sql="select * from  Task_Material where IDX=?";
+		$params=array($IDX);
+		$Task_Material=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
+		return (isset($Task_Material) && is_array($Task_Material) && count($Task_Material)>0)?$Task_Material[0]:array();		
+	}
+	
+	public function getTask_Ability($TaskIDX)
+	{
+		$sql="select * from  Task_Ability where Task_IDX=?";
+		$params=array($TaskIDX);
+		$Task_Ability=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
+		return (isset($Task_Ability) && is_array($Task_Ability) && count($Task_Ability)>0)?$Task_Ability:array();		
+	}
+	
 }

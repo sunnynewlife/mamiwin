@@ -6,83 +6,77 @@
 	<div id="search" class="in collapse">
 		<form class="form_search"  method="POST" style="margin-bottom:0px">
 			<div style="float:left;margin-right:5px;margin-left:15px;margin-top:25px;">
-				<table class="tableApp" style="width:815px;">
+				<table class="tableApp">
 					<tr>
-						<td style="width:120px;">任务类型：</td>
-						<td>
+						<td style="width:100px;">任务类型</td>
+						<td style="width:250px;">
 							<select name="Task_Type">
-								<option value="">全部</option>
 								<option value="1">学习任务</option>
-								<option value="2">陪伴任务</option>							
-							</select>						
+								<option value="2">陪伴任务</option>
+							</select>
 						</td>
-						<td style="width:120px;">任务发布状态：</td>
+						<td style="width:100px;">学习时间</td>
 						<td>
-							<select name="Task_Status">
-								<option value="">全部</option>
-								<option value="0">未发布</option>
-								<option value="1">公开</option>
-								<option value="2">灰度</option>							
-							</select>						
+							<input type="text"  name="Min_Time" value="" class="input-xlarge"  autofocus="true"  style="width:50px;"/>
+							~
+							<input type="text"  name="Max_Time" value="" class="input-xlarge" autofocus="true" style="width:50px;" />
+							分钟
 						</td>
+						<td style="width:100px;">年龄段</td>
+						<td>
+							<input type="text" maxlength="50" name="Min_Age" value="" class="input-xlarge"  autofocus="true" style="width:50px;" />
+							~
+							<input type="text" maxlength="50" name="Max_Age" value="" class="input-xlarge" autofocus="true"  style="width:50px;"/>
+							岁
+						</td>	
 					</tr>
 					<tr>
-						<td style="width:120px;">学习所需时间：</td>
-						<td>
-							<input type='text'  name="Min_Time" />
-						</td>
-						<td colspan=2>
-							~<input type='text'  name="Max_Time" />
-						</td>
-					</tr>
-					<tr>
-						<td style="width:120px;">年龄范围：</td>
-						<td>
-							<input type='text'  name="Min_Age" />
-						</td>
-						<td colspan=2>
-							~<input type='text'  name="Max_Age" />
-						</td>
-					</tr>
-					<tr>
-						<td style="width:120px;">孩子性别：</td>
+						<td>孩子性别</td>
 						<td>
 							<select name="Child_Gender">
 								<option value="0">不限制</option>
 								<option value="1">女孩</option>
-								<option value="2">男孩</option>							
-							</select>						
+								<option value="2">男孩</option>
+							</select>
 						</td>
-						<td style="width:120px;">父母性别：</td>
-						<td>
-							<select name="Parent_Gender">
+						<td>父母性别</td>
+						<td><select name="Parent_Gender">
 								<option value="0">不限制</option>
 								<option value="1">母亲</option>
-								<option value="2">父亲</option>							
-							</select>						
+								<option value="2">父亲</option>
+							</select>
 						</td>
-					</tr>
-					<tr>
-						<td style="width:120px;">父母婚姻状况：</td>
+						<td>父母婚姻状况</td>
 						<td>
 							<select name="Parent_Marriage">
 								<option value="0">不限</option>
 								<option value="1">单亲</option>					
-							</select>						
-						</td>
-						<td style="width:120px;">是否独生：</td>
+							</select>
+						</td>						
+					</tr>
+					<tr>
+						<td>是否独生</td>
 						<td>
 							<select name="Only_Children">
 								<option value="0">不限</option>
 								<option value="1">独生小孩</option>
-							</select>						
+							</select>	
 						</td>
-					</tr>																					
+						<td >任务标题</td>
+						<td colspan=5>
+							<input type="text" maxlength="50" name="Task_Title" value="" class="input-xlarge"  autofocus="true" style="width:530px;" />
+						</td>											
+					</tr>
 					<tr>
-						<td style="width:120px;">任务标题：</td>
-						<td style="width:120px;"><input type='text'  name="Task_Title" /></td>
-						<td><button type="submit" class="btn btn-primary">查  询</button></td>
-						<td></td>
+						<td>任务状态</td>
+						<td>
+							<select name="Task_Status">
+								<option value="0">未发布</option>
+								<option value="1">公开</option>
+								<option value="2">灰度</option>
+							</select>	
+						</td>
+						<td colspan=4 ><button type="submit" class="btn btn-primary">查  询</button></td>																				
 					</tr>
 				</table>			
 				<input type="hidden" name="search" value="1" >
@@ -95,7 +89,6 @@
 			<thead>
 				<tr>
 					<th>任务ID</th>
-					<th>素材类型</th>
 					<th>任务类型</th>
 					<th>任务标题</th>
 					<th>学习时间</th>
@@ -104,7 +97,6 @@
 					<th>父母性别</th>
 					<th>婚姻状况</th>
 					<th>是否独生</th>
-					<th>培养能力类型</th>
 					<th width="80px">操作</th>
 				</tr>
 			</thead>
@@ -112,41 +104,48 @@
 			<?php
 $rowsHtmlTag=<<<EndOfRowTag
 <tr>
-	<td width="60px">%s</td>
-	<td width="220px">%s</td>
-	<td width="80px">%s</td>
-	<td width="150px">%s</td>
-	<td width="150px">%s</td>
-	<td width="40px;">
-		<a href="/fAppMsgHistory/modify?InformationId=%s" title="修改"><i class="icon-pencil"></i></a>&nbsp;
+	<td>%s</td>
+	<td>%s</td>
+	<td>%s</td>
+	<td>%s</td>
+	<td>%s</td>
+	<td>%s</td>
+	<td>%s</td>
+	<td>%s</td>
+	<td>%s</td>			
+	<td>
+		<a href="/mWMaterial/modify?IDX=%s" title="修改"><i class="icon-pencil"></i></a>&nbsp;
 		<a data-toggle="modal" href="#myModal" title="删除这条任务记录"><i class="icon-remove" href="/mWMaterial/del?IDX=%s"></i></a>
 	</td>
 <tr>
 EndOfRowTag;
-/*
+
 			$titleLen=20;
-			foreach ($MsgList as $item){
-				$title=$item["Title"];
+			foreach ($Task_Material as $item){
+				$title=$item["Task_Title"];
 				if(mb_strlen($title,"utf-8")>$titleLen){
 					$title=mb_substr($title, 0,$titleLen,"utf-8")."..";
 				}
 				echo sprintf($rowsHtmlTag,
-					$item["InformationId"],
+					$item["IDX"],
+					DictionaryData::Task_Material_Task_Type[$item["Task_Type"]],
 					$title,
-					(empty($item["PhoneListFileCounts"]) || $item["PhoneListFileCounts"]<1)?"未上传":$item["PhoneListFileCounts"],
-					$item["CreateDt"],
-					$item["ScheduleTime"],
-					$item["InformationId"],$item["InformationId"]
+					sprintf("%d-%d分钟",$item["Min_Time"],$item["Max_Time"]),
+					sprintf("%d-%d岁",$item["Min_Age"],$item["Max_Age"]),
+					DictionaryData::Task_Material_Child_Gender[$item["Child_Gender"]],
+					DictionaryData::Task_Material_Parent_Gender[$item["Parent_Gender"]],
+					DictionaryData::Task_Material_Parent_Marriage[$item["Parent_Marriage"]],
+					DictionaryData::Task_Material_Only_Children[$item["Only_Children"]],						
+					$item["IDX"],$item["IDX"]
 				);
 			}
-*/
+
 			?>
 			</tbody>
 		</table>
 	</div>
 </div>
 <script type="text/javascript">
-
 	$('.icon-remove').click(
 		function() 
 		{
