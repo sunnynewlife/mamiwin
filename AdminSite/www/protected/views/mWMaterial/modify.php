@@ -11,22 +11,22 @@
 						<td style="width:100px;">任务类型</td>
 						<td style="width:250px;">
 							<select name="Task_Type">
-								<option value="1">学习任务</option>
-								<option value="2">陪伴任务</option>
+								<option value="1" <?php echo $Task_Material["Task_Type"]==DictionaryData::Task_Material_Task_Type_Learn?"selected":"" ?>>学习任务</option>
+								<option value="2" <?php echo $Task_Material["Task_Type"]==DictionaryData::Task_Material_Task_Type_Accompany?"selected":"" ?>>陪伴任务</option>
 							</select>
 						</td>
 						<td style="width:100px;">学习时间</td>
 						<td>
-							<input type="text"  name="Min_Time" value="" class="input-xlarge" required="true" autofocus="true"  style="width:50px;"/>
+							<input type="text"  name="Min_Time" value="<?php echo $Task_Material["Min_Time"]?>" class="input-xlarge" required="true" autofocus="true"  style="width:50px;"/>
 							~
-							<input type="text"  name="Max_Time" value="" class="input-xlarge" required="true" autofocus="true" style="width:50px;" />
+							<input type="text"  name="Max_Time" value="<?php echo $Task_Material["Max_Time"]?>" class="input-xlarge" required="true" autofocus="true" style="width:50px;" />
 							分钟
 						</td>
 						<td style="width:100px;">年龄段</td>
 						<td>
-							<input type="text" maxlength="50" name="Min_Age" value="" class="input-xlarge" required="true" autofocus="true" style="width:50px;" />
+							<input type="text" maxlength="50" name="Min_Age" value="<?php echo $Task_Material["Min_Age"]?>" class="input-xlarge" required="true" autofocus="true" style="width:50px;" />
 							~
-							<input type="text" maxlength="50" name="Max_Age" value="" class="input-xlarge" required="true" autofocus="true"  style="width:50px;"/>
+							<input type="text" maxlength="50" name="Max_Age" value="<?php echo $Task_Material["Max_Age"]?>" class="input-xlarge" required="true" autofocus="true"  style="width:50px;"/>
 							岁
 						</td>	
 					</tr>
@@ -34,23 +34,23 @@
 						<td>孩子性别</td>
 						<td>
 							<select name="Child_Gender">
-								<option value="0">不限制</option>
-								<option value="1">女孩</option>
-								<option value="2">男孩</option>
+								<option value="0" <?php echo $Task_Material["Child_Gender"]==DictionaryData::Task_Material_Child_Gender_Unlimited?"selected":"" ?>>不限制</option>
+								<option value="1" <?php echo $Task_Material["Child_Gender"]==DictionaryData::Task_Material_Child_Gender_Girl?"selected":"" ?>>女孩</option>
+								<option value="2" <?php echo $Task_Material["Child_Gender"]==DictionaryData::Task_Material_Child_Gender_Boy?"selected":"" ?>>男孩</option>
 							</select>
 						</td>
 						<td>父母性别</td>
 						<td><select name="Parent_Gender">
-								<option value="0">不限制</option>
-								<option value="1">母亲</option>
-								<option value="2">父亲</option>
+								<option value="0" <?php echo $Task_Material["Parent_Gender"]==DictionaryData::Task_Material_Parent_Gender_Unlimited?"selected":"" ?>>不限制</option>
+								<option value="1" <?php echo $Task_Material["Parent_Gender"]==DictionaryData::Task_Material_Parent_Gender_Mother?"selected":"" ?>>母亲</option>
+								<option value="2" <?php echo $Task_Material["Parent_Gender"]==DictionaryData::Task_Material_Parent_Gender_Father?"selected":"" ?>>父亲</option>
 							</select>
 						</td>
 						<td>父母婚姻状况</td>
 						<td>
 							<select name="Parent_Marriage">
-								<option value="0">不限</option>
-								<option value="1">单亲</option>					
+								<option value="0" <?php echo $Task_Material["Parent_Marriage"]==DictionaryData::Task_Material_Parent_Marriage_Unlimited?"selected":"" ?>>不限</option>
+								<option value="1" <?php echo $Task_Material["Parent_Marriage"]==DictionaryData::Task_Material_Parent_Marriage_Single?"selected":"" ?>>单亲</option>					
 							</select>
 						</td>						
 					</tr>
@@ -58,13 +58,13 @@
 						<td>是否独生</td>
 						<td>
 							<select name="Only_Children">
-								<option value="0">不限</option>
-								<option value="1">独生小孩</option>
+								<option value="0" <?php echo $Task_Material["Only_Children"]==DictionaryData::Task_Material_Only_Children_Unlimited?"selected":"" ?>>不限</option>
+								<option value="1" <?php echo $Task_Material["Only_Children"]==DictionaryData::Task_Material_Only_Children_One?"selected":"" ?>>独生小孩</option>
 							</select>	
 						</td>
 						<td >任务标题</td>
 						<td colspan=5>
-							<input type="text" maxlength="50" name="Task_Title" value="" class="input-xlarge" required="true" autofocus="true" style="width:530px;" />
+							<input type="text" maxlength="50" name="Task_Title" value="<?php echo $Task_Material["Task_Title"]?>" class="input-xlarge" required="true" autofocus="true" style="width:530px;" />
 						</td>											
 					</tr>
 					<tr>
