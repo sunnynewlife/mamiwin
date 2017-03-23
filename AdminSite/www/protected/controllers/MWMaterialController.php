@@ -45,11 +45,11 @@ class MWMaterialController extends TableMagtController
 		
 		if ($submit){			
 			$Task_Type =Yii::app()->request->getParam("Task_Type","1");
-			$Task_Status=Yii::app()->request->getParam("Task_Status","0");
-			$Child_Gender=Yii::app()->request->getParam("Child_Gender","0");
-			$Parent_Gender=Yii::app()->request->getParam("Parent_Gender","0");
-			$Parent_Marriage=Yii::app()->request->getParam("Parent_Marriage","0");
-			$Only_Children=Yii::app()->request->getParam("Only_Children","0");
+			$Task_Status=Yii::app()->request->getParam("Task_Status","1");
+			$Child_Gender=Yii::app()->request->getParam("Child_Gender","1");
+			$Parent_Gender=Yii::app()->request->getParam("Parent_Gender","1");
+			$Parent_Marriage=Yii::app()->request->getParam("Parent_Marriage","1");
+			$Only_Children=Yii::app()->request->getParam("Only_Children","1");
 
 			$Matrial_IDX=Yii::app()->request->getParam("Matrial_IDX","");
 				
@@ -91,11 +91,11 @@ class MWMaterialController extends TableMagtController
 		
 		if ($submit){			
 			$Task_Type =Yii::app()->request->getParam("Task_Type","1");
-			$Task_Status=Yii::app()->request->getParam("Task_Status","0");
-			$Child_Gender=Yii::app()->request->getParam("Child_Gender","0");
-			$Parent_Gender=Yii::app()->request->getParam("Parent_Gender","0");
-			$Parent_Marriage=Yii::app()->request->getParam("Parent_Marriage","0");
-			$Only_Children=Yii::app()->request->getParam("Only_Children","0");
+			$Task_Status=Yii::app()->request->getParam("Task_Status","1");
+			$Child_Gender=Yii::app()->request->getParam("Child_Gender","1");
+			$Parent_Gender=Yii::app()->request->getParam("Parent_Gender","1");
+			$Parent_Marriage=Yii::app()->request->getParam("Parent_Marriage","1");
+			$Only_Children=Yii::app()->request->getParam("Only_Children","1");
 			
 			$Matrial_IDX=Yii::app()->request->getParam("Matrial_IDX","");
 			

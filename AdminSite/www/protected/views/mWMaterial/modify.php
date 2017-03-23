@@ -34,23 +34,23 @@
 						<td>孩子性别</td>
 						<td>
 							<select name="Child_Gender">
-								<option value="0" <?php echo $Task_Material["Child_Gender"]==DictionaryData::Task_Material_Child_Gender_Unlimited?"selected":"" ?>>不限制</option>
-								<option value="1" <?php echo $Task_Material["Child_Gender"]==DictionaryData::Task_Material_Child_Gender_Girl?"selected":"" ?>>女孩</option>
-								<option value="2" <?php echo $Task_Material["Child_Gender"]==DictionaryData::Task_Material_Child_Gender_Boy?"selected":"" ?>>男孩</option>
+								<option value="1" <?php echo $Task_Material["Child_Gender"]==DictionaryData::Task_Material_Child_Gender_Unlimited?"selected":"" ?>>不限制</option>
+								<option value="2" <?php echo $Task_Material["Child_Gender"]==DictionaryData::Task_Material_Child_Gender_Girl?"selected":"" ?>>女孩</option>
+								<option value="3" <?php echo $Task_Material["Child_Gender"]==DictionaryData::Task_Material_Child_Gender_Boy?"selected":"" ?>>男孩</option>
 							</select>
 						</td>
 						<td>父母性别</td>
 						<td><select name="Parent_Gender">
-								<option value="0" <?php echo $Task_Material["Parent_Gender"]==DictionaryData::Task_Material_Parent_Gender_Unlimited?"selected":"" ?>>不限制</option>
-								<option value="1" <?php echo $Task_Material["Parent_Gender"]==DictionaryData::Task_Material_Parent_Gender_Mother?"selected":"" ?>>母亲</option>
-								<option value="2" <?php echo $Task_Material["Parent_Gender"]==DictionaryData::Task_Material_Parent_Gender_Father?"selected":"" ?>>父亲</option>
+								<option value="1" <?php echo $Task_Material["Parent_Gender"]==DictionaryData::Task_Material_Parent_Gender_Unlimited?"selected":"" ?>>不限制</option>
+								<option value="2" <?php echo $Task_Material["Parent_Gender"]==DictionaryData::Task_Material_Parent_Gender_Mother?"selected":"" ?>>母亲</option>
+								<option value="3" <?php echo $Task_Material["Parent_Gender"]==DictionaryData::Task_Material_Parent_Gender_Father?"selected":"" ?>>父亲</option>
 							</select>
 						</td>
 						<td>父母婚姻状况</td>
 						<td>
 							<select name="Parent_Marriage">
-								<option value="0" <?php echo $Task_Material["Parent_Marriage"]==DictionaryData::Task_Material_Parent_Marriage_Unlimited?"selected":"" ?>>不限</option>
-								<option value="1" <?php echo $Task_Material["Parent_Marriage"]==DictionaryData::Task_Material_Parent_Marriage_Single?"selected":"" ?>>单亲</option>					
+								<option value="1" <?php echo $Task_Material["Parent_Marriage"]==DictionaryData::Task_Material_Parent_Marriage_Unlimited?"selected":"" ?>>不限</option>
+								<option value="2" <?php echo $Task_Material["Parent_Marriage"]==DictionaryData::Task_Material_Parent_Marriage_Single?"selected":"" ?>>单亲</option>					
 							</select>
 						</td>						
 					</tr>
@@ -58,8 +58,8 @@
 						<td>是否独生</td>
 						<td>
 							<select name="Only_Children">
-								<option value="0" <?php echo $Task_Material["Only_Children"]==DictionaryData::Task_Material_Only_Children_Unlimited?"selected":"" ?>>不限</option>
-								<option value="1" <?php echo $Task_Material["Only_Children"]==DictionaryData::Task_Material_Only_Children_One?"selected":"" ?>>独生小孩</option>
+								<option value="1" <?php echo $Task_Material["Only_Children"]==DictionaryData::Task_Material_Only_Children_Unlimited?"selected":"" ?>>不限</option>
+								<option value="2" <?php echo $Task_Material["Only_Children"]==DictionaryData::Task_Material_Only_Children_One?"selected":"" ?>>独生小孩</option>
 							</select>	
 						</td>
 						<td >任务标题</td>
@@ -82,9 +82,9 @@
 						<td>任务状态</td>
 						<td>
 							<select name="Task_Status">
-								<option value="0" <?php echo $Task_Material["Task_Status"]==DictionaryData::Task_Material_Task_Status_UnDeploy?"selected":"" ?>>未发布</option>
-								<option value="1" <?php echo $Task_Material["Task_Status"]==DictionaryData::Task_Material_Task_Status_Publish?"selected":"" ?>>公开</option>
-								<option value="2" <?php echo $Task_Material["Task_Status"]==DictionaryData::Task_Material_Task_Status_Test?"selected":"" ?>>灰度</option>
+								<option value="1" <?php echo $Task_Material["Task_Status"]==DictionaryData::Task_Material_Task_Status_UnDeploy?"selected":"" ?>>未发布</option>
+								<option value="2" <?php echo $Task_Material["Task_Status"]==DictionaryData::Task_Material_Task_Status_Publish?"selected":"" ?>>公开</option>
+								<option value="3" <?php echo $Task_Material["Task_Status"]==DictionaryData::Task_Material_Task_Status_Test?"selected":"" ?>>灰度</option>
 							</select>	
 						</td>								
 					</tr>

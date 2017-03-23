@@ -31,48 +31,48 @@ class DictionaryData {
 	const Task_Material_Task_Type_Accompany=2;
 	
 	const Task_Material_Child_Gender=array(
-			"0"		=>	"不限制",
-			"1"		=>	"女孩",
-			"2"		=>	"男孩",
+			"1"		=>	"不限制",
+			"2"		=>	"女孩",
+			"3"		=>	"男孩",
 	);
 	
-	const Task_Material_Child_Gender_Unlimited=0;
-	const Task_Material_Child_Gender_Girl=1;
-	const Task_Material_Child_Gender_Boy=2;
+	const Task_Material_Child_Gender_Unlimited=1;
+	const Task_Material_Child_Gender_Girl=2;
+	const Task_Material_Child_Gender_Boy=3;
 	
 	const Task_Material_Parent_Gender=array(
-			"0"		=>	"不限制",
-			"1"		=>	"母亲",
-			"2"		=>	"父亲",
+			"1"		=>	"不限制",
+			"2"		=>	"母亲",
+			"3"		=>	"父亲",
 	);
 
-	const Task_Material_Parent_Gender_Unlimited=0;
-	const Task_Material_Parent_Gender_Mother=1;
-	const Task_Material_Parent_Gender_Father=2;
+	const Task_Material_Parent_Gender_Unlimited=1;
+	const Task_Material_Parent_Gender_Mother=2;
+	const Task_Material_Parent_Gender_Father=3;
 	
 	const Task_Material_Parent_Marriage=array(
-			"0"		=>	"不限",
-			"1"		=>	"单亲",
+			"1"		=>	"不限",
+			"2"		=>	"单亲",
 	);
 	
-	const Task_Material_Parent_Marriage_Unlimited=0;
-	const Task_Material_Parent_Marriage_Single=1;
+	const Task_Material_Parent_Marriage_Unlimited=1;
+	const Task_Material_Parent_Marriage_Single=2;
 	
 	const Task_Material_Only_Children=array(
-			"0"		=>	"不限",
-			"1"		=>	"独生小孩",
+			"1"		=>	"不限",
+			"2"		=>	"独生小孩",
 	);
 	
-	const Task_Material_Only_Children_Unlimited=0;
-	const Task_Material_Only_Children_One=1;
+	const Task_Material_Only_Children_Unlimited=1;
+	const Task_Material_Only_Children_One=2;
 	
 	const Task_Material_Task_Status=array(
-			"0"		=>	"未发布",
-			"1"		=>	"公开",
-			"2"		=>	"灰度",
+			"1"		=>	"未发布",
+			"2"		=>	"公开",
+			"3"		=>	"灰度",
 	);	
-	const Task_Material_Task_Status_UnDeploy=0;
-	const Task_Material_Task_Status_Publish=1;
-	const Task_Material_Task_Status_Test=2;
+	const Task_Material_Task_Status_UnDeploy=1;
+	const Task_Material_Task_Status_Publish=2;
+	const Task_Material_Task_Status_Test=3;
 	
 }

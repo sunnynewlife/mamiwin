@@ -83,6 +83,7 @@ EndOfRowTag;
 			?>
 			</tbody>
 		</table>
+		<?php echo $page;?>
 	</div>
 </div>
 <script type="text/javascript">
