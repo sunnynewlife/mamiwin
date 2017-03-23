@@ -11,6 +11,7 @@
 						<td style="width:100px;">任务类型</td>
 						<td style="width:250px;">
 							<select name="Task_Type">
+								<option value="">所有</option>
 								<option value="1">学习任务</option>
 								<option value="2">陪伴任务</option>
 							</select>
@@ -34,23 +35,26 @@
 						<td>孩子性别</td>
 						<td>
 							<select name="Child_Gender">
-								<option value="0">不限制</option>
-								<option value="1">女孩</option>
-								<option value="2">男孩</option>
+								<option value="">所有</option>
+								<option value="1">不限制</option>
+								<option value="2">女孩</option>
+								<option value="3">男孩</option>
 							</select>
 						</td>
 						<td>父母性别</td>
 						<td><select name="Parent_Gender">
-								<option value="0">不限制</option>
-								<option value="1">母亲</option>
-								<option value="2">父亲</option>
+								<option value="">所有</option>
+								<option value="1">不限制</option>
+								<option value="2">母亲</option>
+								<option value="3">父亲</option>
 							</select>
 						</td>
 						<td>父母婚姻状况</td>
 						<td>
 							<select name="Parent_Marriage">
-								<option value="0">不限</option>
-								<option value="1">单亲</option>					
+								<option value="">所有</option>
+								<option value="1">不限</option>
+								<option value="2">单亲</option>					
 							</select>
 						</td>						
 					</tr>
@@ -58,8 +62,9 @@
 						<td>是否独生</td>
 						<td>
 							<select name="Only_Children">
-								<option value="0">不限</option>
-								<option value="1">独生小孩</option>
+								<option value="">所有</option>
+								<option value="1">不限</option>
+								<option value="2">独生小孩</option>
 							</select>	
 						</td>
 						<td >任务标题</td>
@@ -71,9 +76,10 @@
 						<td>任务状态</td>
 						<td>
 							<select name="Task_Status">
-								<option value="0">未发布</option>
-								<option value="1">公开</option>
-								<option value="2">灰度</option>
+								<option value="">所有</option>
+								<option value="1">未发布</option>
+								<option value="2">公开</option>
+								<option value="3">灰度</option>
 							</select>	
 						</td>
 						<td colspan=4 ><button type="submit" class="btn btn-primary">查  询</button></td>																				
@@ -95,8 +101,9 @@
 					<th>年龄</th>
 					<th>孩子性别</th>
 					<th>父母性别</th>
-					<th>婚姻状况</th>
+					<th>婚姻状况</th>					
 					<th>是否独生</th>
+					<th>任务状态</th>
 					<th width="80px">操作</th>
 				</tr>
 			</thead>
@@ -112,10 +119,12 @@ $rowsHtmlTag=<<<EndOfRowTag
 	<td>%s</td>
 	<td>%s</td>
 	<td>%s</td>
-	<td>%s</td>			
+	<td>%s</td>
+	<td>%s</td>				
 	<td>
 		<a href="/mWMaterial/modify?IDX=%s" title="修改"><i class="icon-pencil"></i></a>&nbsp;
-		<a data-toggle="modal" href="#myModal" title="删除这条任务记录"><i class="icon-remove" href="/mWMaterial/del?IDX=%s"></i></a>
+		<a data-toggle="modal" href="#myModal" title="删除这条任务记录"><i class="icon-remove" href="/mWMaterial/del?IDX=%s"></i></a>&nbsp;
+		<a href="/mWMaterial/preview?id=%s" target="_blank" title="素材预览" style="display:%s"><i class="icon-eye-open"></i></a>
 	</td>
 <tr>
 EndOfRowTag;
@@ -126,6 +135,7 @@ EndOfRowTag;
 				if(mb_strlen($title,"utf-8")>$titleLen){
 					$title=mb_substr($title, 0,$titleLen,"utf-8")."..";
 				}
+				$previewDisplay=($item["Matrial_IDX"]>0?"":"none");
 				echo sprintf($rowsHtmlTag,
 					$item["IDX"],
 					DictionaryData::Task_Material_Task_Type[$item["Task_Type"]],
@@ -135,14 +145,17 @@ EndOfRowTag;
 					DictionaryData::Task_Material_Child_Gender[$item["Child_Gender"]],
 					DictionaryData::Task_Material_Parent_Gender[$item["Parent_Gender"]],
 					DictionaryData::Task_Material_Parent_Marriage[$item["Parent_Marriage"]],
-					DictionaryData::Task_Material_Only_Children[$item["Only_Children"]],						
-					$item["IDX"],$item["IDX"]
+					DictionaryData::Task_Material_Only_Children[$item["Only_Children"]],
+					DictionaryData::Task_Material_Task_Status[$item["Task_Status"]],						
+					$item["IDX"],$item["IDX"],
+					$item["Matrial_IDX"],$previewDisplay
 				);
 			}
 
 			?>
 			</tbody>
 		</table>
+		<?php echo $page;?>
 	</div>
 </div>
 <script type="text/javascript">
@@ -150,7 +163,7 @@ EndOfRowTag;
 		function() 
 		{
 			var href=$(this).attr('href');
-			bootbox.confirm('确定要这样做吗？', 
+			bootbox.confirm('确定要删除这个任务吗？', 
 					function(result) 
 					{
 						if(result){

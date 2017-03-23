@@ -34,23 +34,23 @@
 						<td>孩子性别</td>
 						<td>
 							<select name="Child_Gender">
-								<option value="0">不限制</option>
-								<option value="1">女孩</option>
-								<option value="2">男孩</option>
+								<option value="1">不限制</option>
+								<option value="2">女孩</option>
+								<option value="3">男孩</option>
 							</select>
 						</td>
 						<td>父母性别</td>
 						<td><select name="Parent_Gender">
-								<option value="0">不限制</option>
-								<option value="1">母亲</option>
-								<option value="2">父亲</option>
+								<option value="1">不限制</option>
+								<option value="2">母亲</option>
+								<option value="3">父亲</option>
 							</select>
 						</td>
 						<td>父母婚姻状况</td>
 						<td>
 							<select name="Parent_Marriage">
-								<option value="0">不限</option>
-								<option value="1">单亲</option>					
+								<option value="1">不限</option>
+								<option value="2">单亲</option>					
 							</select>
 						</td>						
 					</tr>
@@ -58,8 +58,8 @@
 						<td>是否独生</td>
 						<td>
 							<select name="Only_Children">
-								<option value="0">不限</option>
-								<option value="1">独生小孩</option>
+								<option value="1">不限</option>
+								<option value="2">独生小孩</option>
 							</select>	
 						</td>
 						<td >任务标题</td>
@@ -82,9 +82,9 @@
 						<td>任务状态</td>
 						<td>
 							<select name="Task_Status">
-								<option value="0">未发布</option>
-								<option value="1">公开</option>
-								<option value="2">灰度</option>
+								<option value="1">未发布</option>
+								<option value="2">公开</option>
+								<option value="3">灰度</option>
 							</select>	
 						</td>								
 					</tr>

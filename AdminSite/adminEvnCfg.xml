@@ -2,6 +2,7 @@
 <LunaConfigMagt name="LUNA 配置设置">
 	<array key="AppSection" name="应用相关配置">
             <string key="resource_version" value="20140509001" name="静态资源时间戳"/>
+            <string key="Material_Root" value="/var/www/admin.fumuwin.com/AdminSite/www/static/material"  />
 	</array>
 	
 	<array key="LunaSection" name="LUNA SDK 配置">

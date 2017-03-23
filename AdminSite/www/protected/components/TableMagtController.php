@@ -331,14 +331,14 @@ class TableMagtController extends Controller
 				case "greater":
 					$extraFeildValue=trim(Yii::app()->request->getParam($value["field_name"],''));
 					if(empty($extraFeildValue)==false){
-						$sql.=sprintf(" and %s > ? ",$key);
+						$sql.=sprintf(" and %s >= ? ",$key);
 						$params[]=$extraFeildValue;
 					}
 					break;
 				case "less":
 						$extraFeildValue=trim(Yii::app()->request->getParam($value["field_name"],''));
 						if(empty($extraFeildValue)==false){
-							$sql.=sprintf(" and %s < ? ",$key);
+							$sql.=sprintf(" and %s <= ? ",$key);
 							$params[]=$extraFeildValue;
 						}
 						break;						
@@ -411,14 +411,14 @@ class TableMagtController extends Controller
 				case "greater":
 					$extraFeildValue=trim(Yii::app()->request->getParam($value["field_name"],''));
 					if(empty($extraFeildValue)==false){
-						$sql.=sprintf(" and %s > ? ",$key);
+						$sql.=sprintf(" and %s >= ? ",$key);
 						$params[]=$extraFeildValue;
 					}
 					break;
 				case "less":
 					$extraFeildValue=trim(Yii::app()->request->getParam($value["field_name"],''));
 					if(empty($extraFeildValue)==false){
-						$sql.=sprintf(" and %s < ? ",$key);
+						$sql.=sprintf(" and %s <= ? ",$key);
 						$params[]=$extraFeildValue;
 					}
 					break;
