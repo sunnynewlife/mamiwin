@@ -115,7 +115,8 @@ $rowsHtmlTag=<<<EndOfRowTag
 	<td>%s</td>			
 	<td>
 		<a href="/mWMaterial/modify?IDX=%s" title="修改"><i class="icon-pencil"></i></a>&nbsp;
-		<a data-toggle="modal" href="#myModal" title="删除这条任务记录"><i class="icon-remove" href="/mWMaterial/del?IDX=%s"></i></a>
+		<a data-toggle="modal" href="#myModal" title="删除这条任务记录"><i class="icon-remove" href="/mWMaterial/del?IDX=%s"></i></a>&nbsp;
+		<a href="/mWMaterial/preview?id=%s" target="_blank" title="素材预览" style="display:%s"><i class="icon-eye-open"></i></a>
 	</td>
 <tr>
 EndOfRowTag;
@@ -126,6 +127,7 @@ EndOfRowTag;
 				if(mb_strlen($title,"utf-8")>$titleLen){
 					$title=mb_substr($title, 0,$titleLen,"utf-8")."..";
 				}
+				$previewDisplay=($item["Matrial_IDX"]>0?"":"none");
 				echo sprintf($rowsHtmlTag,
 					$item["IDX"],
 					DictionaryData::Task_Material_Task_Type[$item["Task_Type"]],
@@ -136,7 +138,8 @@ EndOfRowTag;
 					DictionaryData::Task_Material_Parent_Gender[$item["Parent_Gender"]],
 					DictionaryData::Task_Material_Parent_Marriage[$item["Parent_Marriage"]],
 					DictionaryData::Task_Material_Only_Children[$item["Only_Children"]],						
-					$item["IDX"],$item["IDX"]
+					$item["IDX"],$item["IDX"],
+					$item["Matrial_IDX"],$previewDisplay
 				);
 			}
 

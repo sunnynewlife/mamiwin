@@ -139,5 +139,56 @@ class MWMaterialController extends TableMagtController
 		return $mwData->deleteTask_Material($value);
 	}	
 	
+	public function actionPreview()
+	{
+		$material_idx=Yii::app()->request->getParam('id',"");
+		if(empty($material_idx)==false){
+			$mwData=new MWData();
+			$download_id=$mwData->getMaterialInfoDownloadByIDX($material_idx);
+			$Material_Info=$mwData->getMaterialInfoByDownloadId($download_id);
+			if(count($Material_Info)>0){
+				$appConfig=LunaConfigMagt::getInstance()->getAppConfig();
+				$file_path=$appConfig["Material_Root"]."/".$download_id;
+				$File_Content;
+				if(file_exists($file_path)==false){
+					$Material_Info=$mwData->getMaterialInfoByDownloadId($download_id,true);
+					if(count($Material_Info)>0){
+						if($material_file=fopen($file_path,"wb")){
+							$File_Content=$Material_Info[0]["File_Content"];
+							fwrite($material_file,$File_Content);
+							fclose($material_file);
+						}
+					}
+				}else{
+					if($material_file=fopen($file_path,"rb")){
+						$File_Content=fread($material_file,$Material_Info[0]["File_Size"]);
+						fclose($material_file);
+					}
+				}
+				if(empty($File_Content)==false){
+					switch ($Material_Info[0]["Location_Type"]){
+						case "1":
+							$html='<!DOCTYPE html><html><head><meta charset="utf-8"><meta content="text/html; charset=utf-8"><title>父母赢-素材文件预览</title></head><body>'.$File_Content.'</body></html>';
+							Header("Content-type:".$Material_Info[0]["Mime_Type"]);
+							Header("Accept-Ranges: bytes");
+							Header("Accept-Length: ".strlen($html));				
+							echo $html;
+							return;							
+						case "3":
+							Header("Location:".$File_Content);
+							return;
+						default:
+							Header("Content-type:".$Material_Info[0]["Mime_Type"]);
+							Header("Accept-Ranges: bytes");
+							Header("Accept-Length: ".$Material_Info[0]["File_Size"]);
+							Header("Content-Disposition: attachment; filename=" . $Material_Info[0]["Original_Name"]);
+							echo $File_Content;
+							return ;
+					}
+				}
+			}
+		}
+		echo "I'm sorry,cannot find the $material_idx resource.";
+	}
 	
 }
