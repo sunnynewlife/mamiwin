@@ -91,7 +91,7 @@ EndOfRowTag;
 		function() 
 		{
 			var href=$(this).attr('href');
-			bootbox.confirm('确定要这样做吗？', 
+			bootbox.confirm('确定要删除这个素材吗？', 
 					function(result) 
 					{
 						if(result){

@@ -66,4 +66,13 @@ class DictionaryData {
 	const Task_Material_Only_Children_Unlimited=0;
 	const Task_Material_Only_Children_One=1;
 	
+	const Task_Material_Task_Status=array(
+			"0"		=>	"未发布",
+			"1"		=>	"公开",
+			"2"		=>	"灰度",
+	);	
+	const Task_Material_Task_Status_UnDeploy=0;
+	const Task_Material_Task_Status_Publish=1;
+	const Task_Material_Task_Status_Test=2;
+	
 }

@@ -74,7 +74,7 @@
 								<option value="">请选择任务使用的素材文件</option>
 <?php 
 					foreach ($Material_Files as $rowItem){
-						echo sprintf("<option value=\"%s\">%s</option>\n",$rowItem["IDX"],$rowItem["File_Title"]);				
+						echo sprintf("<option value=\"%s\" %s >%s</option>\n",$rowItem["IDX"],$Task_Material["Matrial_IDX"]==$rowItem["IDX"]?"selected":"",$rowItem["File_Title"]);				
 					}
 ?>								
 							</select>						
@@ -82,9 +82,9 @@
 						<td>任务状态</td>
 						<td>
 							<select name="Task_Status">
-								<option value="0">未发布</option>
-								<option value="1">公开</option>
-								<option value="2">灰度</option>
+								<option value="0" <?php echo $Task_Material["Task_Status"]==DictionaryData::Task_Material_Task_Status_UnDeploy?"selected":"" ?>>未发布</option>
+								<option value="1" <?php echo $Task_Material["Task_Status"]==DictionaryData::Task_Material_Task_Status_Publish?"selected":"" ?>>公开</option>
+								<option value="2" <?php echo $Task_Material["Task_Status"]==DictionaryData::Task_Material_Task_Status_Test?"selected":"" ?>>灰度</option>
 							</select>	
 						</td>								
 					</tr>
@@ -96,8 +96,16 @@
 					$row_name="";
 					$row_vale="";
 					foreach ($Ability_Type as $rowItem){
+						$bItemChecked=false;
+						foreach ($Task_Ability as $taskAbilityItem){
+							if($taskAbilityItem["Ability_IDX"]==$rowItem["IDX"]){
+								$bItemChecked=true;
+								break;
+							}
+						}
+
 						$row_name.=sprintf("<td style=\"border:1px solid #000000;background-color:#4D5B76;color:#fff;text-align:center; \">%s</td>",$rowItem["Ability_Name"]);
-						$row_vale.=sprintf("<td style=\"border:1px solid #000000;text-align:center;\"><input type=\"checkbox\" name=\"Ability_%d\" value=\"1\" /></td>",$rowItem["IDX"]);
+						$row_vale.=sprintf("<td style=\"border:1px solid #000000;text-align:center;\"><input type=\"checkbox\" name=\"Ability_%d\" value=\"1\"  %s /></td>",$rowItem["IDX"],$bItemChecked?"checked":"" );
 					}
 					echo "<tr>".$row_name."</tr>\n";
 					echo "<tr>".$row_vale."</tr>\n";

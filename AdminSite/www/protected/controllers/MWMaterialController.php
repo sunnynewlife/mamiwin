@@ -90,7 +90,36 @@ class MWMaterialController extends TableMagtController
 		$Ability_Type=$mwData->getAbility_Type();
 		
 		if ($submit){			
+			$Task_Type =Yii::app()->request->getParam("Task_Type","1");
+			$Task_Status=Yii::app()->request->getParam("Task_Status","0");
+			$Child_Gender=Yii::app()->request->getParam("Child_Gender","0");
+			$Parent_Gender=Yii::app()->request->getParam("Parent_Gender","0");
+			$Parent_Marriage=Yii::app()->request->getParam("Parent_Marriage","0");
+			$Only_Children=Yii::app()->request->getParam("Only_Children","0");
 			
+			$Matrial_IDX=Yii::app()->request->getParam("Matrial_IDX","");
+			
+			$Task_Title=Yii::app()->request->getParam("Task_Title","");
+			$Min_Time=Yii::app()->request->getParam("Min_Time","");
+			$Max_Time=Yii::app()->request->getParam("Max_Time","");
+			$Min_Age=Yii::app()->request->getParam("Min_Age","");
+			$Max_Age=Yii::app()->request->getParam("Max_Age","");
+				
+			if(empty($Task_Title) || empty($Min_Time) || empty($Max_Time) || empty($Min_Age) || empty($Max_Age)) {
+				$this->alert('error',"请正确设置字段");
+			}else{
+				$AbilityIds=array();
+				foreach ($Ability_Type as $rowItem){
+					if(Yii::app()->request->getParam(sprintf("Ability_%d",$rowItem["IDX"]),"")=="1"){
+						$AbilityIds[]=$rowItem["IDX"];
+					}
+				}
+				if($mwData->updateTask_Material($Task_Type,$Task_Title,$Task_Status,$Min_Time,$Max_Time,$Min_Age,$Max_Age,
+						$Child_Gender,$Parent_Gender,$Parent_Marriage,$Only_Children,$Matrial_IDX,$AbilityIds,$value)){
+					return $this->exitWithSuccess("修改任务成功",$this->_next_url);
+				}
+				$this->alert('error',"修改任务失败，请正确设置字段值");
+			}			
 		}
 		$this->renderData["Ability_Type"]=$Ability_Type;
 		$this->renderData["Material_Files"]=$mwData->getMaterial_Files();
@@ -103,6 +132,12 @@ class MWMaterialController extends TableMagtController
 	{
 		$this->_actionDel($this->_tableName, $this->_primaryKey, $this->_title, $this->_next_url);
 	}
+	
+	protected function deleteRow($tableName,$primaryKey,$value)
+	{
+		$mwData=new MWData();
+		return $mwData->deleteTask_Material($value);
+	}	
 	
 	
 }
