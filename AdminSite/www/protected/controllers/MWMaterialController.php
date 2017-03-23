@@ -20,7 +20,7 @@ class MWMaterialController extends TableMagtController
 			"Parent_Gender" 	=> array("compartion_type" =>"equal","field_name" =>"Parent_Gender"),
 			"Parent_Marriage" 	=> array("compartion_type" =>"equal","field_name" =>"Parent_Marriage"),
 			"Only_Children" 	=> array("compartion_type" =>"equal","field_name" =>"Only_Children"),
-			"Task_Title" 		=> array("compartion_type" =>"equal","field_name" =>"Task_Title"),
+			"Task_Title" 		=> array("compartion_type" =>"like","field_name" =>"Task_Title"),
 	);	
 	
 	public function init()
