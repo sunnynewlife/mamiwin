@@ -22,8 +22,8 @@ return array(
     'defaultController'=>'site/index',
     'layout' => 'main',
 
-	'onBeginRequest' => array('YIILogerDbPersist', 'HttpRequestBegin'),
-	'onEndRequest' => array('YIILogerDbPersist','HttpRequestEnd'),
+	'onBeginRequest' => array('YIILogerPersist', 'HttpRequestBegin'),
+	'onEndRequest' => array('YIILogerPersist','HttpRequestEnd'),
 		
 	'components'=>array(
 		'session'=>array(
