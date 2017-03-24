@@ -40,10 +40,10 @@ class InterfaceController extends CController
 	public function urlRouter($type){
 		switch ($type) {
 			case '1001':		// 查询所有任务资料列表
-				return 'queryTaskList';
+				return 'queryMeterialList';
 				break;
 			case '1002':	//根据ID查询任务资料
-				return 'queryTaskDetail';	
+				return 'getMeterialDetail';	
 				break;
 			
 			case '9999':	//TEST
@@ -124,7 +124,7 @@ class InterfaceController extends CController
 		die();
 	}
 
-	private function queryTaskList($params){
+	private function queryMeterialList($params){
 		if(isset($params['page'])){
 			$page 	= $params['page'];
 		}
@@ -136,16 +136,16 @@ class InterfaceController extends CController
 		$start = ($page - 1) * $pagesize;	
 
 
-		$mod = new ModTask();
-		$ret = $mod->getTaskList(0,$pagesize,$start);
+		$mod = new ModMaterial();
+		$ret = $mod->getMeterialList(1,$pagesize,$start);
 		$errno = 1 ;
 		$this->_echoResponse($errno,'',$ret); 
 	}  
 
-	private function queryTaskDetail($params){
-		$task_id = $params['id'] ;
-		$mod = new ModTask();
-		$ret = $mod->getTaskDetail($task_id);
+	private function getMeterialDetail($params){
+		$IDX = $params['IDX'] ;
+		$mod = new ModMaterial();
+		$ret = $mod->getMeterialDetail($IDX);
 		if($ret === false){			
 			$errno = ConfTask::ERROR_QUEYR_TASK_DETAIL ;
 			$this->_echoResponse($errno,'',$ret);

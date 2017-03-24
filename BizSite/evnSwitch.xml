@@ -6,7 +6,13 @@
 		<array key="EvnSwitch" name="环境切换">
 			<array key="adminEvnCfg-dev.xml" name="开发环境">
 				<string key="hostName" value="SH,HOME" />
-				<string key="ip" value="192.168.18.74,192.168.18.64" />
+				<string key="ip" value="127.0.0.1,192.168.18.74,192.168.18.64" />
+			</array>
+		</array>
+		<array key="EvnSwitch" name="环境切换">
+			<array key="adminEvnCfg-local.xml" name="开发环境">
+				<string key="hostName" value="ADMIN" />
+				<string key="ip" value="127.0.0.1" />
 			</array>
 		</array>
 	</array>

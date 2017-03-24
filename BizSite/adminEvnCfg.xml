@@ -79,10 +79,10 @@
 				<string key="pass" value="4e27885189e0b389ba7752aa8cb0f9ca" />
 			</array>
 			<array key="special" name="特殊类重载配置">
-				<array key="FHDatabase" name="分红数据库">
-					<string key="dsn" value="mysql:host=10.126.7.66;port=3306;dbname=mobilefh" />
-					<string key="user" value="mobilefh" />
-					<string key="pass" value="4e27885189e0b389ba7752aa8cb0f9ca" />
+				<array key="BizDatabase" name="任务数据库">
+					<string key="dsn" value="mysql:host=112.74.42.241;port=3306;dbname=biz_info" />
+					<string key="user" value="root" />
+					<string key="pass" value="Devuser01&amp;" />
 				</array>
 			</array>
 		</array>
