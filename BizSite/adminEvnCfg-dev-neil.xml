@@ -7,14 +7,38 @@
 	</array>
 	
 	<array key="LunaSection" name="LUNA SDK 配置">
+		<array key="CodeVerify">
+			<string key="expire_seconds" value="300" />
+			<string key="code_lenth" value="6"	/>
+			<string key="enable_logger" value="true" />
+			<string key="max_sms_verify_counts"	value="1" />
+			<string key="max_img_verify_counts" value="1" />
+			
+			<array key="ImgParameters">
+				<string key="code_charset" value="abcdefghkmnprstuvwxyzABCDEFGHKMNPRSTUVWXYZ23456789" />
+				<string key="width"	value="160" />
+				<string key="height" value="50" />
+				<string key="regenerate_showing" value="true" />
+				<string key="drawing_method" value="0" name="使用的绘制图片的实现者" />
+				<array key="DrawImgImplementers">
+					<array key="0">
+						<string key="className"	value="luna_lib.verify.LunaImgElephant" />
+					</array>
+				</array>
+			</array>
+			<array key="SmsParameters">
+				<string key="code_charset" value="1234567890" />
+				<string key="senderClassName"  value="SMSSender" />
+			</array>
+		</array>	
 		<array key="Logger" name="logger 配置">
 			<string key="level" value="all" name="logger Level 值:info,notice,warning,debug,error,fatal,none,all" />
 			<string key="enableColorLog" value="false" />
-			<string key="logSiteId" value="admin.home.com" />
+			<string key="logSiteId" value="api.fumuwin.com" />
 			<array key="appender">
 				<string key="persist" value="lib.log.YIILogerPersist" />
 				<array key="param">
-					<string key="dir" value="/Xulong/opt/logs/admin.home.com" />
+					<string key="dir" value="/Xulong/opt/logs/biz.home.com" />
 				</array>
 			</array>
 		</array>
