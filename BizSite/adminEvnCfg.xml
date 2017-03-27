@@ -20,11 +20,11 @@
 		<array key="Logger" name="logger 配置">
 			<string key="level" value="all" name="logger Level 值:info,notice,warning,debug,error,fatal,none,all" />
 			<string key="enableColorLog" value="false" />
-			<string key="logSiteId" value="dd.f.sdo.com" />
+			<string key="logSiteId" value="api.fumuwin.com" />
 			<array key="appender">
 				<string key="persist" value="luna_lib.log.YIILogerDbPersist" />
 				<array key="param">
-					<string key="db_dir" value="/opt/logs/dd.f.sdo.com" />
+					<string key="db_dir" value="/opt/logs/api.fumuwin.com" />
 					<string key="db_serverIp" value="10.158.26.92" />
 					<string key="db_serverPort" value="19520" />
 				
@@ -80,7 +80,7 @@
 			</array>
 			<array key="special" name="特殊类重载配置">
 				<array key="BizDatabase" name="任务数据库">
-					<string key="dsn" value="mysql:host=112.74.42.241;port=3306;dbname=biz_info" />
+					<string key="dsn" value="mysql:host=127.0.0.1;port=3306;dbname=biz_info" />
 					<string key="user" value="root" />
 					<string key="pass" value="Devuser01&amp;" />
 				</array>
