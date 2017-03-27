@@ -16,7 +16,8 @@
 	<link rel="stylesheet" href="/static/css/jquery-ui.css" />
 	<link rel="stylesheet" href="/static/css/jquery-ui-timepicker-addon.css" />
 	
-    <script src="/static/js/lib/jquery-1.8.1.min.js" ></script>
+    <script src="/static/js/lib/jquery.js" ></script>
+    
 	<script src="/static/js/lib/bootstrap/js/bootbox.min.js"></script>
 	<script src="/static/js/lib/bootstrap/js/bootstrap-modal.js"></script>
 	<script src="/static/js/lib/bootstrap/js/bootstrap.js"></script>

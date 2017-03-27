@@ -118,7 +118,12 @@
 	      	  height: 300,                 // set editor height
 	    	  minHeight: null,             // set minimum height of editor
 	    	  maxHeight: null,
-	    	  lang: 'zh-CN'
+	    	  lang: 'zh-CN',
+	    	  callbacks: {  
+	    		  onImageUpload: function(files) { //the onImageUpload API  
+	                  console.log("onImageUpload");
+	              }
+	          }  
 	    	});	
 	}
   
