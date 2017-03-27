@@ -14,7 +14,7 @@ class ModMaterial {
 		$offSet = (is_null($offSet)) ? 0 : $offSet;
 		
 		$params=array();
-		$sql="select IDX,File_Title,File_Type,Location_Type,Mime_Type,Original_Name,File_Size,Download_Id,File_Content,Create_time,Update_time from material_files	where 1 = 1 ";
+		$sql="select IDX,File_Title,File_Type,Location_Type,Mime_Type,Original_Name,File_Size,Download_Id,File_Content,Create_time,Update_time from Material_Files	where 1 = 1 ";
 		if(!empty($File_Type) ){
 			$sql .= " AND File_Type = ? ";
 			$params[] = $File_Type;
@@ -36,7 +36,7 @@ class ModMaterial {
 	 */
 	public function getMeterialDetail($IDX){
 		$params=array();
-		$sql="select IDX,File_Title,File_Type,Location_Type,Mime_Type,Original_Name,File_Size,Download_Id,File_Content,Create_time,Update_time from material_files where IDX = ? ";
+		$sql="select IDX,File_Title,File_Type,Location_Type,Mime_Type,Original_Name,File_Size,Download_Id,File_Content,Create_time,Update_time from Material_Files where IDX = ? ";
 		$params = array_merge($params,array($IDX));	
 		// if($del_flag === 1 || $del_flag === 0 ){
 		// 	$sql .= " AND del_flag = ? ";
