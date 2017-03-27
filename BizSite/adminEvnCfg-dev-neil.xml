@@ -2,14 +2,16 @@
 <LunaConfigMagt name="LUNA 配置设置">
 	<array key="AppSection" name="应用相关配置">
             <string key="resource_version" value="20140509001" name="静态资源时间戳"/>
-            <string key="Material_Root" value="/var/www/admin.fumuwin.com/AdminSite/www/static/material"  />
+            
+            <string key="Material_Root" value="/Xulong/homework/mamiwin/AdminSite/www/static/material"  />
 	</array>
+	
 	<array key="LunaSection" name="LUNA SDK 配置">
 		<array key="CodeVerify">
 			<string key="expire_seconds" value="300" />
 			<string key="code_lenth" value="6"	/>
 			<string key="enable_logger" value="true" />
-			<string key="max_sms_verify_counts"	value="10" />
+			<string key="max_sms_verify_counts"	value="1" />
 			<string key="max_img_verify_counts" value="1" />
 			
 			<array key="ImgParameters">
@@ -17,7 +19,7 @@
 				<string key="width"	value="160" />
 				<string key="height" value="50" />
 				<string key="regenerate_showing" value="true" />
-				<string key="drawing_method" value="0" />
+				<string key="drawing_method" value="0" name="使用的绘制图片的实现者" />
 				<array key="DrawImgImplementers">
 					<array key="0">
 						<string key="className"	value="luna_lib.verify.LunaImgElephant" />
@@ -28,8 +30,7 @@
 				<string key="code_charset" value="1234567890" />
 				<string key="senderClassName"  value="SMSSender" />
 			</array>
-		</array>
-	
+		</array>	
 		<array key="Logger" name="logger 配置">
 			<string key="level" value="all" name="logger Level 值:info,notice,warning,debug,error,fatal,none,all" />
 			<string key="enableColorLog" value="false" />
@@ -37,8 +38,7 @@
 			<array key="appender">
 				<string key="persist" value="lib.log.YIILogerPersist" />
 				<array key="param">
-					<string key="dir" value="/opt/logs/api.fumuwin.com" />
-					<string key="senderClassName"  value="" />
+					<string key="dir" value="/Xulong/opt/logs/biz.home.com" />
 				</array>
 			</array>
 		</array>
@@ -55,12 +55,21 @@
 		</array>
 		<array key="Pdo" name="PDO MySQL 数据库访问配置">
 			<array key="global" name="全局配置">
-				<string key="dsn" value="mysql:host=127.0.0.1;port=3306;dbname=biz_info" />
-				<string key="user" value="fm_win" />
-				<string key="pass" value="fww_17Mar#@8win" />
+				<string key="dsn" value="mysql:host=127.0.0.1;port=3306;dbname=magtadmin" />
+				<string key="user" value="neil" />
+				<string key="pass" value="homework123" />
 			</array>
 			<array key="special" name="特殊类重载配置">
-			</array>			
+				<array key="Admin" name="Admin用户和菜单管理">
+					<string key="dsn" value="mysql:host=127.0.0.1;port=3306;dbname=magtadmin" />
+				</array>
+				<array key="BizDatabase" name="业务数据库">
+					<string key="dsn" value="mysql:host=127.0.0.1;port=3306;dbname=biz_info" />
+				</array>
+				<array key="LunaLog" name="网站日志数据库">
+					<string key="dsn" value="mysql:host=127.0.0.1;port=3306;dbname=lunalog" />
+				</array>			
+			</array>
 		</array>
 		<array key="LunaCfg" name="配置管理设置">
 			<string key="editAcl" value="127.0.0.1,61.172.240.227,10.240.39.26" />
@@ -70,8 +79,25 @@
 			</array>
 			<string key="syncHost" value="10.240.39.26," />
 		</array>
-
 		<array key="HttpInterface" name="统一调用外部Http接口类定义">
+			<array key="WxPay" name="微信支付">
+				<string key="domain" value="https://api.mch.weixin.qq.com" />
+				<string key="needMd5Sign" value="false" />
+				<string key="signPwd" value="" />
+				<string key="signPosition" value="bottom" />
+				<string key="signParaName" value="sign"/>
+				<string key="signParamJoinChar" value="="/>
+				<string key="responseType" value="xml" />
+				<string key="method" value="POST" />
+				<array key="interface" name="">
+					<array key="SendRedEnvelope" name="发送红包">
+						<string key="url" value="mmpaymkttransfers/sendredpack" />
+					</array>
+					<array key="QueryRedEnvelope" name="查询红包状态">
+						<string key="url" value="mmpaymkttransfers/gethbinfo" />
+					</array>
+				</array>
+			</array>
 			<array key="Tencent" name="微信平台">
 				<string key="domain" value="https://api.weixin.qq.com" />
 				<string key="needMd5Sign" value="false" />
@@ -82,21 +108,25 @@
 				<string key="responseType" value="json" />
 				<string key="method" value="GET" />
 				<array key="interface" name="">
-					<array key="PageAccessToken" name="网页授权access_token">
-						<string key="url" value="sns/oauth2/access_token" />
-					</array>
 					<array key="AccessToken" name="后台服务访问微信接口凭证">
 						<string key="url" value="cgi-bin/token" />
 					</array>
-					<array key="JSApiTicket" name="获取JS访问接口票据">
-						<string key="url" value="cgi-bin/ticket/getticket" />
+					<array key="MenuGet" name="查询自定义菜单接口">
+						<string key="url" value="cgi-bin/menu/get" />
+					</array>
+					<array key="MenuDel" name="删除自定义菜单接口">
+						<string key="url" value="cgi-bin/menu/delete" />
+					</array>
+					<array key="MenuCreate" name="创建自定义菜单接口">
+						<string key="url" value="cgi-bin/menu/create" />
+						<string key="method" value="POST" />
 					</array>
 					<array key="NotifyMsg" name="向用户推送消息">
 						<string key="method" value="POST" />
 						<string key="url" value="cgi-bin/message/template/send" />
 					</array>
 				</array>
-			</array>
+			</array>	
 		</array>
 	</array>
 </LunaConfigMagt>

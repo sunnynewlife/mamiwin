@@ -42,8 +42,8 @@
 		<array key="Pdo" name="PDO MySQL 数据库访问配置">
 			<array key="global" name="全局配置">
 				<string key="dsn" value="mysql:host=127.0.0.1;port=3306;dbname=magtadmin" />
-				<string key="user" value="root" />
-				<string key="pass" value="qwe123" />
+				<string key="user" value="neil" />
+				<string key="pass" value="homework123" />
 			</array>
 			<array key="special" name="特殊类重载配置">
 				<array key="Admin" name="Admin用户和菜单管理">
