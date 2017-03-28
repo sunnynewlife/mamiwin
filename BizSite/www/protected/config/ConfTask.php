@@ -22,6 +22,7 @@ class ConfTask {
 
 	const ERROR_ERROR 						= -101000000;
 	const ERROR_QUEYR_TASK_DETAIL 			= -101000001;
+	const ERROR_USER_BASICINFO_ADD 			= -101000002;
 	
 
 
@@ -51,8 +52,9 @@ class ConfTask {
 		self::ERROR_FROM_ACTIVITY_DATA_NOT_EXIST => "Fromid Activity Data Not Exist In View", 
 
 		self::ERROR_QUEYR_TASK_DETAIL		=>	"查询资料失败",
+		self::ERROR_USER_BASICINFO_ADD		=>	"用户基础资料录入失败" ,
 		
-		self::ERROR_CLUB_GAME_RIGHT 					=>	"您没有此操作权限" ,
+		self::ERROR_CLUB_GAME_RIGHT 		=>	"您没有此操作权限" ,
 
 
 	);
