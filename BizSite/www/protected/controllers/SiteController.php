@@ -8,14 +8,26 @@ LunaLoader::import("luna_lib.log.LunaLogger");
 
 class SiteController extends CController 
 {
-	const WX_APP_ID			="wx8a417e8a8315d161";
-	const WX_SECRET			="c458469a3a7ba712d2d8408dc488a45a";
-	
 	public  $layout	="main_h5";
     
 	public function init()
 	{
 	}
+	
+	//test 微信用户进入页面 
+	public function actionWxIndex()
+	{
+		$code	=	Yii::app()->request->getParam('code',"");
+		if(empty($code)==false){
+			$openId=WxHelper::getOpenId($code);
+			if($openId){
+				echo "Wx OpenID=".$openId;
+				return ;
+			}
+		}
+		echo "unauthized user.";
+	}	
+	
 	//资料文件下载
 	public function actionDownload()
 	{

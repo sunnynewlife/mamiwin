@@ -5,9 +5,27 @@ LunaLoader::import("luna_lib.util.LunaMemcache");
 
 class WxHelper
 {
-	const WX_APP_ID="wx8a417e8a8315d161";
-	const WX_SECRET="c458469a3a7ba712d2d8408dc488a45a";
+	const WX_APP_ID="wxdd49e61c887860bd";
+	const WX_SECRET="811df5190a7f85b5b718c12326ca58f7";
 	
+	
+	public static function getOpenId($code)
+	{
+		if(empty($code)==false){
+			$http=new HttpInterface("Tencent","PageAccessToken");
+			$params=array(
+					"code"			=>	$code,
+					"appid"			=>	WxHelper::WX_APP_ID,
+					"secret"		=>	WxHelper::WX_SECRET,
+					"grant_type"	=>	"authorization_code",
+			);
+			$data=$http->submit($params);
+			if($data && is_array($data) && isset($data["openid"]) && empty($data["openid"])==false){
+				return $data["openid"];
+			}
+		}
+		return false;
+	}
 	
 	public static function getAccessToken($bUsingCache=true)
 	{
