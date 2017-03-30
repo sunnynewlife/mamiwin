@@ -1,7 +1,7 @@
 <?php
 
 LunaLoader::import("luna_lib.verify.LunaCodeVerify");
-
+require_once(dirname(__FILE__).'/../config/ConfTask.php');
 
 class InterfaceController extends CController 
 {
@@ -149,7 +149,7 @@ class InterfaceController extends CController
 	}  
 
 	private function getMeterialDetail($params){
-		// $IDX = $params['IDX'] ;
+		$IDX = $params['IDX'] ;
 		$mod = new ModMaterial();
 		$ret = $mod->getMeterialDetail($IDX);
 		if($ret === false){			
