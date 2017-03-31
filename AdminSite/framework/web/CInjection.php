@@ -40,8 +40,8 @@ class CInjection
 			foreach ($_FILES as $uploadedFile){
 				if(empty($uploadedFile["name"])==false){
 					$file_name=pathinfo($uploadedFile["name"]);
-					$extname=strtolower($file_name["extension"]);
-					if(in_array($extname, $this->_UPLOAD_FILE_EXTENSION_NAME)==false){
+					$extname=isset($file_name["extension"])?strtolower($file_name["extension"]):"";
+					if($extname!=null && empty($extname)==false && in_array($extname, $this->_UPLOAD_FILE_EXTENSION_NAME)==false){
 						echo "websec notice:Illegal file upload operation!" ;
 						Yii::app()->end();
 					}

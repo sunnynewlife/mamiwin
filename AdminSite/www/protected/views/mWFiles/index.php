@@ -43,7 +43,7 @@
 					<th width="140px;">原始文件名称</th>
 					<th width="80px;">文件大小</th>
 					<th width="270px;">下载标识</th>
-					<th width="40px">操作</th>
+					<th width="60px">操作</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -59,6 +59,7 @@ $rowsHtmlTag=<<<EndOfRowTag
 	<td>%s</td>
 	<td>
 		<a href="/mWFiles/modify?IDX=%s" title="修改"><i class="icon-pencil"></i></a>&nbsp;
+		<a href="/mWMaterial/add?Matrial_IDX=%s" title="用此素材创建任务"><i class="icon-file"></i></a>&nbsp;		
 		<a data-toggle="modal" href="#myModal" title="删除这个素材文件"><i class="icon-remove" href="/mWFiles/del?IDX=%s"></i></a>
 	</td>
 <tr>
@@ -77,7 +78,7 @@ EndOfRowTag;
 					$item["Original_Name"],
 					$item["File_Size"],
 					$item["Download_Id"],
-					$item["IDX"],$item["IDX"]
+					$item["IDX"],$item["IDX"],$item["IDX"]
 				);
 			}
 			?>

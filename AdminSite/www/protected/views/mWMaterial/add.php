@@ -73,8 +73,8 @@
 							<select name="Matrial_IDX" style="width:500px;">
 								<option value="">请选择任务使用的素材文件</option>
 <?php 
-					foreach ($Material_Files as $rowItem){
-						echo sprintf("<option value=\"%s\">%s</option>\n",$rowItem["IDX"],$rowItem["File_Title"]);				
+					foreach ($Material_Files as $rowItem){						
+						echo sprintf("<option value=\"%s\" %s>%s</option>\n",$rowItem["IDX"],($Matrial_IDX==$rowItem["IDX"]?" selected ":" "),$rowItem["File_Title"]);				
 					}
 ?>								
 							</select>						

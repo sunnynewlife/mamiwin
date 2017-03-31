@@ -77,6 +77,7 @@ class MWMaterialController extends TableMagtController
 		}
 		$this->renderData["Ability_Type"]=$Ability_Type;
 		$this->renderData["Material_Files"]=$mwData->getMaterial_Files();
+		$this->renderData["Matrial_IDX"]=Yii::app()->request->getParam("Matrial_IDX","");
 		$this->render("add",$this->renderData);
 	}
 	public function actionModify()

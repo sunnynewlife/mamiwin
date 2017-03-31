@@ -178,4 +178,28 @@ class MWFilesController extends TableMagtController
 		$this->_actionDel($this->_tableName, $this->_primaryKey, $this->_title, $this->_next_url);
 	}	
 	
+	public function actionUploadImage()
+	{
+		if(isset($_FILES) && is_array($_FILES) && count($_FILES)>0){
+			foreach ($_FILES as $uploadedFile){
+				if(empty($uploadedFile["name"])==false){
+					$appConfig=LunaConfigMagt::getInstance()->getAppConfig();
+					$imgName=CGuidManager::GetFullGuid().".jpg";
+					$img_path=$appConfig["UploadImage_Root"]."/".$imgName;
+					if(copy($uploadedFile["tmp_name"],$img_path)){
+						$img_url=$appConfig["UploadImage_Domain"]."/".$imgName;
+						echo json_encode(array(
+							"return_code"	=>	0,
+							"url"			=>	$img_url,
+						));
+						return;
+					}
+				}
+			}
+		}	
+		echo json_encode(array(
+			"return_code"	=>	-1,
+			"message"		=>	"图片上传失败",
+		));
+	}
 }
