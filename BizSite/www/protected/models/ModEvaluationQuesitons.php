@@ -2,19 +2,22 @@
 LunaLoader::import("luna_lib.util.LunaPdo");
 require_once(dirname(__FILE__).'/../config/ConfTask.php');
 /*
-	File_Title           varchar(500) not null,
-   File_Type            int not null comment  素材类型'1 文本  2 音频   3 视频',
-   Location_Type        int comment '1 本站HTML文本   2 本站二进制文件     3 外站点URL',
-   Mime_Type            varchar(100),
-   Original_Name        varchar(200),
-   File_Size            int,
-   Download_Id          varchar(100) not null,
-   File_Content         longblob,
+   IDX                  int not null auto_increment,
+   Question_Stems       varchar(500),
+   Ability_Type_ID      int,
+   Option_A             varchar(500),
+   Option_B             varchar(500),
+   Option_C             varchar(500),
+   Option_D             varchar(500),
+   Point_A              int default 3,
+   Point_B              int default 2,
+   Point_C              int default 1,
+   Point_D              int default 0,
    Create_Time          timestamp default CURRENT_TIMESTAMP,
    Update_Time          timestamp default CURRENT_TIMESTAMP,
-
  */
-class ModMaterial {
+
+class ModEvaluationQuesitons {
 	private $_PDO_NODE_NAME="BizDatabase";
 	
 	public function getLastInsertId($name=null)
@@ -23,22 +26,21 @@ class ModMaterial {
 	}
 
 	/**
-	 * 查询素材列表
+	 * 查询测评题列表
 	 * @param  string  $File_Type [description]
 	 * @param  integer $pagesize  [description]
 	 * @param  integer $offSet    [description]
 	 * @return [type]             [description]
 	 */
-	public function getMeterialList($File_Type = '',$pagesize = 10 ,$offSet = 0 ){
+	public function getEvaluationQuesitonsList($File_Type = '',$pagesize = 10 ,$offSet = 0 ){
 		$pagesize = (is_null($pagesize)) ? 10 : $pagesize;
 		$offSet = (is_null($offSet)) ? 0 : $offSet;
 		
 		$params=array();
-		$sql="select IDX,File_Title,File_Type,Location_Type,Mime_Type,Original_Name,File_Size,Download_Id,File_Content,Create_time,Update_time from Material_Files	where 1 = 1 ";
-		if(!empty($File_Type) ){
-			$sql .= " AND File_Type = ? ";
-			$params[] = $File_Type;
-			// $params = array_merge($params,array($del_flag));			
+		$sql=" SELECT IDX,Question_Stems,Ability_Type_ID,Option_A,Option_B,Option_C,Option_D,Point_A,Point_B,Point_C,Point_D,Create_time,Update_time from Evaluation_Quesitons	where 1 = 1 ";
+		if(!empty($Task_Type) ){
+			$sql .= " AND Task_Type = ? ";
+			$params[] = $Task_Type;			
 		}
 		$sql .= " order by IDX asc ;" ;
 		$sql .= " limit $offSet,$pagesize " ; 
@@ -50,13 +52,13 @@ class ModMaterial {
 	}
 
 	/**
-	 * 查询单条素材详情
+	 * 查询单条测评题详情
 	 * @param  [type] $task_id [description]
 	 * @return [type]          [description]
 	 */
-	public function getMeterialDetail($IDX){
+	public function getEvaluationQuesitons($IDX){
 		$params=array();
-		$sql="select IDX,File_Title,File_Type,Location_Type,Mime_Type,Original_Name,File_Size,Download_Id,File_Content,Create_time,Update_time from Material_Files where IDX = ? ";
+		$sql="SELECT IDX,Question_Stems,Ability_Type_ID,Option_A,Option_B,Option_C,Option_D,Point_A,Point_B,Point_C,Point_D,Create_time,Update_time from Evaluation_Quesitons where IDX = ? ";
 		$params = array_merge($params,array($IDX));	
 		// if($del_flag === 1 || $del_flag === 0 ){
 		// 	$sql .= " AND del_flag = ? ";
