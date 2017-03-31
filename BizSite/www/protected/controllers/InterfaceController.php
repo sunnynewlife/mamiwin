@@ -1,7 +1,7 @@
 <?php
 
 LunaLoader::import("luna_lib.verify.LunaCodeVerify");
-
+require_once(dirname(__FILE__).'/../config/ConfTask.php');
 
 class InterfaceController extends CController 
 {
@@ -42,14 +42,26 @@ class InterfaceController extends CController
     //路由
 	public function urlRouter($type){
 		switch ($type) {
-			case '1001':		// 查询所有任务资料列表
+			case '1001':		// 查询所有资料列表
 				return 'queryMeterialList';
 				break;
-			case '1002':	//根据ID查询任务资料
+			case '1002':	//根据ID查询资料
 				return 'getMeterialDetail';	
 				break;
 			case '1003':	//提交基础资料
 				return 'addUserBasicInfo';	
+				break;
+			case '2001':		// 查询所有任务列表
+				return 'queryTaskMeterialList';
+				break;
+			case '2002':	//根据ID查询任务
+				return 'getTaskMeterialDetail';	
+				break;
+			case '3001':		// 查询所有测评题列表
+				return 'getEvaluationQuesitonsList';
+				break;
+			case '3002':	//根据ID查询测评题
+				return 'getEvaluationQuesitons';	
 				break;
 			
 			case '9999':	//TEST
@@ -149,7 +161,7 @@ class InterfaceController extends CController
 	}  
 
 	private function getMeterialDetail($params){
-		// $IDX = $params['IDX'] ;
+		$IDX = $params['IDX'] ;
 		$mod = new ModMaterial();
 		$ret = $mod->getMeterialDetail($IDX);
 		if($ret === false){			
@@ -179,6 +191,66 @@ class InterfaceController extends CController
 		$this->_echoResponse($errno,'',$ret); 
 	}
 
+	private function queryTaskMeterialList($params){
+		if(isset($params['page'])){
+			$page 	= $params['page'];
+		}
+		if(isset($params['pagesize'])){
+			$pagesize 	= $params['pagesize'];
+		}
+		if(empty($pagesize)){$pagesize =  10; }
+		if(empty($page)){$page =  1; }
+		$start = ($page - 1) * $pagesize;	
+
+		$mod = new ModTaskMaterial();
+		$ret = $mod->getTaskMeterialList(1,$pagesize,$start);
+		$errno = 1 ;
+		$this->_echoResponse($errno,'',$ret); 
+	}  
+
+	private function getTaskMeterialDetail($params){
+		$IDX = $params['IDX'] ;
+		$mod = new ModTaskMaterial();
+		$ret = $mod->getTaskMeterialDetail($IDX);
+		if($ret === false){			
+			$errno = ConfTask::ERROR_QUEYR_TASK_DETAIL ;
+			$this->_echoResponse($errno,'',$ret);
+			return;
+		}
+		$errno = 1 ;
+		$this->_echoResponse($errno,'',$ret); 
+	}
+
+
+	private function getEvaluationQuesitonsList($params){
+		if(isset($params['page'])){
+			$page 	= $params['page'];
+		}
+		if(isset($params['pagesize'])){
+			$pagesize 	= $params['pagesize'];
+		}
+		if(empty($pagesize)){$pagesize =  10; }
+		if(empty($page)){$page =  1; }
+		$start = ($page - 1) * $pagesize;	
+
+		$mod = new ModEvaluationQuesitons();
+		$ret = $mod->getEvaluationQuesitonsList(1,$pagesize,$start);
+		$errno = 1 ;
+		$this->_echoResponse($errno,'',$ret); 
+	}  
+
+	private function getEvaluationQuesitons($params){
+		$IDX = $params['IDX'] ;
+		$mod = new ModEvaluationQuesitons();
+		$ret = $mod->getEvaluationQuesitons($IDX);
+		if($ret === false){			
+			$errno = ConfTask::ERROR_QUEYR_TASK_DETAIL ;
+			$this->_echoResponse($errno,'',$ret);
+			return;
+		}
+		$errno = 1 ;
+		$this->_echoResponse($errno,'',$ret); 
+	}	
 
 	//显示图片验证码 
 	public function actionShowImgCode()
