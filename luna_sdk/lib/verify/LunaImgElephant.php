@@ -50,8 +50,7 @@ class LunaImgElephant implements ILunaImgCodeDrawer{
 		$this->draw_backgroud();
 		$this->draw_noise();
 		
-		putenv('GDFONTPATH=' . realpath('.'));
-		$font_name="font/Elephant.ttf";
+		$font_name=dirname(__FILE__)."/font/Elephant.ttf";
 		
 		$code_len=strlen($code);
 		$_x = $this->width / $code_len;

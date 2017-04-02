@@ -14,7 +14,7 @@ class SMSSender implements ILunaSmsCodeSender{
 	{
 		$logMsg=sprintf("Simulate send sms code:%s",$code);
 		LunaLogger::getInstance()->info($logMsg);
-		return 0;
+		return true;
 	}
 }
 

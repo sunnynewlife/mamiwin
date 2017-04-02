@@ -41,5 +41,4 @@ class BizAppData
 		$Material_info=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
 		return (isset($Material_info) && is_array($Material_info) && count($Material_info)>0)?$Material_info:array();
 	}
-	
 }

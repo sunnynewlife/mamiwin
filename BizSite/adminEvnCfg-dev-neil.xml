@@ -11,7 +11,7 @@
 			<string key="expire_seconds" value="300" />
 			<string key="code_lenth" value="6"	/>
 			<string key="enable_logger" value="true" />
-			<string key="max_sms_verify_counts"	value="1" />
+			<string key="max_sms_verify_counts"	value="10" />
 			<string key="max_img_verify_counts" value="1" />
 			
 			<array key="ImgParameters">

@@ -70,41 +70,17 @@ class SiteController extends CController
 	
 	public function actionRegist()
 	{
-		$this->render("regist");
+		$this->layout="test_page_list";
+		$this->render("test_page_regist");
 	}
 	public function actionLogin()
 	{
-		
+		$this->layout="test_page_list";
+		$this->render("test_page_login");
 	}
 	public function  actionIndex()
 	{
-		$this->render("index");
-	}
-	
-	public function actionSendCode()
-	{
-		
-	}
-	
-	public function actionValidCode()
-	{
-		$data=array(
-			"return_code"			=>	0,
-			"return_message"		=>	"注册成功",
-			"data"					=>	array(
-					"next_url"		=>	"/site/bizIndex",
-				),				
-		);
-		
-		$phone=Yii::app()->request->getParam('mobileNo',"");
-		$pwd=Yii::app()->request->getParam('newPwd',"");
-		if(empty($phone)==false && empty($pwd)==false){
-			$bizAppData= new BizAppData();
-			$bizAppData->registUserInfo($phone, BizDataDictionary::User_AcctSource_SelfSite, $pwd);
-		}
-		
-		
-		echo json_encode($data);
-		
+		$this->layout="test_page_list";
+		$this->render("test_page_list");
 	}
 }
