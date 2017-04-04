@@ -23,7 +23,14 @@ class ConfTask {
 	const ERROR_ERROR 						= -101000000;
 	const ERROR_QUEYR_TASK_DETAIL 			= -101000001;
 	const ERROR_USER_BASICINFO_ADD 			= -101000002;
-	
+
+	const ERROR_USER_LOGIN 	 			= -901000001;
+	const ERROR_USER_REGIST 			= -901000002;
+	const ERROR_USER_LOGIN_PASSWORD 	= -901000003;
+	const ERROR_USER_LOGIN_USER 		= -901000004;
+	const ERROR_USER_EXISTS				= -901000005;
+	const ERROR_USER_NOT_LOGIN			= -901000006;
+	const ERROR_USER_IMAGE_CODE			= -901000007;
 
 
 	
@@ -53,6 +60,13 @@ class ConfTask {
 
 		self::ERROR_QUEYR_TASK_DETAIL		=>	"查询资料失败",
 		self::ERROR_USER_BASICINFO_ADD		=>	"用户基础资料录入失败" ,
+		self::ERROR_USER_LOGIN				=>	"用户登录失败" ,
+		self::ERROR_USER_REGIST				=>	"用户注册失败" ,
+		self::ERROR_USER_LOGIN_PASSWORD		=>	"账号或者密码错误" ,
+		self::ERROR_USER_LOGIN_USER			=>	"账号异常，不能登录" ,
+		self::ERROR_USER_EXISTS 			=>	"手机号已注册" ,
+		self::ERROR_USER_NOT_LOGIN 			=>	"您尚未登录" ,
+		self::ERROR_USER_IMAGE_CODE			=>	"图片验证码不正确" ,
 		
 		self::ERROR_CLUB_GAME_RIGHT 		=>	"您没有此操作权限" ,
 
