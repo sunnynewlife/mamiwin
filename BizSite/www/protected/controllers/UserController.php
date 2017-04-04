@@ -30,8 +30,12 @@ class UserController extends CController
 	//发送短信验证码
 	public function actionSendSms()
 	{
+		$phone=Yii::app()->request->getParam('phone',"");
+		if(empty($phone)){
+			return $this->_response("-99","参数错误");
+		}
 		$lunaCodeVerify=LunaCodeVerify::getInstance();
-		if($lunaCodeVerify->sendSmsCode()){
+		if($lunaCodeVerify->sendSmsCode($phone)){
 			return $this->_response();
 		}
 		return $this->_response("-1","发送短信失败");
@@ -69,7 +73,7 @@ class UserController extends CController
 		if($imgVerifyCode!=0){
 			return $this->_response_error("img_code", $imgVerifyCode-10);
 		}
-		$smsVerifyCode=$lunaCodeVerify->verifySmsCode($sms_verify_code);
+		$smsVerifyCode=$lunaCodeVerify->verifySmsCode($sms_verify_code,$phone);
 		if($smsVerifyCode!=0){
 			return $this->_response_error("sms_code", $smsVerifyCode-20);
 		}
@@ -84,7 +88,6 @@ class UserController extends CController
 		}
 		return $this->_response("-2","注册失败，请稍后重试");
 	}
-	
 	//账号登录
 	public function actionLogin()
 	{
@@ -122,5 +125,35 @@ class UserController extends CController
 			"LoginName"		=>	$userInfo[0]["LoginName"],
 			"IDX"			=>	$userInfo[0]["IDX"],
 		));
+	}
+	//重新设置账号密码
+	public function actionResetpwd()
+	{
+		$phone=Yii::app()->request->getParam('phone',"");
+		$password=Yii::app()->request->getParam('password',"");
+		$img_verify_code=Yii::app()->request->getParam('img_code',"");
+		$sms_verify_code=Yii::app()->request->getParam('sms_code',"");
+		if(empty($phone) || empty($password) || empty($img_verify_code) || empty($sms_verify_code)){
+			return $this->_response(-99,"参数错误");
+		}
+		$lunaCodeVerify=LunaCodeVerify::getInstance();
+		$imgVerifyCode=$lunaCodeVerify->verifyImageCode($img_verify_code);
+		if($imgVerifyCode!=0){
+			return $this->_response_error("img_code", $imgVerifyCode-10);
+		}
+		$smsVerifyCode=$lunaCodeVerify->verifySmsCode($sms_verify_code,$phone);
+		if($smsVerifyCode!=0){
+			return $this->_response_error("sms_code", $smsVerifyCode-20);
+		}
+		$bizAppData= new BizAppData();
+		$userInfo=$bizAppData->getUserInfoByLoginName($phone, BizDataDictionary::User_AcctSource_SelfSite);
+		if(count($userInfo)==0){
+			return $this->_response("-1","手机号未注册");
+		}
+		$md5password=md5($password);
+		if($bizAppData->resetPwd($phone, BizDataDictionary::User_AcctSource_SelfSite, $md5password)){
+			return $this->_response();
+		}
+		return $this->_response("-2","重设失败，请稍后重试");
 	}
 }

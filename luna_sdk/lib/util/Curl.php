@@ -171,7 +171,7 @@ class Curl
 	{
 		$opt=array( CURLOPT_HTTP_VERSION =>CURL_HTTP_VERSION_1_1,CURLOPT_ENCODING=>'gzip, deflate',
 				CURLOPT_RETURNTRANSFER=>true,CURLOPT_CONNECTTIMEOUT=>5,CURLOPT_TIMEOUT=>5,CURLOPT_FOLLOWLOCATION=>true,
-				CURLOPT_MAXREDIRS=>5,CURLOPT_DNS_USE_GLOBAL_CACHE=>false,CURLOPT_DNS_CACHE_TIMEOUT=>2,);
+				CURLOPT_MAXREDIRS=>5,);
 		return $this->_http($url, $method, $data_fields,$option,$opt,false,$postBodyAsJson,$postAsQueryString,$jsonEncodeEx,$postBodyAsXml);
 	}
 	

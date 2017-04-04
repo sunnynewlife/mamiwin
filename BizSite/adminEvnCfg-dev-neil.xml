@@ -29,6 +29,7 @@
 			<array key="SmsParameters">
 				<string key="code_charset" value="1234567890" />
 				<string key="senderClassName"  value="SMSSender" />
+				<string key="skip_sms_send" value="true" />
 			</array>
 		</array>	
 		<array key="Logger" name="logger 配置">
@@ -80,6 +81,21 @@
 			<string key="syncHost" value="10.240.39.26," />
 		</array>
 		<array key="HttpInterface" name="统一调用外部Http接口类定义">
+			<array key="CoSMS" name="短信发送">
+				<string key="domain" value="http://api.cosms.cn" />
+				<string key="needMd5Sign" value="false" />
+				<string key="signPwd" value="" />
+				<string key="signPosition" value="bottom" />
+				<string key="signParaName" value="sign"/>
+				<string key="signParamJoinChar" value="="/>
+				<string key="responseType" value="text" />
+				<string key="method" value="GET" />
+				<array key="interface" name="">
+					<array key="sendSms" name="发送短信">
+						<string key="url" value="sms/putMt/" />
+					</array>
+				</array>
+			</array>
 			<array key="WxPay" name="微信支付">
 				<string key="domain" value="https://api.mch.weixin.qq.com" />
 				<string key="needMd5Sign" value="false" />
