@@ -6,7 +6,7 @@
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta property="wb:webmaster" content="1a3e87cdf94158a1" />
-	<title>Homework</title>
+	<title>父母赢</title>
 	<?php $this->widget('application.widget.Framework7Header'); ?>
 	
 	<link rel="stylesheet" href="/static/css/swiper.min.css">
