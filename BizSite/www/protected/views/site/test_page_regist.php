@@ -58,7 +58,7 @@ function sendSmsCode()
          url: "/user/sendSms",
          type: "GET",
          dataType: 'json',
-         data: {},
+         data: {"phone":$("#txtPhone").val()},
          success: function (data) {
       		if(data.code==0){
           		alert("发送短信成功");

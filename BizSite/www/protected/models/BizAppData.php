@@ -41,4 +41,11 @@ class BizAppData
 		$Material_info=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
 		return (isset($Material_info) && is_array($Material_info) && count($Material_info)>0)?$Material_info:array();
 	}
+	
+	public function resetPwd($loginName,$acctSource,$loginPwd)
+	{
+		$sql="update User_Info set LoginPwd=?,UpdateTime=NOW() where  LoginName=? and AcctSource=?";
+		$params=array($loginPwd,$loginName,$acctSource);
+		return (LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params)>0);
+	}
 }

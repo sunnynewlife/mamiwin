@@ -97,7 +97,7 @@ class LunaCodeVerify {
 		}
 	}
 	
-	private function getCode($code_type)
+	private function getCode($code_type,$phone="")
 	{
 		$session_code_key="_code_".$code_type;
 		if(isset(Yii::app()->session[$session_code_key])){
@@ -116,6 +116,7 @@ class LunaCodeVerify {
 			"code"			=>	$code,
 			"verify_count"	=>	0,
 			"time"			=>	time(),
+			"phone"			=>	$phone,
 		);
 		Yii::app()->session[$session_code_key]=$code_info;
 		if($this->_enable_logger){
@@ -155,16 +156,16 @@ class LunaCodeVerify {
 		return false;
 	} 
 	
-	public function verifySmsCode($code)
+	public function verifySmsCode($code,$phone)
 	{
-		return  $this->verifyCode(self::_CODE_TYPE_SMS, $code);
+		return  $this->verifyCode(self::_CODE_TYPE_SMS, $code,$phone);
 	}
 	
-	public function sendSmsCode()
+	public function sendSmsCode($phone)
 	{
-		$code=$this->getCode(self::_CODE_TYPE_SMS);
+		$code=$this->getCode(self::_CODE_TYPE_SMS,$phone);
 		if($this->_sms_sender_instance!=null){
-			return $this->_sms_sender_instance->sendSmsCode($code);
+			return $this->_sms_sender_instance->sendSmsCode($code,$phone);
 		}
 		$logMsg="<LunaCodeVerify>\tSendSmsCode\t<no sms sender implement class>";
 		LunaLogger::getInstance()->info($logMsg);
@@ -177,7 +178,7 @@ class LunaCodeVerify {
 	 * -3		验证尝试次数已达最大次数，需要重新发生验证码或者显示验证码图片
 	 * -4		code  错误
 	 */
-	private function verifyCode($code_type,$code)
+	private function verifyCode($code_type,$code,$phone="")
 	{
 		$session_code_key="_code_".$code_type;
 		$code_info=Yii::app()->session[$session_code_key];
@@ -188,7 +189,7 @@ class LunaCodeVerify {
 				return -2;
 			}
 			$code_info["verify_count"]+=1;
-			if($code!=$code_info["code"]){
+			if($code!=$code_info["code"] || $phone!= $code_info["phone"]){
 				if($code_type==self::_CODE_TYPE_IMG && $code_info["verify_count"]>=$this->_max_img_verify_counts){
 					unset(Yii::app()->session[$session_code_key]);
 					return -3;

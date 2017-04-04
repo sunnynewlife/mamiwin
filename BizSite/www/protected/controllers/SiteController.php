@@ -66,7 +66,10 @@ class SiteController extends CController
 		}
 		echo "I'm sorry,cannot find the $download_id resource.";
 	}
-	
+	public function  actionIndex()
+	{
+		$this->render("index");
+	}
 	
 	public function actionRegist()
 	{
@@ -78,9 +81,14 @@ class SiteController extends CController
 		$this->layout="test_page_list";
 		$this->render("test_page_login");
 	}
-	public function  actionIndex()
+	public function  actionTest()
 	{
 		$this->layout="test_page_list";
 		$this->render("test_page_list");
+	}
+	public function actionResetpwd()
+	{
+		$this->layout="test_page_list";
+		$this->render("test_page_resetpwd");		
 	}
 }

@@ -9,6 +9,7 @@
 		<ul>
 			<li class="f_item"><a href="/site/regist">账号注册</a></li>
 			<li class="f_item"><a href="/site/login">账号登录</a></li>
+			<li class="f_item"><a href="/site/resetpwd">忘记密码</a></li>
 		</ul>
 	</div>
 </div>
