@@ -434,6 +434,7 @@ class InterfaceController extends CController
 		Yii::app()->session[$this->_USER_SESSION_KEY]=$userInfo;
 		$errno = 1 ;
 		$this->_echoResponse($errno);
+		return ;
 	}
 	
 	//账号注销
@@ -466,6 +467,7 @@ class InterfaceController extends CController
 		if($lunaCodeVerify->sendSmsCode($phone)){
 			$errno = 1 ;
 			$this->_echoResponse($errno);
+			return ;
 		}
 		$errno = ConfTask::ERROR_SMS_SEND ;
 		$this->_echoResponse($errno);
