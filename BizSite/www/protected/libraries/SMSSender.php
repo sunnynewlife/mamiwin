@@ -8,6 +8,10 @@ LunaLoader::import("luna_lib.http.HttpInterface");
 class SMSSender implements ILunaSmsCodeSender{ 
 	private $_SKIP_SMS_SEND=false;
 	
+	const _LoginName="HUANJIN";
+	const _CorpID="2059386";
+	const _Password="100208abc";
+	
 	function init($configure)
 	{
 		if(isset($configure["skip_sms_send"]) && empty($configure["skip_sms_send"])==false){
@@ -22,22 +26,31 @@ class SMSSender implements ILunaSmsCodeSender{
 			return true;
 		}else{
 			LunaLogger::getInstance()->info($logMsg);
+			$this_password=self::_Password;
+			
+			$http=new HttpInterface("CoSMS","getSecretKey");
+			$cookie_jar = tempnam('./tmp','cookie');
+			$result=$http->submit(array("_v" =>	1),false,array(CURLOPT_COOKIEJAR => $cookie_jar));
+			$this_password=md5(md5(self::_CorpID.self::_LoginName.self::_Password).$result);
+
 			$params=array(
 					"mtLevel"		=>	1,
 					"msgFormat"		=>	2,
-					"corpID"		=>	"",
-					"loginName"		=>	"",
-					"password"		=>	"",
+					"corpID"		=>	self::_CorpID,
+					"loginName"		=>	self::_LoginName,
+					"password"		=>	$this_password,
 					"Mobs"			=>	$phone,
-					"msg"			=>	sprintf("短信验证码:%s",$code),
+					"msg"			=>	sprintf("请在页面里输入验证码:%s。【父母赢】",$code),
 					"kindFlag"		=>	"PhoneVerify",
-						
+					"MD5str"		=>	$result,
+					
 					"subNumber"		=>	"",
-					"linkID"		=>	"",
+					"linkID"		=>	"",					
 			);
 			$http=new HttpInterface("CoSMS","sendSms");
-			$result=$http->submit($params);
-			list($return_code)=explode($result,"\r");
+			$result=$http->submit($params,false,array( "cookiejar" => $cookie_jar ));
+			
+			list($return_code)=explode("\n",$result);
 			return 	$return_code=="100";
 		}
 	}

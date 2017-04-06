@@ -29,7 +29,7 @@
 			<array key="SmsParameters">
 				<string key="code_charset" value="1234567890" />
 				<string key="senderClassName"  value="SMSSender" />
-				<string key="skip_sms_send" value="true" />
+				<string key="skip_sms_send" value="false" />
 			</array>
 		</array>	
 		<array key="Logger" name="logger 配置">
@@ -93,6 +93,9 @@
 				<array key="interface" name="">
 					<array key="sendSms" name="发送短信">
 						<string key="url" value="sms/putMt/" />
+					</array>
+					<array key="getSecretKey" name="获取Secret Key">
+						<string key="url" value="sms/getMD5str/" />
 					</array>
 				</array>
 			</array>
