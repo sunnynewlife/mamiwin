@@ -8,7 +8,7 @@ class InterfaceController extends CController
 
 	public $_errorNo;
 	public $_errorMessage;
-	
+	private $_USER_SESSION_KEY="user";								//session key
 
 	public function _echoResponse($errno, $attach_errmsg = '', $data = array(), $count = null) {
 		$origin = isset($_SERVER['HTTP_ORIGIN'])? $_SERVER['HTTP_ORIGIN'] : '*';  		
@@ -62,6 +62,18 @@ class InterfaceController extends CController
 				break;
 			case '3002':	//根据ID查询测评题
 				return 'getEvaluationQuesitons';	
+				break;
+			case '9001':	//手机用户登录
+				return 'userLogin';	
+				break;
+			case '9002':	//手机用户注册
+				return 'userRegist';	
+				break;
+			case '9003':	//用户登出
+				return 'userLogout';	
+				break;
+			case '9004':	//获取用户信息，登录成功后
+				return 'getUserInfo';	
 				break;
 			
 			case '9999':	//TEST
@@ -245,5 +257,103 @@ class InterfaceController extends CController
 		}
 		$errno = 1 ;
 		$this->_echoResponse($errno,'',$ret); 
+	}
+
+
+	//账号注册
+	private function userRegist($params)
+	{
+		$phone=$params['phone'] ;
+		$password=$params['password'] ;
+		$img_verify_code=$params['img_verify_code'] ;
+		// $sms_verify_code=$params['sms_verify_code'] ;
+		
+		// if(empty($phone) || empty($password) || empty($img_verify_code) || empty($sms_verify_code)){
+		// 	return $this->_response(-99,"参数错误");
+		// }
+		// $lunaCodeVerify=LunaCodeVerify::getInstance();
+		// $imgVerifyCode=$lunaCodeVerify->verifyImageCode($img_verify_code);
+		// if($imgVerifyCode!=0){			
+		// 	$errno = ConfTask::ERROR_USER_LOGIN_PASSWORD ;
+		// 	$this->_echoResponse($errno);
+		// 	return;
+		// }
+		// $smsVerifyCode=$lunaCodeVerify->verifySmsCode($sms_verify_code);
+		// if($smsVerifyCode!=0){
+		// 	return $this->_response_error("sms_code", $smsVerifyCode-20);
+		// 	$errno = ConfTask::ERROR_USER_LOGIN_PASSWORD ;
+		// 	$this->_echoResponse($errno,'',$ret);
+		// 	return;
+		// }
+		$bizAppData= new BizAppData();
+		$userInfo=$bizAppData->getUserInfoByLoginName($phone, BizDataDictionary::User_AcctSource_SelfSite);
+		if(count($userInfo)>0){
+			// return $this->_response("-1","手机号已注册");
+			$errno = ConfTask::ERROR_USER_EXISTS ;
+			$this->_echoResponse($errno);
+			return;
+		}
+		$md5password=md5($password);
+		if($bizAppData->registUserInfo($phone, BizDataDictionary::User_AcctSource_SelfSite, $md5password)){
+			// return $this->_response();
+			$errno = 1 ;
+			$this->_echoResponse($errno);
+			return;
+		}
+		// return $this->_response("-2","注册失败，请稍后重试");
+		$errno = ConfTask::ERROR_USER_REGIST ;
+		$this->_echoResponse($errno);
+		return;
+
 	}	
+
+	//用户登录
+	private function userLogin($params){
+		$phone=$params['phone'] ;
+		$password=$params['password'] ;
+		// if(empty($phone) || empty($password)){
+		// 	return $this->_response(-99,"参数错误");
+		// }
+		$bizAppData= new BizAppData();
+		$userInfo=$bizAppData->getUserInfoByLoginName($phone, BizDataDictionary::User_AcctSource_SelfSite);
+		$md5password=md5($password);
+		if(count($userInfo)==0 || $userInfo[0]["LoginPwd"]!=$md5password ){
+			$errno = ConfTask::ERROR_USER_LOGIN_PASSWORD ;
+			$this->_echoResponse($errno);
+			return;
+		}
+		if($userInfo[0]["AcctStatus"]!=BizDataDictionary::User_AcctStatus_Valid){
+			$errno = ConfTask::ERROR_USER_LOGIN_USER ;
+			$this->_echoResponse($errno);
+			return;
+		}
+		$session_code_key="user";
+		Yii::app()->session[$this->_USER_SESSION_KEY]=$userInfo;
+		$errno = 1 ;
+		$this->_echoResponse($errno);
+	}
+	
+	//账号注销
+	private function userLogout()
+	{
+		unset(Yii::app()->session[$this->_USER_SESSION_KEY]);
+		$errno = 1 ;
+		$this->_echoResponse($errno);
+	}
+	//获取登录用户信息
+	private  function getUserInfo()
+	{
+		if(isset(Yii::app()->session[$this->_USER_SESSION_KEY])==false){
+			$errno = ConfTask::ERROR_USER_NOT_LOGIN ;
+			$this->_echoResponse($errno);
+			return;
+		}
+		$userInfo=Yii::app()->session[$this->_USER_SESSION_KEY];
+		$ret = array(
+			"LoginName"		=>	$userInfo[0]["LoginName"],
+			"IDX"			=>	$userInfo[0]["IDX"],
+		);
+		$errno = 1 ;
+		$this->_echoResponse($errno);
+	}
 }
