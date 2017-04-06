@@ -123,6 +123,17 @@
 	    	  minHeight: null,             // set minimum height of editor
 	    	  maxHeight: null,
 	    	  lang: 'zh-CN',
+	    	  toolbar:[
+		   				['FontStyle', ['bold', 'italic', 'underline', 'clear']],
+		   				['font', ['strikethrough', 'superscript', 'subscript']],
+		   			    ['fontsize', ['fontsize']],
+		   			    ['color', ['color']],
+		   			    ['table',['table']],
+		   			    ['style',['height','style','normal','blockquote','pre','h1','h2','h3','h4']],
+		   			    ['para', ['ul', 'ol', 'paragraph']],
+		   			    ['misc',['undo','redo']],
+		   			    ['options',['fullscreen','codeview']]	   
+			  ],	    	  
 	    	  callbacks:{
 		    	  onImageUpload: function(files) {
 		    		  console.log("image upload...");
