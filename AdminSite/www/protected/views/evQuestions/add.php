@@ -19,6 +19,18 @@
 							</select>
 						</td>
 					</tr>
+					<tr>
+						<td style="width:100px;">智能属性</td>
+						<td style="width:550px;" colspan=6>
+						<select name="Ability_Type_ID">
+							<?php 
+								foreach ($Ability_Type as $rowItem){						
+									echo sprintf("<option value=\"%s\" %s>%s</option>\n",$rowItem["IDX"],($Set_IDX==$rowItem["IDX"]?" selected ":" "),$rowItem["Ability_Name"]);				
+								}
+							?>				
+							</select>
+						</td>
+					</tr>
 					<tr>						
 						<td >评测题标题</td>
 						<td colspan=6>

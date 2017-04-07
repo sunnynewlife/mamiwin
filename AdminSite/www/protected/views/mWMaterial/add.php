@@ -89,7 +89,7 @@
 						</td>								
 					</tr>
 					<tr>
-						<td>培养能力</td>
+						<td>智能属性</td>
 						<td colspan=5>
 							<table style="width:600px;">
 <?php 
