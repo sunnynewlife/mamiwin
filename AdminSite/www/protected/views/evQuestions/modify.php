@@ -26,7 +26,7 @@
 						<select name="Ability_Type_ID">
 							<?php 
 								foreach ($Ability_Type as $rowItem){						
-									echo sprintf("<option value=\"%s\" %s>%s</option>\n",$rowItem["IDX"],($Set_IDX==$rowItem["IDX"]?" selected ":" "),$rowItem["Ability_Name"]);				
+									echo sprintf("<option value=\"%s\" %s>%s</option>\n",$rowItem["IDX"],($Evaluation_Quesiton["Ability_Type_ID"] == $rowItem["IDX"]?" selected ":" "),$rowItem["Ability_Name"]);				
 								}
 							?>				
 							</select>
