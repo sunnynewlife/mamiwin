@@ -13,7 +13,14 @@ class MWData
 	{
 		$sql="insert into Material_Files (File_Title,File_Type,Location_Type,Mime_Type,Original_Name,File_Size,Download_Id,File_Content) values (?,?,?,?,?,?,?,?)";
 		$params=array($File_Title,$File_Type,$Location_Type,$Mime_Type,$Original_Name,$File_Size,$Download_Id,$File_Content);
-		return LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params);
+		$pdo=LunaPdo::GetInstance($this->_PDO_NODE_NAME);
+		if($pdo->exec_with_prepare($sql,$params)){
+			$last_id = $pdo->lastInsertId();
+			return $last_id;			
+		}else{
+			return false;
+		}
+		
 	}
 	
 	public function updateMaterial_Files($File_Title,$File_Type,$IDX)
