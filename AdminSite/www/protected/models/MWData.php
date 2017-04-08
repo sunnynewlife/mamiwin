@@ -164,6 +164,14 @@ class MWData
 		$Material_info=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
 		return (isset($Material_info) && is_array($Material_info) && count($Material_info)>0)?$Material_info[0]["Download_Id"]:"";
 	}
+
+
+	public function updateIsShowIndex($Is_Show_Index,$IDX)
+	{
+		$sql="update Material_Files set Is_Show_Index=?,Update_Time=now() where IDX=?";
+		$params=array($Is_Show_Index,$IDX);
+		return LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params);
+	}
 		
 	
 }

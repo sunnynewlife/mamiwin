@@ -205,4 +205,18 @@ class MWFilesController extends TableMagtController
 			"message"		=>	"图片上传失败",
 		));
 	}
+
+
+	public function actionIsShowIndex(){
+		$value = Yii::app()->request->getParam($this->_primaryKey,'');
+		$Is_Show_Index=Yii::app()->request->getParam("Is_Show_Index");
+			if(empty($value)){
+			$this->exitWithError("参数错误",$this->_next_url);
+		}
+		$Is_Show_Index = (empty($Is_Show_Index)) ? 1 :0 ;
+		$mwData=new MWData();
+		if($mwData->updateIsShowIndex($Is_Show_Index,$value)>0){
+			return $this->exitWithSuccess(sprintf("修改%s成功",$this->_title),$this->_next_url);
+		}
+	}
 }
