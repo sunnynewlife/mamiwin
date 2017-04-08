@@ -262,10 +262,10 @@ class InterfaceController extends CController
 		if(empty($pagesize)){$pagesize =  10; }
 		if(empty($page)){$page =  1; }
 		$start = ($page - 1) * $pagesize;	
-
+		$Is_Show_Index 	= $params['Is_Show_Index'];
 
 		$mod = new ModMaterial();
-		$ret = $mod->getMeterialList(1,$pagesize,$start);
+		$ret = $mod->getMeterialList(1,$Is_Show_Index,$pagesize,$start);
 		$errno = 1 ;
 		$this->_echoResponse($errno,'',$ret); 
 	}  
