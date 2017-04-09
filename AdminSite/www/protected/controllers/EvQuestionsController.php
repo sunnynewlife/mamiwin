@@ -25,18 +25,21 @@ class EvQuestionsController extends TableMagtController
 	}
 	
 	public function actionIndex()
-	{
-		$this->_actionIndex($this->_tableName, $this->_searchName, $this->_next_url, $this->_tableName,"index");
+	{	
+		$this->_actionIndex("v_Questions", $this->_searchName, $this->_next_url, $this->_tableName,"index");
 	}
 	public function actionAdd()
 	{	
 		$submit = trim(Yii::app()->request->getParam('submit',0));
 		$EvaluationQuestionsSetData	=new EvaluationQuestionsSetData();
 		$EvaluationQuestionsSet_List=$EvaluationQuestionsSetData->getEvaluationQuestionsSetList();
+		$mwData=new MWData();
+		$Ability_Type=$mwData->getAbility_Type();
 		
 		$EvQuestionData=new EvQuestionData();
 		if ($submit){			
 			$Question_Set_IDX =Yii::app()->request->getParam("Question_Set","");
+			$Ability_Type_ID=Yii::app()->request->getParam("Ability_Type_ID","");
 			$Question_Stems=Yii::app()->request->getParam("Question_Stems","");
 			$Option_A=Yii::app()->request->getParam("Option_A","");
 			$Option_B=Yii::app()->request->getParam("Option_B","");
@@ -52,7 +55,7 @@ class EvQuestionsController extends TableMagtController
 				$this->alert('error',"请正确设置评测题及选项AB");
 			}else{
 				
-				if($EvQuestionData->insertEvQuestion($Question_Set_IDX,$Question_Stems,$Option_A,$Option_B,$Option_C,$Option_D,$Point_A,$Point_B,$Point_C,$Point_D,$IDX)){
+				if($EvQuestionData->insertEvQuestion($Question_Set_IDX,$Ability_Type_ID,$Question_Stems,$Option_A,$Option_B,$Option_C,$Option_D,$Point_A,$Point_B,$Point_C,$Point_D,0)){
 					return $this->exitWithSuccess("增加评测题成功",$this->_next_url);
 				}
 				$this->alert('error',"增加评测题失败，请正确设置字段值");
@@ -60,6 +63,7 @@ class EvQuestionsController extends TableMagtController
 		}
 		$this->renderData["Evaluation_Quesitons"]=$EvQuestionData->getEvQuestion();
 		$this->renderData["EvaluationQuestionsSet_List"]=$EvaluationQuestionsSet_List;
+		$this->renderData["Ability_Type"]=$Ability_Type;
 		$this->render("add",$this->renderData);
 	}
 	public function actionModify()
@@ -71,9 +75,12 @@ class EvQuestionsController extends TableMagtController
 		$submit = trim(Yii::app()->request->getParam('submit',0));
 		$EvQuestionData=new EvQuestionData();$EvaluationQuestionsSetData	=new EvaluationQuestionsSetData();
 		$EvaluationQuestionsSet_List=$EvaluationQuestionsSetData->getEvaluationQuestionsSetList();
-		
+		$mwData=new MWData();
+		$Ability_Type=$mwData->getAbility_Type();
+
 		if ($submit){			
 			$Question_Set_IDX =Yii::app()->request->getParam("Question_Set","");
+			$Ability_Type_ID =Yii::app()->request->getParam("Ability_Type_ID","");
 			$Question_Stems=Yii::app()->request->getParam("Question_Stems","");
 			$Option_A=Yii::app()->request->getParam("Option_A","");
 			$Option_B=Yii::app()->request->getParam("Option_B","");
@@ -84,6 +91,7 @@ class EvQuestionsController extends TableMagtController
 			$Point_B=Yii::app()->request->getParam("Point_B","");
 			$Point_C=Yii::app()->request->getParam("Point_C","");
 			$Point_D=Yii::app()->request->getParam("Point_D","");
+			$Order_Index=Yii::app()->request->getParam("Order_Index",0);
 				
 			if(empty($Question_Stems) || empty($Option_A) || empty($Option_B) || empty($Point_A) ) {
 				$this->alert('error',"请正确设置字段");
@@ -94,7 +102,7 @@ class EvQuestionsController extends TableMagtController
 				// 		$AbilityIds[]=$rowItem["IDX"];
 				// 	}
 				// }
-				if($EvQuestionData->updateEvQuestion($Question_Set_IDX,$Question_Stems,$Option_A,$Option_B,$Option_C,$Option_D,$Point_A,$Point_B,$Point_C,$Point_D,$value)){
+				if($EvQuestionData->updateEvQuestion($Question_Set_IDX,$Ability_Type_ID,$Question_Stems,$Option_A,$Option_B,$Option_C,$Option_D,$Point_A,$Point_B,$Point_C,$Point_D,$Order_Index,$value)){
 					return $this->exitWithSuccess("修改评测题成功",$this->_next_url);
 				}
 				$this->alert('error',"修改评测题失败，请正确设置字段值");
@@ -106,6 +114,7 @@ class EvQuestionsController extends TableMagtController
 		// $this->renderData["Task_Ability"]=$EvQuestionData->getTask_Ability($value);
 		$Evaluation_Quesiton = $EvQuestionData->getEvQuestionByIDX($value);
 		$this->renderData["Evaluation_Quesiton"]=$Evaluation_Quesiton;
+		$this->renderData["Ability_Type"]=$Ability_Type;
 		$this->renderData["EvaluationQuestionsSet_List"]=$EvaluationQuestionsSet_List;
 
 		$this->render("modify",$this->renderData);

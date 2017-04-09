@@ -29,7 +29,7 @@ class ModMaterial {
 	 * @param  integer $offSet    [description]
 	 * @return [type]             [description]
 	 */
-	public function getMeterialList($File_Type = '',$pagesize = 10 ,$offSet = 0 ){
+	public function getMeterialList($File_Type = '',$Is_Show_Index = '',$pagesize = 10 ,$offSet = 0 ){
 		$pagesize = (is_null($pagesize)) ? 10 : $pagesize;
 		$offSet = (is_null($offSet)) ? 0 : $offSet;
 		
@@ -39,6 +39,10 @@ class ModMaterial {
 			$sql .= " AND File_Type = ? ";
 			$params[] = $File_Type;
 			// $params = array_merge($params,array($del_flag));			
+		}
+		if($Is_Show_Index === 0 || $Is_Show_Index === 1 ){
+			$sql .= " AND Is_Show_Index = ? ";
+			$params[] = $Is_Show_Index;
 		}
 		$sql .= " order by IDX asc ;" ;
 		$sql .= " limit $offSet,$pagesize " ; 

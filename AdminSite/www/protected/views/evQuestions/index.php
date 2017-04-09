@@ -26,6 +26,7 @@
 				<tr>
 					<th>题目ID</th>
 					<th>题集</th>
+					<th>智能属性</th>
 					<th>题目</th>
 					<th>选项A</th>
 					<th>选项B</th>
@@ -35,6 +36,7 @@
 					<th>B分值</th>					
 					<th>C分值</th>
 					<th>D分值</th>
+					<th>排序</th>
 					<th width="80px">操作</th>
 				</tr>
 			</thead>
@@ -52,6 +54,8 @@ $rowsHtmlTag=<<<EndOfRowTag
 	<td>%s</td>
 	<td>%s</td>
 	<td>%s</td>
+	<td>%s</td>
+	<td>%s</td>	
 	<td>%s</td>				
 	<td>
 		<a href="/evQuestions/modify?IDX=%s" title="修改"><i class="icon-pencil"></i></a>&nbsp;
@@ -63,6 +67,9 @@ EndOfRowTag;
 			$titleLen=20;
 			foreach ($Evaluation_Questions as $item){
 				$Question_Set=$item["Question_Set_IDX"];
+				$Ability_Type_ID=$item["Ability_Type_ID"];
+				$Question_Set_Name=$item["Set_Name"];
+				$Ability_Name=$item["Ability_Name"];
 				$title=$item["Question_Stems"];
 				$Option_A=$item["Option_A"];
 				$Option_B=$item["Option_B"];
@@ -72,12 +79,14 @@ EndOfRowTag;
 				$Point_B=$item["Point_B"];
 				$Point_C=$item["Point_C"];
 				$Point_D=$item["Point_D"];
+				$Order_Index=$item["Order_Index"];
 				if(mb_strlen($title,"utf-8")>$titleLen){
 					$title=mb_substr($title, 0,$titleLen,"utf-8")."..";
 				}
 				echo sprintf($rowsHtmlTag,
 					$item["IDX"],
-					$Question_Set,
+					$Question_Set_Name,
+					$Ability_Name,
 					$title,
 					$Option_A,
 					$Option_B,
@@ -87,6 +96,7 @@ EndOfRowTag;
 					$Point_B,
 					$Point_C,
 					$Point_D,
+					$Order_Index,
 					$item["IDX"],$item["IDX"]			
 				);
 			}

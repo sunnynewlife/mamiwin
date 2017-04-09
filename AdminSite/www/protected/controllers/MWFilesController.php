@@ -31,6 +31,7 @@ class MWFilesController extends TableMagtController
 	}
 	public function actionAdd()
 	{
+
 		$submit = trim(Yii::app()->request->getParam('submit',0));
 		if ($submit){
 			$File_Type =Yii::app()->request->getParam("File_Type","1");
@@ -79,8 +80,10 @@ class MWFilesController extends TableMagtController
 				{
 					$Download_Id=CGuidManager::GetFullGuid();
 					$mwData=new MWData();
-					if($mwData->insertMaterial_Files($File_Title, $File_Type,$Location_Type,$Mime_Type,$File_Name,$File_Size, $Download_Id, $File_Content)>0){
-						return $this->exitWithSuccess(sprintf("增加%s成功",$this->_title),$this->_next_url);
+					$lastInsertID = $mwData->insertMaterial_Files($File_Title, $File_Type,$Location_Type,$Mime_Type,$File_Name,$File_Size, $Download_Id, $File_Content);
+					if($lastInsertID){						
+						$next_url = "/mWMaterial/add?Matrial_IDX=".$lastInsertID ;
+						return $this->exitWithSuccess(sprintf("增加%s成功",$this->_title),$next_url);
 					}						
 				}
 				$this->alert('error',"请选择上传的文件");
@@ -201,5 +204,19 @@ class MWFilesController extends TableMagtController
 			"return_code"	=>	-1,
 			"message"		=>	"图片上传失败",
 		));
+	}
+
+
+	public function actionIsShowIndex(){
+		$value = Yii::app()->request->getParam($this->_primaryKey,'');
+		$Is_Show_Index=Yii::app()->request->getParam("Is_Show_Index");
+			if(empty($value)){
+			$this->exitWithError("参数错误",$this->_next_url);
+		}
+		$Is_Show_Index = (empty($Is_Show_Index)) ? 1 :0 ;
+		$mwData=new MWData();
+		if($mwData->updateIsShowIndex($Is_Show_Index,$value)>0){
+			return $this->exitWithSuccess(sprintf("修改%s成功",$this->_title),$this->_next_url);
+		}
 	}
 }

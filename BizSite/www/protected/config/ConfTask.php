@@ -31,6 +31,11 @@ class ConfTask {
 	const ERROR_USER_EXISTS				= -901000005;
 	const ERROR_USER_NOT_LOGIN			= -901000006;
 	const ERROR_USER_IMAGE_CODE			= -901000007;
+	const ERROR_USER_SMS_CODE			= -901000008;
+	const ERROR_SMS_SEND				= -901000009;
+	const ERROR_USER_PHONE_REGIST		= -901000010;
+	const ERROR_USER_PASSWORD_RESET		= -901000011;
+
 
 
 	
@@ -67,6 +72,11 @@ class ConfTask {
 		self::ERROR_USER_EXISTS 			=>	"手机号已注册" ,
 		self::ERROR_USER_NOT_LOGIN 			=>	"您尚未登录" ,
 		self::ERROR_USER_IMAGE_CODE			=>	"图片验证码不正确" ,
+		self::ERROR_USER_SMS_CODE			=>	"短信验证码不正确" ,
+		self::ERROR_SMS_SEND				=>	"短信发送失败" ,
+		self::ERROR_USER_PHONE_REGIST		=>	"手机号未注册" ,
+		self::ERROR_USER_PASSWORD_RESET		=>	"密码重设失败" ,
+
 		
 		self::ERROR_CLUB_GAME_RIGHT 		=>	"您没有此操作权限" ,
 

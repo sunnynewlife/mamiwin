@@ -75,6 +75,12 @@ class InterfaceController extends CController
 			case '9004':	//获取用户信息，登录成功后
 				return 'getUserInfo';	
 				break;
+			case '9005':	//短信发送
+				return 'sendSms';	
+				break;
+			case '9006':	//修改密码
+				return 'resetPassword';	
+				break;
 			
 			case '9999':	//TEST
 				return 'test';		
@@ -85,7 +91,99 @@ class InterfaceController extends CController
 		
 		}
 	}	
+	public function checkParams($params){
+		if(!array_key_exists('type',$params) || isset($params['type']) == false){
+			$this->_errorNo = ConfTask::ERROR_PARAMS;
+		}
+		$type = $params['type'];
+		switch ($type) {
+			case '1002':
+				if(isset($params['IDX']) == false || empty($params['IDX'])){
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
+					$this->_errorMessage = " phone " ;
+				}				
+				break;
+			case '1003':
+				if(isset($params['Parent_Gender']) == false || empty($params['Parent_Gender'])){
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
+					$this->_errorMessage = " phone " ;
+				}				
+				if(isset($params['Parent_Marriage']) == false || empty($params['Parent_Marriage '])){
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
+					$this->_errorMessage = " phone " ;
+				}				
+				if(isset($params['Child_Gender']) == false || empty($params['Child_Gender'])){
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
+					$this->_errorMessage = " phone " ;
+				}				
+				if(isset($params['Child_Birthday']) == false || empty($params['Child_Birthday'])){
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
+					$this->_errorMessage = " phone " ;
+				}				
+				break;
+			case '1005':
+				if(isset($params['IDX']) == false || empty($params['IDX'])){
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
+					$this->_errorMessage = " phone " ;
+				}				
+				break;
+			case '1007':
+				if(isset($params['IDX']) == false || empty($params['IDX'])){
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
+					$this->_errorMessage = " phone " ;
+				}				
+				break;
+			case '2002':
+				if(isset($params['IDX']) == false || empty($params['IDX'])){
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
+					$this->_errorMessage = " phone " ;
+				}				
+				break;
+			case '9001':
+				if(isset($params['phone']) == false || empty($params['phone'])){
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
+					$this->_errorMessage = " phone " ;
+				}
+				if(isset($params['password']) == false || empty($params['password'])){
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
+					$this->_errorMessage = " password " ;
+				}
+				
+				break;
+			case '9002':
+				if(isset($params['phone']) == false || empty($params['phone'])){
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
+					$this->_errorMessage = " phone " ;
+				}
+				if(isset($params['password']) == false || empty($params['password'])){
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
+					$this->_errorMessage = " password " ;
+				}
+				
+				break;
+			case '9005':
+				if(isset($params['phone']) == false || empty($params['phone'])){
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
+					$this->_errorMessage = " phone " ;
+				}
+				break;
+			case '9006':
+				if(isset($params['phone']) == false || empty($params['phone'])){
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
+					$this->_errorMessage = " phone " ;
+				}
+				if(isset($params['password']) == false || empty($params['password'])){
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
+					$this->_errorMessage = " password " ;
+				}
+				
+				break;
 
+			default:
+				# code...
+				break;
+		}
+	}
 	public function actionIndex(){		
 		$body	= file_get_contents("php://input");
 		$bodys	= json_decode($body,true);
@@ -138,6 +236,11 @@ class InterfaceController extends CController
 			$method	= $this->urlRouter($type);
 		}
 		if(isset($method) && !empty($method)){
+			$this->checkParams($body);
+			if(!empty($this->_errorNo)){
+				$this->_echoResponse($this->_errorNo);
+				return;
+			}
 			// var_dump("method=" . $method);
 			// CommonHelper::my_var_dump(get_defined_vars()); 
 			$this->$method($body);
@@ -159,10 +262,10 @@ class InterfaceController extends CController
 		if(empty($pagesize)){$pagesize =  10; }
 		if(empty($page)){$page =  1; }
 		$start = ($page - 1) * $pagesize;	
-
+		$Is_Show_Index 	= isset($params['Is_Show_Index']) ? $params['Is_Show_Index'] : '';
 
 		$mod = new ModMaterial();
-		$ret = $mod->getMeterialList(1,$pagesize,$start);
+		$ret = $mod->getMeterialList(1,$Is_Show_Index,$pagesize,$start);
 		$errno = 1 ;
 		$this->_echoResponse($errno,'',$ret); 
 	}  
@@ -331,6 +434,7 @@ class InterfaceController extends CController
 		Yii::app()->session[$this->_USER_SESSION_KEY]=$userInfo;
 		$errno = 1 ;
 		$this->_echoResponse($errno);
+		return ;
 	}
 	
 	//账号注销
@@ -355,5 +459,59 @@ class InterfaceController extends CController
 		);
 		$errno = 1 ;
 		$this->_echoResponse($errno);
+	}
+
+	private function sendSms($params){
+		$phone=$params['phone'] ;
+		$lunaCodeVerify=LunaCodeVerify::getInstance();
+		if($lunaCodeVerify->sendSmsCode($phone)){
+			$errno = 1 ;
+			$this->_echoResponse($errno);
+			return ;
+		}
+		$errno = ConfTask::ERROR_SMS_SEND ;
+		$this->_echoResponse($errno);
+	}
+
+	//修改密码
+	private function resetPassword($params){
+		$phone=$params['phone'] ;
+		$password=$params['password'] ;
+		$img_code=$params['img_verify_code'] ;
+		$sms_code=$params['sms_verify_code'] ;
+
+		// $lunaCodeVerify=LunaCodeVerify::getInstance();
+		// $imgVerifyCode=$lunaCodeVerify->verifyImageCode($img_verify_code);
+		// if($imgVerifyCode!=0){
+		// 	// return $this->_response_error("img_code", $imgVerifyCode-10);
+		// 	$errno = ConfTask::ERROR_USER_IMAGE_CODE ;
+		// 	$this->_echoResponse($errno);
+		// 	return ;
+		// }
+		// $smsVerifyCode=$lunaCodeVerify->verifySmsCode($sms_verify_code,$phone);
+		// if($smsVerifyCode!=0){
+		// 	// return $this->_response_error("sms_code", $smsVerifyCode-20);
+		// 	$errno = ConfTask::ERROR_USER_SMS_CODE ;
+		// 	$this->_echoResponse($errno);
+		// 	return ;
+		// }
+		$bizAppData= new BizAppData();
+		$userInfo=$bizAppData->getUserInfoByLoginName($phone, BizDataDictionary::User_AcctSource_SelfSite);
+		if(count($userInfo)==0){
+			// return $this->_response("-1","手机号未注册");
+			$errno = ConfTask::ERROR_USER_PHONE_REGIST ;
+			$this->_echoResponse($errno);
+			return ;
+		}
+		$md5password=md5($password);
+		if($bizAppData->resetPwd($phone, BizDataDictionary::User_AcctSource_SelfSite, $md5password)){
+			$errno = 1 ;
+			$this->_echoResponse($errno);
+			return ;
+		}
+		// return $this->_response("-2","重设失败，请稍后重试");
+		$errno = ConfTask::ERROR_USER_PASSWORD_RESET ;
+		$this->_echoResponse($errno);
+		return ;
 	}
 }

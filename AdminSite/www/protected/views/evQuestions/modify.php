@@ -20,6 +20,18 @@
 							</select>
 						</td>
 					</tr>
+					<tr>
+						<td style="width:100px;">智能属性</td>
+						<td style="width:550px;" colspan=6>
+						<select name="Ability_Type_ID">
+							<?php 
+								foreach ($Ability_Type as $rowItem){						
+									echo sprintf("<option value=\"%s\" %s>%s</option>\n",$rowItem["IDX"],($Evaluation_Quesiton["Ability_Type_ID"] == $rowItem["IDX"]?" selected ":" "),$rowItem["Ability_Name"]);				
+								}
+							?>				
+							</select>
+						</td>
+					</tr>
 					<tr>						
 						<td >评测题标题</td>
 						<td colspan=6>
@@ -68,7 +80,15 @@
 						<td>
 							<input type="text"  name="Point_D" value="<?php echo $Evaluation_Quesiton["Point_D"]?>" class="input-xlarge" autofocus="false"  style="width:50px;"/>							
 						</td>											
-					</tr>					
+					</tr>		
+					<tr>						
+						<td >排序</td>
+						<td colspan=2>
+							<input type="text" maxlength="50" name="Order_Index" value="<?php echo $Evaluation_Quesiton["Order_Index"]?>" class="input-xlarge" autofocus="true" style="width:100px;" />
+						</td>
+						<td style="width:100px;"></td>
+						<td></td>											
+					</tr>			
 				</table>
 
 				<input type="hidden" name="submit" value="1" />
