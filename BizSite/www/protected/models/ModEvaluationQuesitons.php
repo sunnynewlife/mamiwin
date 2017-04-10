@@ -32,15 +32,15 @@ class ModEvaluationQuesitons {
 	 * @param  integer $offSet    [description]
 	 * @return [type]             [description]
 	 */
-	public function getEvaluationQuesitonsList($File_Type = '',$pagesize = 10 ,$offSet = 0 ){
+	public function getEvaluationQuesitonsList($Question_Set_IDX = '',$pagesize = 10 ,$offSet = 0 ){
 		$pagesize = (is_null($pagesize)) ? 10 : $pagesize;
 		$offSet = (is_null($offSet)) ? 0 : $offSet;
 		
 		$params=array();
 		$sql=" SELECT IDX,Question_Stems,Ability_Type_ID,Option_A,Option_B,Option_C,Option_D,Point_A,Point_B,Point_C,Point_D,Create_time,Update_time from Evaluation_Quesitons	where 1 = 1 ";
-		if(!empty($Task_Type) ){
-			$sql .= " AND Task_Type = ? ";
-			$params[] = $Task_Type;			
+		if(!empty($Question_Set_IDX) ){
+			$sql .= " AND Question_Set_IDX = ? ";
+			$params[] = $Question_Set_IDX;			
 		}
 		$sql .= " order by IDX asc ;" ;
 		$sql .= " limit $offSet,$pagesize " ; 
