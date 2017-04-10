@@ -57,7 +57,7 @@ class InterfaceController extends CController
 			case '2002':	//根据ID查询任务
 				return 'getTaskMeterialDetail';	
 				break;
-			case '3001':		// 查询所有测评题列表
+			case '3001':	// 查询所有测评题列表
 				return 'getEvaluationQuesitonsList';
 				break;
 			case '3002':	//根据ID查询测评题
@@ -368,26 +368,27 @@ class InterfaceController extends CController
 	{
 		$phone=$params['phone'] ;
 		$password=$params['password'] ;
-		$img_verify_code=$params['img_verify_code'] ;
-		// $sms_verify_code=$params['sms_verify_code'] ;
+		// $img_verify_code=$params['img_verify_code'] ;
+		$sms_verify_code=$params['sms_verify_code'] ;
 		
 		// if(empty($phone) || empty($password) || empty($img_verify_code) || empty($sms_verify_code)){
 		// 	return $this->_response(-99,"参数错误");
 		// }
-		// $lunaCodeVerify=LunaCodeVerify::getInstance();
+		
 		// $imgVerifyCode=$lunaCodeVerify->verifyImageCode($img_verify_code);
 		// if($imgVerifyCode!=0){			
 		// 	$errno = ConfTask::ERROR_USER_LOGIN_PASSWORD ;
 		// 	$this->_echoResponse($errno);
 		// 	return;
 		// }
-		// $smsVerifyCode=$lunaCodeVerify->verifySmsCode($sms_verify_code);
-		// if($smsVerifyCode!=0){
-		// 	return $this->_response_error("sms_code", $smsVerifyCode-20);
-		// 	$errno = ConfTask::ERROR_USER_LOGIN_PASSWORD ;
-		// 	$this->_echoResponse($errno,'',$ret);
-		// 	return;
-		// }
+		$lunaCodeVerify=LunaCodeVerify::getInstance();
+		$smsVerifyCode=$lunaCodeVerify->verifySmsCode($sms_verify_code);
+		if($smsVerifyCode!=0){
+			return $this->_response_error("sms_code", $smsVerifyCode-20);
+			$errno = ConfTask::ERROR_USER_LOGIN_PASSWORD ;
+			$this->_echoResponse($errno,'',$ret);
+			return;
+		}
 		$bizAppData= new BizAppData();
 		$userInfo=$bizAppData->getUserInfoByLoginName($phone, BizDataDictionary::User_AcctSource_SelfSite);
 		if(count($userInfo)>0){
@@ -460,9 +461,17 @@ class InterfaceController extends CController
 		$errno = 1 ;
 		$this->_echoResponse($errno);
 	}
-
+	//发送短信前，必须 输入图片验证码，注册、修改密码
 	private function sendSms($params){
 		$phone=$params['phone'] ;
+		$img_verify_code=$params['img_verify_code'] ;
+		
+		$imgVerifyCode=$lunaCodeVerify->verifyImageCode($img_verify_code);
+		if($imgVerifyCode!=0){
+			$errno = ConfTask::ERROR_USER_IMAGE_CODE ;
+			$this->_echoResponse($errno);
+			return ;
+		}
 		$lunaCodeVerify=LunaCodeVerify::getInstance();
 		if($lunaCodeVerify->sendSmsCode($phone)){
 			$errno = 1 ;
