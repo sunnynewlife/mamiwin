@@ -105,9 +105,10 @@ class UserController extends CController
 		if($userInfo[0]["AcctStatus"]!=BizDataDictionary::User_AcctStatus_Valid){
 			return $this->_response("-2","账号异常，不能登录");
 		}
+		$userInfo[0]["AcctSource"]	=	BizDataDictionary::User_AcctSource_SelfSite;
 		$session_code_key="user";
-		Yii::app()->session[$this->_USER_SESSION_KEY]=$userInfo;
-		$this->_response();		
+		Yii::app()->session[$this->_USER_SESSION_KEY]=$userInfo[0];
+		$this->_response(0,"success",$userInfo[0]);		
 	}
 	//账号注销
 	public function actionLogout()
@@ -122,8 +123,9 @@ class UserController extends CController
 		}
 		$userInfo=Yii::app()->session[$this->_USER_SESSION_KEY];
 		$this->_response(0,"success",array(
-			"LoginName"		=>	$userInfo[0]["LoginName"],
-			"IDX"			=>	$userInfo[0]["IDX"],
+			"LoginName"		=>	$userInfo["LoginName"],
+			"IDX"			=>	$userInfo["IDX"],
+			"AcctSource"	=>	$userInfo["AcctSource"],
 		));
 	}
 	//重新设置账号密码
@@ -155,5 +157,39 @@ class UserController extends CController
 			return $this->_response();
 		}
 		return $this->_response("-2","重设失败，请稍后重试");
+	}
+	//微信登录
+	public function actionWxLogin()
+	{
+		$code			=	Yii::app()->request->getParam('code',"");
+		$needUserInfo	=	Yii::app()->request->getParam('userinfo',"");
+		if(empty($code)){
+			return $this->_response(-99,"参数错误");
+		}
+		$wxUser=WxHelper::getOpenId($code);
+		if($wxUser==false){
+			return $this->_response("-1","code 错误");
+		}
+		$bizAppData= new BizAppData();
+		$userInfo=$bizAppData->getUserInfoByLoginName($wxUser["openid"], BizDataDictionary::User_AcctSource_Tencent_Wx);
+		if(count($userInfo)==0){
+			$bizAppData->registThirdUserInfo($wxUser["openid"], BizDataDictionary::User_AcctSource_Tencent_Wx);
+		}
+		$userInfo=$bizAppData->getUserInfoByLoginName($wxUser["openid"], BizDataDictionary::User_AcctSource_Tencent_Wx);
+		if(count($userInfo)==0){
+			return $this->_response("-2","记录第3方账号出错");
+		}
+		$userInfo[0]["AcctSource"]	=	BizDataDictionary::User_AcctSource_SelfSite;
+		if($needUserInfo=="1"){
+			$userInfo[0]["OpenUserInfo"]=WxHelper::getOpenIdUserInfo($wxUser["openid"]);
+		}
+		$session_code_key="user";
+		Yii::app()->session[$this->_USER_SESSION_KEY]=$userInfo[0];
+		$this->_response(0,"success",array(
+			"LoginName"		=>		$wxUser["openid"],
+			"IDX"			=>		$userInfo["IDX"],
+			"AcctSource"	=>		BizDataDictionary::User_AcctSource_Tencent_Wx,
+			"OpenUserInfo"	=>		$userInfo[0]["OpenUserInfo"],
+		));
 	}
 }

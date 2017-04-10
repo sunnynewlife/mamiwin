@@ -14,20 +14,6 @@ class SiteController extends CController
 	{
 	}
 	
-	//test 微信用户进入页面 
-	public function actionWxIndex()
-	{
-		$code	=	Yii::app()->request->getParam('code',"");
-		if(empty($code)==false){
-			$openId=WxHelper::getOpenId($code);
-			if($openId){
-				echo "Wx OpenID=".$openId;
-				return ;
-			}
-		}
-		echo "unauthized user.";
-	}	
-	
 	//资料文件下载
 	public function actionDownload()
 	{
@@ -91,4 +77,18 @@ class SiteController extends CController
 		$this->layout="test_page_list";
 		$this->render("test_page_resetpwd");		
 	}
+	public function actionWxacct()
+	{
+		$this->layout="test_page_list";
+		$this->render("test_page_wxacct");
+	}	
+	public function actionWxIndex()
+	{
+		$data=array(
+				"code"		=>	Yii::app()->request->getParam('code',""),
+				"state"		=>	Yii::app()->request->getParam('state',"1"),
+		);
+		$this->layout="test_page_list";
+		$this->render("test_page_wxlogin",$data);
+	}	
 }

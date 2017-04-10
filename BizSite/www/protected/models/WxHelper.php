@@ -5,9 +5,8 @@ LunaLoader::import("luna_lib.util.LunaMemcache");
 
 class WxHelper
 {
-	const WX_APP_ID="wxdd49e61c887860bd";
-	const WX_SECRET="811df5190a7f85b5b718c12326ca58f7";
-	
+	const WX_APP_ID="wxb3def19097c93c37";
+	const WX_SECRET="9af53f46a404fa91b5678c4716248dca";
 	
 	public static function getOpenId($code)
 	{
@@ -21,10 +20,76 @@ class WxHelper
 			);
 			$data=$http->submit($params);
 			if($data && is_array($data) && isset($data["openid"]) && empty($data["openid"])==false){
-				return $data["openid"];
+				//保存访问用户的信息的 AccessToken
+				$cacheCfgNodeName="TencentWx";
+				$cacheKey=$data["openid"]."_AccessToken";
+				$expire=$data["expires_in"]-60;
+				LunaMemcache::GetInstance($cacheCfgNodeName)->write($cacheKey,$data["access_token"],$expire);
+				
+				//保存刷新用户信息的 AccessToken的 RefreshToken
+				$cacheKey=$data["openid"]."_RefreshToken";
+				$expire=$data["expires_in"]+72000;
+				LunaMemcache::GetInstance($cacheCfgNodeName)->write($cacheKey,$data["refresh_token"],$expire);
+				return $data;
 			}
 		}
 		return false;
+	}
+	
+	public static function getOpenIdUserInfo($openId)
+	{
+		if(empty($openId)==false){
+			$http=new HttpInterface("Tencent","GetUserInfo");
+			$params=array(
+					"access_token"		=>	self::getOpenIdAccessToken($openId),
+					"openid"			=>	$openId,
+					"lang"				=>	"zh_CN",
+			);
+			$data=$http->submit($params);
+			if($data && is_array($data) && isset($data["openid"]) && empty($data["openid"])==false){
+				return $data;
+			}
+		}
+		return false;
+	}
+	
+	public static function getOpenIdAccessToken($openId)
+	{
+		$cacheCfgNodeName="TencentWx";
+		$cacheKey=$openId."_AccessToken";
+		$cachedValue =LunaMemcache::GetInstance($cacheCfgNodeName)->read($cacheKey);
+		
+		if(isset($cachedValue) &&  $cachedValue!=false && empty($cachedValue)==false ){
+			return $cachedValue;
+		}else{
+			$cacheKey=$openId."_RefreshToken";
+			$refreshToken =LunaMemcache::GetInstance($cacheCfgNodeName)->read($cacheKey);
+			if(isset($refreshToken) &&  $refreshToken!=false && empty($refreshToken)==false ){
+				$http=new HttpInterface("Tencent","PageRefreshAccessToken");
+				$params=array(
+						"grant_type"		=>	"refresh_token",
+						"appid"				=>	WxHelper::WX_APP_ID,
+						"refresh_token"		=>	$refreshToken,
+				);
+				$data=$http->submit($params);
+				if(isset($data) && is_array($data) && isset($data["access_token"]) && empty($data["access_token"])==false){
+					$cachedValue=$data["access_token"];
+					
+					//保存访问用户的信息的 AccessToken
+					$cacheCfgNodeName="TencentWx";
+					$cacheKey=$openId."_AccessToken";
+					$expire=$data["expires_in"]-60;
+					LunaMemcache::GetInstance($cacheCfgNodeName)->write($cacheKey,$data["access_token"],$expire);
+					
+					//保存刷新用户信息的 AccessToken的 RefreshToken
+					$cacheKey=$openId."_RefreshToken";
+					$expire=$data["expires_in"]+72000;
+					LunaMemcache::GetInstance($cacheCfgNodeName)->write($cacheKey,$data["refresh_token"],$expire);
+				}
+				return $cachedValue;
+			}
+			return "access token out of date";
+		}
 	}
 	
 	public static function getAccessToken($bUsingCache=true)

@@ -101,9 +101,16 @@
 				<string key="responseType" value="json" />
 				<string key="method" value="GET" />
 				<array key="interface" name="">
-					<array key="PageAccessToken" name="网页授权access_token">
+					<array key="PageAccessToken" name="用户网页授权access_token">
 						<string key="url" value="sns/oauth2/access_token" />
 					</array>
+					<array key="PageRefreshAccessToken" name="用户网页授权access_token延期">
+						<string key="url" value="sns/oauth2/refresh_token" />
+					</array>
+					<array key="GetUserInfo" name="用户信息">
+						<string key="url" value="sns/userinfo" />
+					</array>
+															
 					<array key="AccessToken" name="后台服务访问微信接口凭证">
 						<string key="url" value="cgi-bin/token" />
 					</array>

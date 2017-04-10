@@ -21,7 +21,7 @@
 		</div>	
 		<div class="f_b">
 			<a id="JLoginBtn" href="#" class="btn" onclick="javascript:showUser();">查看登录账号信息</a>
-		</div>				
+		</div>	
 	</div>
 </div>
 <script>
@@ -68,7 +68,7 @@ function showUser()
          data: {},
          success: function (data) {
         	 if(data.code==0){
-            		alert("登录的用户:"+data.data.LoginName+" IDX="+data.data.IDX);
+            		alert("登录的用户:"+data.data.LoginName+" IDX="+data.data.IDX+" 登录来源:"+data.data.AcctSource);
         		}else{
             		alert(data.message);
         		}           
