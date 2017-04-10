@@ -134,7 +134,7 @@ class Curl
 		curl_setopt($this->_curl_session, CURLOPT_URL, $url);
 		if (parse_url($url, PHP_URL_SCHEME) == 'https') {
 			curl_setopt($this->_curl_session, CURLOPT_SSL_VERIFYPEER, FALSE);
-			curl_setopt($this->_curl_session, CURLOPT_SSL_VERIFYHOST, 1);
+			curl_setopt($this->_curl_session, CURLOPT_SSL_VERIFYHOST, 2);
 		}
 		$_time_start = microtime(true);
 		$response = curl_exec($this->_curl_session);
