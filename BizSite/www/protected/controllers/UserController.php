@@ -1,6 +1,7 @@
 <?php
 
 LunaLoader::import("luna_lib.verify.LunaCodeVerify");
+LunaLoader::import("luna_lib.log.LunaLogger");
 
 class UserController extends CController 
 {
@@ -174,20 +175,19 @@ class UserController extends CController
 		$userInfo=$bizAppData->getUserInfoByLoginName($wxUser["openid"], BizDataDictionary::User_AcctSource_Tencent_Wx);
 		if(count($userInfo)==0){
 			$bizAppData->registThirdUserInfo($wxUser["openid"], BizDataDictionary::User_AcctSource_Tencent_Wx);
+			$userInfo=$bizAppData->getUserInfoByLoginName($wxUser["openid"], BizDataDictionary::User_AcctSource_Tencent_Wx);
 		}
-		$userInfo=$bizAppData->getUserInfoByLoginName($wxUser["openid"], BizDataDictionary::User_AcctSource_Tencent_Wx);
 		if(count($userInfo)==0){
 			return $this->_response("-2","记录第3方账号出错");
 		}
-		$userInfo[0]["AcctSource"]	=	BizDataDictionary::User_AcctSource_SelfSite;
-		if($needUserInfo=="1"){
-			$userInfo[0]["OpenUserInfo"]=WxHelper::getOpenIdUserInfo($wxUser["openid"]);
-		}
+		$userInfo[0]["AcctSource"]	=	BizDataDictionary::User_AcctSource_Tencent_Wx;
+		$userInfo[0]["OpenUserInfo"]=  ($needUserInfo=="1"? WxHelper::getOpenIdUserInfo($wxUser["openid"]):array());
+
 		$session_code_key="user";
 		Yii::app()->session[$this->_USER_SESSION_KEY]=$userInfo[0];
 		$this->_response(0,"success",array(
 			"LoginName"		=>		$wxUser["openid"],
-			"IDX"			=>		$userInfo["IDX"],
+			"IDX"			=>		$userInfo[0]["IDX"],
 			"AcctSource"	=>		BizDataDictionary::User_AcctSource_Tencent_Wx,
 			"OpenUserInfo"	=>		$userInfo[0]["OpenUserInfo"],
 		));
