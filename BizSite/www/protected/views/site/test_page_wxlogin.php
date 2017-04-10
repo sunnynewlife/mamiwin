@@ -7,23 +7,30 @@
 	<div class="f_wrap">
 		<div class="f_b">
 			<a id="JLoginBtn" href="#" class="btn" onclick="javascript:login();">完成用户登录</a>
-			<a id="GetUserInfoBtn" href="#" class="btn" onclick="javascript:showUser();">查看登录用户信息</a>
+		</div>
+		<div class="f_b">
+			<a id="GetUserInfoBtn" href="#" class="btn" onclick="javascript:showUser();" style="display:none;">查看登录用户信息</a>
+		</div>
+		<div class="f_b">
 			<a id="ShareBtn" href="#" class="btn" onclick="javascript:share();" style="display:none;">微信分享</a>
-		</div>
-		<div class="f_item">
-				<input id="txtOpenId" type="text" placeholder="OpenId">
-		</div>
-		<div class="f_item">
-				<input id="txtNickName" type="text" placeholder="User nickname">
-		</div>
-		<div class="f_item">
-				<img src="" id="btnUserImg" />
+		</div>	
+		<div class="f_box">		
+			<div class="f_item">
+					<input id="txtOpenId" type="text" placeholder="OpenId">
+			</div>
+			<div class="f_item">
+					<input id="txtNickName" type="text" placeholder="User nickname">
+			</div>
+			<div class="f_item">
+					<img src="" id="btnUserImg" />
+			</div>
 		</div>							
 	</div>
 </div>
 <script>
 var code="<?php echo $code;?>";
-var state=<?php echo $state;?>
+var state=<?php echo $state;?>;
+
 function login()
 {
 	 $.ajax({
@@ -42,7 +49,7 @@ function login()
           		$("#GetUserInfoBtn").show();
           		var loginInfo=data.data;
           		$("#txtOpenId").val(loginInfo.LoginName);
-          		if(code==2){
+          		if(state==2){
 	          		$("#txtNickName").val(loginInfo.OpenUserInfo.nickname);
 	          		$("#btnUserImg").attr("src",loginInfo.OpenUserInfo.headimgurl);
           		}
