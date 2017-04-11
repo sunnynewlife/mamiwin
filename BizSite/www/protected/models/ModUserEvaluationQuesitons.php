@@ -43,9 +43,16 @@ class ModUserEvaluationQuesitons {
 		return array();
 	}
 
+	//为用户生成评测题
+	public function generateUserQuestion($User_IDX,$Question_Set_IDX){
+		$sql = " INSERT INTO User_Evalution_Questions(User_IDX,Question_Set_IDX,Question_IDX,Ability_Type_ID) SELECT $User_IDX,$Question_Set_IDX,IDX,Ability_Type_ID FROM Evaluation_Questions WHERE Question_Set_IDX = ? ";
+		$params = $Question_Set_IDX;
+		return LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params);
+	}
+
 	// 获取要做的下一题
 	public function getNextQuestion($User_IDX){
-		$sql="select * from User_Evalution_Questions where User_IDX=? AND status = 0  limit 1 ";
+		$sql="SELECT a.User_IDX,a.Question_Set_IDX,a.Question_IDX,b.Option_A,b.Option_B,b.Option_C,b.Option_D from User_Evaluation_Questions a ,Evaluation_Questions b  where a.Question_IDX = b.IDX  AND a.User_IDX=? AND a.status = 0  order by a.IDX  limit 1 ";
 		$params=array($User_IDX);
 		$ret=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
 		return (isset($ret) && is_array($ret) && count($ret)>0)?$ret[0]:array();
@@ -62,6 +69,17 @@ class ModUserEvaluationQuesitons {
 		$sql="update User_Evalution_Questions set Point=?,Status=?,Update_Time=now() where User_IDX=? and Question_IDX = ?";
 		$params=array($Point,$User_IDX,$Question_IDX);
 		return LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params);
+	}
+
+	/**
+	 * 计算用户整套评测题得分，并以此分配任务 
+	 * @return [type] [description]
+	 */
+	public function recordUserEvaluationResult($User_IDX,$Question_Set_IDX){
+		$sql = "INSERT INTO User_Evaluation_Result(User_IDX,Set_IDX,Ability_Type_IDX,Ability_Score) SELECT $User_IDX,$Question_Set_IDX,Ability_Type_ID,SUM(POINT) AS Ability_Score FROM user_evaluation_questions WHERE User_IDX = ? AND Question_Set_IDX = ? GROUP BY Ability_Type_ID" ;
+		$params=array($User_IDX,$Question_Set_IDX);
+		return LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params);
+
 	}
 }	
 ?>

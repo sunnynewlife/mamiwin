@@ -2,6 +2,8 @@
 
 LunaLoader::import("luna_lib.verify.LunaCodeVerify");
 require_once(dirname(__FILE__).'/../config/ConfTask.php');
+require_once(dirname(__FILE__).'/../libraries/LibUserQuestions.php');
+
 
 class InterfaceController extends CController 
 {
@@ -59,6 +61,19 @@ class InterfaceController extends CController
 			case '2002':	//根据ID查询任务
 				return 'getTaskMeterialDetail';	
 				break;
+			case '2003':	//获取用户任务列表
+				return 'getUserTaskList';
+				break;
+			case '2004':	//开始任务
+				return 'startUserTask';
+				break;
+			case '2005':	//完成、结束任务
+				return 'endUserTask';
+				break;
+			case '2006':	//换一个任务
+				return 'switchUserTask';
+				break;
+
 			case '3001':	// 查询所有测评题列表
 				return 'getEvaluationQuesitonsList';
 				break;
@@ -74,6 +89,9 @@ class InterfaceController extends CController
 			case '3005':	// 提交评测题结果
 				return 'recordUserQuestionResult';
 				break;
+			
+
+
 			case '9001':	//手机用户登录
 				return 'userLogin';	
 				break;
@@ -248,7 +266,10 @@ class InterfaceController extends CController
 					'User_IDX'=>$User_IDX
 				),$body);
 		}
-		
+		$body = array_merge(array(
+					'LoginName'=>'18917518989',
+					'User_IDX'=>"23"
+				),$body);
 		if(array_key_exists('type',$body)){
 			$type	= $body['type'];	
 		}else{
@@ -309,7 +330,7 @@ class InterfaceController extends CController
 		$this->_echoResponse($errno,'',$ret); 
 	}
 
-	//用户基础资料录入
+	//用户基础资料录入,自动分配评测题给用户
 	private function addUserBasicInfo($params){
 		$UserIDX = isset($params['UserIDX']) ? 1 :$params['UserIDX']  ;
 		$Parent_Gender = $params['Parent_Gender'] ;
@@ -323,6 +344,7 @@ class InterfaceController extends CController
 			$this->_echoResponse($errno,'',$ret);
 			return;
 		}
+		LibUserQuestions::distributeUserQuestsion($UserIDX,$Parent_Gender,$Parent_Marriage,$Child_Gender,$Child_Birthday);
 		$errno = 1 ;
 		$this->_echoResponse($errno,'',$ret); 
 	}
@@ -350,6 +372,21 @@ class InterfaceController extends CController
 		$ret = $mod->getTaskMeterialDetail($IDX);
 		if($ret === false){			
 			$errno = ConfTask::ERROR_QUEYR_TASK_DETAIL ;
+			$this->_echoResponse($errno,'',$ret);
+			return;
+		}
+		$errno = 1 ;
+		$this->_echoResponse($errno,'',$ret); 
+	}
+
+
+	private function getUserTaskList($params){
+		$User_IDX = $params['User_IDX'];
+		$Task_Type = isset($params['Task_Type']) ? $params['Task_Type'] : 0 ;
+		$mod = new ModUserTask();
+		$ret = $mod->getUserTaskList($User_IDX,$Task_Type);
+		if($ret === false){			
+			$errno = ConfTask::ERROR_QUEYR_USER_TASK_LIST ;
 			$this->_echoResponse($errno,'',$ret);
 			return;
 		}
@@ -608,6 +645,7 @@ class InterfaceController extends CController
 
 	/**
 	 * 提交评测题答案
+	 * TODO 全部评测结束 ，根据评测结果分配任务
 	 * @param  [type] $params [description]
 	 * @return [type]         [description]
 	 */

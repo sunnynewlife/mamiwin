@@ -58,6 +58,15 @@ class ModTask {
 		return false;
 	}
 
+/**
+ * 给用户分配 学习任务 ，TODO待确认
+ * @param  [type] $User_IDX [description]
+ * @return [type]           [description]
+ */
+	public function generateUserTask($User_IDX){
+
+	}
+
 }	
 
 
