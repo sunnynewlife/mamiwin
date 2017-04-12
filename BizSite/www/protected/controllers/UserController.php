@@ -192,4 +192,15 @@ class UserController extends CController
 			"OpenUserInfo"	=>		$userInfo[0]["OpenUserInfo"],
 		));
 	}
+	//微信JSAPI Config
+	public function actionWxJSAPIConfig()
+	{
+		$url			=	Yii::app()->request->getParam('url',"");
+		if(empty($url)){
+			return $this->_response(-99,"参数错误");
+		}
+		$JsSDKData=	WxHelper::getJSSDKData($url);
+		$this->_response(0,"success",$JsSDKData);
+	}
+	
 }

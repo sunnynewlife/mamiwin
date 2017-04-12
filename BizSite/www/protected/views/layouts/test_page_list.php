@@ -7,6 +7,7 @@
 <meta content="telephone=no,email=no" name="format-detection" />
 <link rel="stylesheet" type="text/css" href="/static/css/style.css?_t=20150812001">
 <script type="text/javascript" src="/static/js/jquery-1.8.1.min.js"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 </head>
 <body>
 	<div class="wraper">

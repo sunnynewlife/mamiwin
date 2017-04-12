@@ -92,6 +92,63 @@ class WxHelper
 		}
 	}
 	
+	public static function getJSSDKData($url)
+	{
+		$data=array(
+				"appId"			=>	WxHelper::WX_APP_ID,
+				"timestamp"		=>	time(),
+				"nonceStr"		=>	CGuidManager::GetGuid(),
+		);
+		$params=array(
+				"jsapi_ticket"	=>	self::getJsApiTicket(),
+				"noncestr"		=>	$data["nonceStr"],
+				"timestamp"		=>	$data["timestamp"],
+				"url"			=>	$url,
+		);
+		$buff="";
+		foreach ($params as $k => $v){
+			$buff .= $k . "=" . $v . "&";
+		}
+		$buff=substr($buff, 0, strlen($buff)-1);
+		$data["signature"]=sha1($buff);
+		return $data;
+	}	
+	
+	public static function getJsApiTicket()
+	{
+		$cacheCfgNodeName="TencentWx";
+		$cacheKey="WX.ACCESS.JSSDK_TICKET";
+		$expire=7100;
+	
+		$cachedValue =LunaMemcache::GetInstance($cacheCfgNodeName)->read($cacheKey);
+		if(isset($cachedValue) &&  $cachedValue!=false && empty($cachedValue)==false){
+			return $cachedValue;
+		}else{
+			$http=new HttpInterface("Tencent","JSApiTicket");
+			$params=array(
+					"type"			=>	"jsapi",
+					"access_token"	=>	$this->getAccessToken(),
+			);
+			$data=$http->submit($params);
+			if(isset($data) && is_array($data) && isset($data["errcode"]) && $data["errcode"]=="0" && isset($data["ticket"]) && empty($data["ticket"])==false){
+				$cachedValue=$data["ticket"];
+				LunaMemcache::GetInstance($cacheCfgNodeName)->write($cacheKey,$cachedValue,$expire);
+			}else{
+				//重新获取 access token
+				if(isset($data) && is_array($data) && isset($data["errcode"]) && ($data["errcode"]=="40001" || $data["errcode"]=="40002" || $data["errcode"]=="42001")){
+					$params[access_token] = self::getAccessToken(false);
+					$data=$http->submit($params);
+					if(isset($data) && is_array($data) && isset($data["errcode"]) && $data["errcode"]=="0" && isset($data["ticket"]) && empty($data["ticket"])==false){
+						$cachedValue=$data["ticket"];
+						LunaMemcache::GetInstance($cacheCfgNodeName)->write($cacheKey,$cachedValue,$expire);
+					}
+				}
+			}
+			return $cachedValue;
+		}
+	}	
+	
+	
 	public static function getAccessToken($bUsingCache=true)
 	{
 		$cacheCfgNodeName="TencentWx";
