@@ -10,7 +10,7 @@
 					<tr>
 						<td style="width:100px;">任务类型</td>
 						<td style="width:250px;">
-							<select name="Task_Type">
+							<select name="Task_Type"  id="Task_Type" onchange="javascript:TaskTypeChanged();">
 								<option value="1">学习任务</option>
 								<option value="2">陪伴任务</option>
 							</select>
@@ -29,6 +29,36 @@
 							<input type="text" maxlength="50" name="Max_Age" value="" class="input-xlarge" required="true" autofocus="true"  style="width:50px;"/>
 							岁
 						</td>	
+					</tr>
+					<tr id="trTask_TypeExtendAttr" style="display:none;">
+						<td>季节</td>
+						<td>
+							<select name="Task_Type_Season">
+								<option value="1">不限</option>
+								<option value="2">春季</option>
+								<option value="3">夏季</option>
+								<option value="4">秋季</option>
+								<option value="5">冬季</option>
+							</select>
+						</td>
+						<td>环境</td>
+						<td><select name="Task_Type_Env">
+								<option value="1">不限</option>
+								<option value="2">室内</option>
+								<option value="3">室外</option>
+								<option value="4">水中</option>
+								<option value="5">野外</option>
+							</select>
+						</td>
+						<td>人数</td>
+						<td>
+							<select name="Task_Type_Person">
+								<option value="1">不限</option>
+								<option value="2">独自</option>	
+								<option value="3">需父母</option>
+								<option value="4">需小伙伴</option>				
+							</select>
+						</td>						
 					</tr>
 					<tr>
 						<td>孩子性别</td>
@@ -119,3 +149,13 @@
 		</div>
 	</div>
 </div>
+<script type="text/javascript">
+function TaskTypeChanged()
+{
+	if($("#Task_Type").val()=="2"){
+		$("#trTask_TypeExtendAttr").show();
+	}else{
+		$("#trTask_TypeExtendAttr").hide();
+	}
+}
+</script>

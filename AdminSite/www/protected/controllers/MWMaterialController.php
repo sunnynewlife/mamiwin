@@ -5,7 +5,7 @@ class MWMaterialController extends TableMagtController
 	private $_tableName="Task_Material";
 	private $_searchName="";
 	private $_next_url="/mWMaterial/index";
-	private $_columns=array("Task_Type","Task_Title","Task_Status","Min_Time","Max_Time","Matrial_IDX","Min_Age","Max_Age","Child_Gender","Parent_Gender","Parent_Marriage","Only_Children","Matrial_IDX");
+	private $_columns=array("Task_Type","Task_Title","Task_Status","Min_Time","Max_Time","Matrial_IDX","Min_Age","Max_Age","Child_Gender","Parent_Gender","Parent_Marriage","Only_Children","Matrial_IDX","Task_Type_Season","Task_Type_Env","Task_Type_Person");
 	private $_title="父母赢管理后台-任务库定义";
 	private $_primaryKey="IDX";
 	
@@ -50,6 +50,10 @@ class MWMaterialController extends TableMagtController
 			$Parent_Gender=Yii::app()->request->getParam("Parent_Gender","1");
 			$Parent_Marriage=Yii::app()->request->getParam("Parent_Marriage","1");
 			$Only_Children=Yii::app()->request->getParam("Only_Children","1");
+			
+			$Task_Type_Season=Yii::app()->request->getParam("Task_Type_Season","1");
+			$Task_Type_Env=Yii::app()->request->getParam("Task_Type_Env","1");
+			$Task_Type_Person=Yii::app()->request->getParam("Task_Type_Person","1");
 
 			$Matrial_IDX=Yii::app()->request->getParam("Matrial_IDX","");
 				
@@ -69,7 +73,7 @@ class MWMaterialController extends TableMagtController
 					}
 				}
 				if($mwData->insertTask_Material($Task_Type,$Task_Title,$Task_Status,$Min_Time,$Max_Time,$Min_Age,$Max_Age,
-						$Child_Gender,$Parent_Gender,$Parent_Marriage,$Only_Children,$Matrial_IDX,$AbilityIds)){
+						$Child_Gender,$Parent_Gender,$Parent_Marriage,$Only_Children,$Matrial_IDX,$AbilityIds,$Task_Type_Season,$Task_Type_Env,$Task_Type_Person)){
 					return $this->exitWithSuccess("增加任务成功",$this->_next_url);
 				}
 				$this->alert('error',"增加任务失败，请正确设置字段值");
@@ -98,6 +102,10 @@ class MWMaterialController extends TableMagtController
 			$Parent_Marriage=Yii::app()->request->getParam("Parent_Marriage","1");
 			$Only_Children=Yii::app()->request->getParam("Only_Children","1");
 			
+			$Task_Type_Season=Yii::app()->request->getParam("Task_Type_Season","1");
+			$Task_Type_Env=Yii::app()->request->getParam("Task_Type_Env","1");
+			$Task_Type_Person=Yii::app()->request->getParam("Task_Type_Person","1");
+			
 			$Matrial_IDX=Yii::app()->request->getParam("Matrial_IDX","");
 			
 			$Task_Title=Yii::app()->request->getParam("Task_Title","");
@@ -116,7 +124,7 @@ class MWMaterialController extends TableMagtController
 					}
 				}
 				if($mwData->updateTask_Material($Task_Type,$Task_Title,$Task_Status,$Min_Time,$Max_Time,$Min_Age,$Max_Age,
-						$Child_Gender,$Parent_Gender,$Parent_Marriage,$Only_Children,$Matrial_IDX,$AbilityIds,$value)){
+						$Child_Gender,$Parent_Gender,$Parent_Marriage,$Only_Children,$Matrial_IDX,$AbilityIds,$value,$Task_Type_Season,$Task_Type_Env,$Task_Type_Person)){
 					return $this->exitWithSuccess("修改任务成功",$this->_next_url);
 				}
 				$this->alert('error',"修改任务失败，请正确设置字段值");

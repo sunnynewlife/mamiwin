@@ -10,7 +10,7 @@
 					<tr>
 						<td style="width:100px;">任务类型</td>
 						<td style="width:250px;">
-							<select name="Task_Type">
+							<select name="Task_Type" id="Task_Type" onchange="javascript:TaskTypeChanged();">
 								<option value="1" <?php echo $Task_Material["Task_Type"]==DictionaryData::Task_Material_Task_Type_Learn?"selected":"" ?>>学习任务</option>
 								<option value="2" <?php echo $Task_Material["Task_Type"]==DictionaryData::Task_Material_Task_Type_Accompany?"selected":"" ?>>陪伴任务</option>
 							</select>
@@ -30,6 +30,36 @@
 							岁
 						</td>	
 					</tr>
+					<tr id="trTask_TypeExtendAttr" style="display:<?php echo $Task_Material["Task_Type"]==DictionaryData::Task_Material_Task_Type_Accompany?"":"none" ?>;">
+						<td>季节</td>
+						<td>
+							<select name="Task_Type_Season">
+								<option value="1" <?php echo $Task_Material["Task_Type_Season"]=="1"?"selected":"" ?>>不限</option>
+								<option value="2" <?php echo $Task_Material["Task_Type_Season"]=="2"?"selected":"" ?>>春季</option>
+								<option value="3" <?php echo $Task_Material["Task_Type_Season"]=="3"?"selected":"" ?>>夏季</option>
+								<option value="4" <?php echo $Task_Material["Task_Type_Season"]=="4"?"selected":"" ?>>秋季</option>
+								<option value="5" <?php echo $Task_Material["Task_Type_Season"]=="5"?"selected":"" ?>>冬季</option>
+							</select>
+						</td>
+						<td>环境</td>
+						<td><select name="Task_Type_Env">
+								<option value="1" <?php echo $Task_Material["Task_Type_Env"]=="1"?"selected":"" ?>>不限</option>
+								<option value="2" <?php echo $Task_Material["Task_Type_Env"]=="2"?"selected":"" ?>>室内</option>
+								<option value="3" <?php echo $Task_Material["Task_Type_Env"]=="3"?"selected":"" ?>>室外</option>
+								<option value="4" <?php echo $Task_Material["Task_Type_Env"]=="4"?"selected":"" ?>>水中</option>
+								<option value="5" <?php echo $Task_Material["Task_Type_Env"]=="5"?"selected":"" ?>>野外</option>
+							</select>
+						</td>
+						<td>人数</td>
+						<td>
+							<select name="Task_Type_Person">
+								<option value="1" <?php echo $Task_Material["Task_Type_Person"]=="1"?"selected":"" ?>>不限</option>
+								<option value="2" <?php echo $Task_Material["Task_Type_Person"]=="2"?"selected":"" ?>>独自</option>	
+								<option value="3" <?php echo $Task_Material["Task_Type_Person"]=="3"?"selected":"" ?>>需父母</option>
+								<option value="4" <?php echo $Task_Material["Task_Type_Person"]=="4"?"selected":"" ?>>需小伙伴</option>				
+							</select>
+						</td>						
+					</tr>					
 					<tr>
 						<td>孩子性别</td>
 						<td>
@@ -127,3 +157,14 @@
 		</div>
 	</div>
 </div>
+<script type="text/javascript">
+function TaskTypeChanged()
+{
+	if($("#Task_Type").val()=="2"){
+		$("#trTask_TypeExtendAttr").show();
+	}else{
+		$("#trTask_TypeExtendAttr").hide();
+	}
+}
+</script>
+

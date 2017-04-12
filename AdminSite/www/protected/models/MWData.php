@@ -61,14 +61,14 @@ class MWData
 		return (isset($Material_Files) && is_array($Material_Files) && count($Material_Files)>0)?$Material_Files:array();		
 	}
 	
-	public function insertTask_Material($Task_Type,$Task_Title,$Task_Status,$Min_Time,$Max_Time,$Min_Age,$Max_Age,$Child_Gender,$Parent_Gender,$Parent_Marriage,$Only_Children,$Matrial_IDX,$AbilityIds)
+	public function insertTask_Material($Task_Type,$Task_Title,$Task_Status,$Min_Time,$Max_Time,$Min_Age,$Max_Age,$Child_Gender,$Parent_Gender,$Parent_Marriage,$Only_Children,$Matrial_IDX,$AbilityIds,$Task_Type_Season,$Task_Type_Env,$Task_Type_Person)
 	{
 		if(empty($Matrial_IDX)){
-			$sql="insert into Task_Material (Task_Type,Task_Title,Task_Status,Min_Time,Max_Time,Min_Age,Max_Age,Child_Gender,Parent_Gender,Parent_Marriage,Only_Children,Create_Time,Update_Time) values (?,?,?,?,?,?,?,?,?,?,?,now(),now())";
-			$params=array($Task_Type,$Task_Title,$Task_Status,$Min_Time,$Max_Time,$Min_Age,$Max_Age,$Child_Gender,$Parent_Gender,$Parent_Marriage,$Only_Children);
+			$sql="insert into Task_Material (Task_Type,Task_Title,Task_Status,Min_Time,Max_Time,Min_Age,Max_Age,Child_Gender,Parent_Gender,Parent_Marriage,Only_Children,Create_Time,Update_Time,Task_Type_Season,Task_Type_Env,Task_Type_Person) values (?,?,?,?,?,?,?,?,?,?,?,now(),now(),?,?,?)";
+			$params=array($Task_Type,$Task_Title,$Task_Status,$Min_Time,$Max_Time,$Min_Age,$Max_Age,$Child_Gender,$Parent_Gender,$Parent_Marriage,$Only_Children,$Task_Type_Season,$Task_Type_Env,$Task_Type_Person);
 		}else{
-			$sql="insert into Task_Material (Task_Type,Task_Title,Task_Status,Min_Time,Max_Time,Min_Age,Max_Age,Child_Gender,Parent_Gender,Parent_Marriage,Only_Children,Create_Time,Update_Time,Matrial_IDX) values (?,?,?,?,?,?,?,?,?,?,?,now(),now(),? )";
-			$params=array($Task_Type,$Task_Title,$Task_Status,$Min_Time,$Max_Time,$Min_Age,$Max_Age,$Child_Gender,$Parent_Gender,$Parent_Marriage,$Only_Children,$Matrial_IDX);
+			$sql="insert into Task_Material (Task_Type,Task_Title,Task_Status,Min_Time,Max_Time,Min_Age,Max_Age,Child_Gender,Parent_Gender,Parent_Marriage,Only_Children,Create_Time,Update_Time,Matrial_IDX,Task_Type_Season,Task_Type_Env,Task_Type_Person) values (?,?,?,?,?,?,?,?,?,?,?,now(),now(),?,?,?,?)";
+			$params=array($Task_Type,$Task_Title,$Task_Status,$Min_Time,$Max_Time,$Min_Age,$Max_Age,$Child_Gender,$Parent_Gender,$Parent_Marriage,$Only_Children,$Matrial_IDX,$Task_Type_Season,$Task_Type_Env,$Task_Type_Person);
 		}
 		$pdo=LunaPdo::GetInstance($this->_PDO_NODE_NAME);
 		$pdo->beginTransaction();
@@ -87,14 +87,14 @@ class MWData
 		return false;
 	}
 	
-	public function updateTask_Material($Task_Type,$Task_Title,$Task_Status,$Min_Time,$Max_Time,$Min_Age,$Max_Age,$Child_Gender,$Parent_Gender,$Parent_Marriage,$Only_Children,$Matrial_IDX,$AbilityIds,$Task_IDX)
+	public function updateTask_Material($Task_Type,$Task_Title,$Task_Status,$Min_Time,$Max_Time,$Min_Age,$Max_Age,$Child_Gender,$Parent_Gender,$Parent_Marriage,$Only_Children,$Matrial_IDX,$AbilityIds,$Task_IDX,$Task_Type_Season,$Task_Type_Env,$Task_Type_Person)
 	{
 		if(empty($Matrial_IDX)){
-			$sql="update Task_Material set Task_Type=?,Task_Title=?,Task_Status=?,Min_Time=?,Max_Time=?,Min_Age=?,Max_Age=?,Child_Gender=?,Parent_Gender=?,Parent_Marriage=?,Only_Children=?,Matrial_IDX=null,Update_Time=now() where IDX=?";
-			$params=array($Task_Type,$Task_Title,$Task_Status,$Min_Time,$Max_Time,$Min_Age,$Max_Age,$Child_Gender,$Parent_Gender,$Parent_Marriage,$Only_Children,$Task_IDX);
+			$sql="update Task_Material set Task_Type=?,Task_Title=?,Task_Status=?,Min_Time=?,Max_Time=?,Min_Age=?,Max_Age=?,Child_Gender=?,Parent_Gender=?,Parent_Marriage=?,Only_Children=?,Matrial_IDX=null,Update_Time=now(),Task_Type_Season=?,Task_Type_Env=?,Task_Type_Person=? where IDX=?";
+			$params=array($Task_Type,$Task_Title,$Task_Status,$Min_Time,$Max_Time,$Min_Age,$Max_Age,$Child_Gender,$Parent_Gender,$Parent_Marriage,$Only_Children,$Task_Type_Season,$Task_Type_Env,$Task_Type_Person,$Task_IDX);
 		}else{
-			$sql="update Task_Material set Task_Type=?,Task_Title=?,Task_Status=?,Min_Time=?,Max_Time=?,Min_Age=?,Max_Age=?,Child_Gender=?,Parent_Gender=?,Parent_Marriage=?,Only_Children=?,Matrial_IDX=?,Update_Time=now() where IDX=?";
-			$params=array($Task_Type,$Task_Title,$Task_Status,$Min_Time,$Max_Time,$Min_Age,$Max_Age,$Child_Gender,$Parent_Gender,$Parent_Marriage,$Only_Children,$Matrial_IDX,$Task_IDX);
+			$sql="update Task_Material set Task_Type=?,Task_Title=?,Task_Status=?,Min_Time=?,Max_Time=?,Min_Age=?,Max_Age=?,Child_Gender=?,Parent_Gender=?,Parent_Marriage=?,Only_Children=?,Matrial_IDX=?,Update_Time=now(),Task_Type_Season=?,Task_Type_Env=?,Task_Type_Person=? where IDX=?";
+			$params=array($Task_Type,$Task_Title,$Task_Status,$Min_Time,$Max_Time,$Min_Age,$Max_Age,$Child_Gender,$Parent_Gender,$Parent_Marriage,$Only_Children,$Matrial_IDX,$Task_Type_Season,$Task_Type_Env,$Task_Type_Person,$Task_IDX);
 		}
 		$pdo=LunaPdo::GetInstance($this->_PDO_NODE_NAME);
 		$pdo->beginTransaction();
