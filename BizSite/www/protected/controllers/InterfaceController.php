@@ -2,6 +2,8 @@
 
 LunaLoader::import("luna_lib.verify.LunaCodeVerify");
 require_once(dirname(__FILE__).'/../config/ConfTask.php');
+require_once(dirname(__FILE__).'/../libraries/LibUserQuestions.php');
+
 
 class InterfaceController extends CController 
 {
@@ -9,6 +11,8 @@ class InterfaceController extends CController
 	public $_errorNo;
 	public $_errorMessage;
 	private $_USER_SESSION_KEY="user";								//session key
+	private $_need_login_method_type = array(
+		3004,3005);
 
 	public function _echoResponse($errno, $attach_errmsg = '', $data = array(), $count = null) {
 		$origin = isset($_SERVER['HTTP_ORIGIN'])? $_SERVER['HTTP_ORIGIN'] : '*';  		
@@ -57,12 +61,37 @@ class InterfaceController extends CController
 			case '2002':	//根据ID查询任务
 				return 'getTaskMeterialDetail';	
 				break;
+			case '2003':	//获取用户任务列表
+				return 'getUserTaskList';
+				break;
+			case '2004':	//开始任务
+				return 'startUserTask';
+				break;
+			case '2005':	//完成、结束任务
+				return 'endUserTask';
+				break;
+			case '2006':	//换一个任务
+				return 'switchUserTask';
+				break;
+
 			case '3001':	// 查询所有测评题列表
 				return 'getEvaluationQuesitonsList';
 				break;
 			case '3002':	//根据ID查询测评题
 				return 'getEvaluationQuesitons';	
 				break;
+			case '3003':	// 查询所有测评题集列表
+				return 'getEvaluationQuesitonsSetList';
+				break;
+			case '3004':	// 获取下一题
+				return 'getUserNextQuestion';
+				break;
+			case '3005':	// 提交评测题结果
+				return 'recordUserQuestionResult';
+				break;
+			
+
+
 			case '9001':	//手机用户登录
 				return 'userLogin';	
 				break;
@@ -139,6 +168,18 @@ class InterfaceController extends CController
 					$this->_errorMessage = " phone " ;
 				}				
 				break;
+			case '3004':
+				if(isset($params['User_IDX']) == false || empty($params['User_IDX'])){
+					$this->_errorNo = ConfTask::ERROR_USER_NOT_LOGIN;
+					$this->_errorMessage = " User_IDX " ;
+				}				
+				break;
+			case '3005':
+				if(isset($params['User_IDX']) == false || empty($params['User_IDX'])){
+					$this->_errorNo = ConfTask::ERROR_USER_NOT_LOGIN;
+					$this->_errorMessage = " User_IDX " ;
+				}				
+				break;
 			case '9001':
 				if(isset($params['phone']) == false || empty($params['phone'])){
 					$this->_errorNo = ConfTask::ERROR_PARAMS;
@@ -184,6 +225,10 @@ class InterfaceController extends CController
 				break;
 		}
 	}
+
+	private  function checkMethodLoginin($type){
+
+	}
 	public function actionIndex(){		
 		$body	= file_get_contents("php://input");
 		$bodys	= json_decode($body,true);
@@ -196,6 +241,8 @@ class InterfaceController extends CController
 		// LibLogger::log(' Ok #(body:),('.json_encode($bodys).')');
 		$header = $bodys['header'];
 		$body = $bodys['body'];
+		
+		
 		// $str_token = empty($header['token']) ?  $_COOKIE["login_token"] : $header['token'] ;
 		// $from  = empty($header['from']) ? "" : $header['from'];		//接口调用者：''：app；'wx'：微信；
 		// $curlRet	= GamesHelper::token($str_token);
@@ -205,24 +252,24 @@ class InterfaceController extends CController
 		// 		$this->_echoResponse($errno);
 		// 		return;
 		// }
-			
-		// $userid = 0 ;
-		// $phone = '';
-		// $realname = '';
-		// $nickname = '';
-		// $address = '';
-
-		// if(isset($curlRet['userinfo'])){
-		// 	$userid = $curlRet['userinfo']['id'];
-		// 	$phone = $curlRet['userinfo']['phone'];
-		// 	$realname = $curlRet['userinfo']['realname'];
-		// 	$nickname = $curlRet['userinfo']['nickname'];
-		// 	$address = $curlRet['userinfo']['address'];
-		// 	$avatar = $curlRet['userinfo']['avatar'];
-		// 	$rpc_sex = ($curlRet['userinfo']['sex'] == 2 ) ? 0 : 1 ;//默认为男,用户中心：0：未知；1：男；2：女
-		// 	LibUsers::checkUserInfo($curlRet['userinfo']);
-		// }
-		$body = array_merge(array('UserIDX'=>1),$body);
+		
+		$userInfo=Yii::app()->session[$this->_USER_SESSION_KEY];
+		$ret = array(
+			"LoginName"		=>	$userInfo[0]["LoginName"],
+			"IDX"			=>	$userInfo[0]["IDX"],
+		);
+		if(isset($userInfo)){
+			$LoginName = $userInfo[0]["LoginName"];
+			$User_IDX = $userInfo[0]["IDX"];
+			$body = array_merge(array(
+					'LoginName'=>$LoginName,
+					'User_IDX'=>$User_IDX
+				),$body);
+		}
+		$body = array_merge(array(
+					'LoginName'=>'18917518989',
+					'User_IDX'=>"23"
+				),$body);
 		if(array_key_exists('type',$body)){
 			$type	= $body['type'];	
 		}else{
@@ -283,7 +330,7 @@ class InterfaceController extends CController
 		$this->_echoResponse($errno,'',$ret); 
 	}
 
-	//用户基础资料录入
+	//用户基础资料录入,自动分配评测题给用户
 	private function addUserBasicInfo($params){
 		$UserIDX = isset($params['UserIDX']) ? 1 :$params['UserIDX']  ;
 		$Parent_Gender = $params['Parent_Gender'] ;
@@ -297,6 +344,7 @@ class InterfaceController extends CController
 			$this->_echoResponse($errno,'',$ret);
 			return;
 		}
+		LibUserQuestions::distributeUserQuestsion($UserIDX,$Parent_Gender,$Parent_Marriage,$Child_Gender,$Child_Birthday);
 		$errno = 1 ;
 		$this->_echoResponse($errno,'',$ret); 
 	}
@@ -332,6 +380,47 @@ class InterfaceController extends CController
 	}
 
 
+	private function getUserTaskList($params){
+		$User_IDX = $params['User_IDX'];
+		$Task_Type = isset($params['Task_Type']) ? $params['Task_Type'] : 0 ;
+		$mod = new ModUserTask();
+		$ret = $mod->getUserTaskList($User_IDX,$Task_Type);
+		if($ret === false){			
+			$errno = ConfTask::ERROR_QUEYR_USER_TASK_LIST ;
+			$this->_echoResponse($errno,'',$ret);
+			return;
+		}
+		$errno = 1 ;
+		$this->_echoResponse($errno,'',$ret); 
+	}
+
+	/**
+	 * 查询所有的评测题集
+	 * @param  [type] $params [description]
+	 * @return [type]         [description]
+	 */
+	private function getEvaluationQuesitonsSetList($params){
+		// if(isset($params['page'])){
+		// 	$page 	= $params['page'];
+		// }
+		// if(isset($params['pagesize'])){
+		// 	$pagesize 	= $params['pagesize'];
+		// }
+		// if(empty($pagesize)){$pagesize =  10; }
+		// if(empty($page)){$page =  1; }
+		// $start = ($page - 1) * $pagesize;	
+		$Question_Set_IDX 	= isset($params['Question_Set_IDX']) ? $params['Question_Set_IDX'] : '';
+
+		$mod = new ModEvaluationQuesitonsSet();
+		$ret = $mod->getEvaluationQuesitonsSetList();
+		$errno = 1 ;
+		$this->_echoResponse($errno,'',$ret);
+	}
+	/**
+	 * 根据题集选择评测题 
+	 * @param  [type] $params [description]
+	 * @return [type]         [description]
+	 */
 	private function getEvaluationQuesitonsList($params){
 		if(isset($params['page'])){
 			$page 	= $params['page'];
@@ -342,13 +431,19 @@ class InterfaceController extends CController
 		if(empty($pagesize)){$pagesize =  10; }
 		if(empty($page)){$page =  1; }
 		$start = ($page - 1) * $pagesize;	
+		$Question_Set_IDX 	= $params['Question_Set_IDX'];
 
 		$mod = new ModEvaluationQuesitons();
-		$ret = $mod->getEvaluationQuesitonsList(1,$pagesize,$start);
+		$ret = $mod->getEvaluationQuesitonsList($Question_Set_IDX,$pagesize,$start);
 		$errno = 1 ;
 		$this->_echoResponse($errno,'',$ret); 
 	}  
 
+	/**
+	 * 获取单道评测题
+	 * @param  [type] $params [description]
+	 * @return [type]         [description]
+	 */
 	private function getEvaluationQuesitons($params){
 		$IDX = $params['IDX'] ;
 		$mod = new ModEvaluationQuesitons();
@@ -465,14 +560,14 @@ class InterfaceController extends CController
 	private function sendSms($params){
 		$phone=$params['phone'] ;
 		$img_verify_code=$params['img_verify_code'] ;
-		
+		$lunaCodeVerify=LunaCodeVerify::getInstance();
 		$imgVerifyCode=$lunaCodeVerify->verifyImageCode($img_verify_code);
 		if($imgVerifyCode!=0){
 			$errno = ConfTask::ERROR_USER_IMAGE_CODE ;
 			$this->_echoResponse($errno);
 			return ;
 		}
-		$lunaCodeVerify=LunaCodeVerify::getInstance();
+		
 		if($lunaCodeVerify->sendSmsCode($phone)){
 			$errno = 1 ;
 			$this->_echoResponse($errno);
@@ -522,5 +617,68 @@ class InterfaceController extends CController
 		$errno = ConfTask::ERROR_USER_PASSWORD_RESET ;
 		$this->_echoResponse($errno);
 		return ;
+	}
+
+	/**
+	 * 获取用户下一题
+	 * @param  [type] $params [description]
+	 * @return [type]         [description]
+	 */
+	private function getUserNextQuestion($params){
+		$User_IDX = $params['User_IDX'];
+		$mod = new ModUserEvaluationQuesitons();
+		$ret = $mod->getNextQuestion($User_IDX);
+		if($ret === false){			
+			$errno = ConfTask::ERROR_QUESTION_GET_NEXT ;
+			$this->_echoResponse($errno,'',$ret);
+			return;
+		}
+		if(empty($ret)){
+			$errno = ConfTask::ERROR_QUESTION_GET_NEXT_EMPTY ;
+			$this->_echoResponse($errno,'',$ret);
+			return;	
+		}
+		$errno = 1 ;
+		$this->_echoResponse($errno,'',$ret); 
+
+	}
+
+	/**
+	 * 提交评测题答案
+	 * TODO 全部评测结束 ，根据评测结果分配任务
+	 * @param  [type] $params [description]
+	 * @return [type]         [description]
+	 */
+	private function recordUserQuestionResult($params){
+		$User_IDX = $params['User_IDX'];
+		$Question_IDX = $params['Question_IDX'];
+		$Option = trim($params['Option']);
+		$mod_question = ModEvaluationQuesitons::getInstance();
+		$ret_question = $mod_question->getEvaluationQuesitons($Question_IDX);
+		if(empty($ret_question)){
+			$errno = ConfTask::ERROR_USER_QUESTION_GET ;
+			$this->_echoResponse($errno,'',$ret);
+			return;
+		}
+	
+		if($Option == "A"){
+			$Point = $ret_question['Point_A'];
+		}else  if($Option == "B"){
+			$Point = $ret_question['Point_B'];
+		}else  if($Option == "C"){
+			$Point = $ret_question['Point_C'];
+		}else  if($Option == "D"){
+			$Point = $ret_question['Point_D'];
+		}
+		$mod_user_question = ModUserEvaluationQuesitons::getInstance();
+		$ret_user_question = $mod_user_question->recordUserQuestionResult($User_IDX,$Question_IDX,$Point);
+		if($ret_user_question === false){
+			$errno = ConfTask::ERROR_USER_QUESTION_RECORD ;
+			$this->_echoResponse($errno,'',$ret);
+			return;
+		}
+		$errno = 1 ;
+		$this->_echoResponse($errno); 
+
 	}
 }

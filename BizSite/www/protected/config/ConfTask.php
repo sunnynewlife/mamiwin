@@ -24,6 +24,16 @@ class ConfTask {
 	const ERROR_QUEYR_TASK_DETAIL 			= -101000001;
 	const ERROR_USER_BASICINFO_ADD 			= -101000002;
 
+	const ERROR_QUEYR_USER_TASK_LIST 			= -101000003;
+	const ERROR_QUEYR_USER_TASK_DETAIL 			= -101000004;
+	const ERROR_QUEYR_USER_TASK_START 			= -101000005;
+	const ERROR_QUEYR_USER_TASK_FINISH 			= -101000006;	
+
+	const ERROR_QUESTION_GET_NEXT			= -201000001 ;
+	const ERROR_QUESTION_GET_NEXT_EMPTY		= -201000002 ;
+	const ERROR_USER_QUESTION_GET			= -201000003 ;
+	const ERROR_USER_QUESTION_RECORD		= -201000004 ;
+
 	const ERROR_USER_LOGIN 	 			= -901000001;
 	const ERROR_USER_REGIST 			= -901000002;
 	const ERROR_USER_LOGIN_PASSWORD 	= -901000003;
@@ -63,8 +73,20 @@ class ConfTask {
 		self::ERROR_ACTIVITY_DATA_NOT_EXIST => "Activity Data Not Exist In DB", 
 		self::ERROR_FROM_ACTIVITY_DATA_NOT_EXIST => "Fromid Activity Data Not Exist In View", 
 
+		self::ERROR_QUESTION_GET_NEXT			=>	"查询用户下一题失败",
+		self::ERROR_QUESTION_GET_NEXT_EMPTY		=>	"没有下一题，全部答完",	
+		self::ERROR_USER_QUESTION_GET			=>	"未找到此评测题",
+		self::ERROR_USER_QUESTION_RECORD		=>	"记录评测题失败",	
+	
+
 		self::ERROR_QUEYR_TASK_DETAIL		=>	"查询资料失败",
 		self::ERROR_USER_BASICINFO_ADD		=>	"用户基础资料录入失败" ,
+
+		self::ERROR_QUEYR_USER_TASK_LIST		=>	"查询用户任务列表失败",
+		self::ERROR_QUEYR_USER_TASK_DETAIL		=>	"查询用户任务详情失败",
+		self::ERROR_QUEYR_USER_TASK_START		=>	"开始用户任务失败",
+		self::ERROR_QUEYR_USER_TASK_FINISH		=>	"完成用户任务失败",
+
 		self::ERROR_USER_LOGIN				=>	"用户登录失败" ,
 		self::ERROR_USER_REGIST				=>	"用户注册失败" ,
 		self::ERROR_USER_LOGIN_PASSWORD		=>	"账号或者密码错误" ,
