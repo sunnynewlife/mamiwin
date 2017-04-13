@@ -127,7 +127,7 @@ class WxHelper
 			$http=new HttpInterface("Tencent","JSApiTicket");
 			$params=array(
 					"type"			=>	"jsapi",
-					"access_token"	=>	$this->getAccessToken(),
+					"access_token"	=>	self::getAccessToken(),
 			);
 			$data=$http->submit($params);
 			if(isset($data) && is_array($data) && isset($data["errcode"]) && $data["errcode"]=="0" && isset($data["ticket"]) && empty($data["ticket"])==false){
