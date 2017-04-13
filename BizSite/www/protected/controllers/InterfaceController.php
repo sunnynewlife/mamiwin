@@ -73,6 +73,13 @@ class InterfaceController extends CController
 			case '2006':	//换一个任务
 				return 'switchUserTask';
 				break;
+			case '2007':	//按月查询用户已完成任务数
+				return 'queryUserTaskMonth';
+				break;
+			case '2008':	//按日查询用户已完成任务数
+				return 'queryUserTaskDay';
+				break;
+
 
 			case '3001':	// 查询所有测评题列表
 				return 'getEvaluationQuesitonsList';
@@ -90,7 +97,16 @@ class InterfaceController extends CController
 				return 'recordUserQuestionResult';
 				break;
 			
-
+			case '4001':	// 分享
+				return 'shareOut';
+				break;
+			
+			case '5001':	// 任务评价
+				return 'taskEvaluate';
+				break;
+			case '8001':	// 图片上传
+				return 'uploadFile';
+				break;
 
 			case '9001':	//手机用户登录
 				return 'userLogin';	
@@ -109,6 +125,15 @@ class InterfaceController extends CController
 				break;
 			case '9006':	//修改密码
 				return 'resetPassword';	
+				break;
+			case '9010':	//微信登录
+				return 'wechatLogin';	
+				break;
+			case '9011':	//微信token
+				return 'wechatToken';	
+				break;
+			case '9012':	//微信签名，用于分享
+				return 'wechatSign';	
 				break;
 			
 			case '9999':	//TEST
@@ -178,6 +203,38 @@ class InterfaceController extends CController
 				if(isset($params['User_IDX']) == false || empty($params['User_IDX'])){
 					$this->_errorNo = ConfTask::ERROR_USER_NOT_LOGIN;
 					$this->_errorMessage = " User_IDX " ;
+				}				
+				break;
+			case '4001':
+				if(isset($params['User_IDX']) == false || empty($params['User_IDX'])){
+					$this->_errorNo = ConfTask::ERROR_USER_NOT_LOGIN;
+					$this->_errorMessage = " User_IDX " ;
+				}				
+				if(isset($params['Share_Type']) == false || empty($params['Share_Type'])){
+					$this->_errorNo = ConfTask::ERROR_USER_NOT_LOGIN;
+					$this->_errorMessage = " Share_Type " ;
+				}				
+				if(isset($params['Share_IDX']) == false || empty($params['Share_IDX'])){
+					$this->_errorNo = ConfTask::ERROR_USER_NOT_LOGIN;
+					$this->_errorMessage = " Share_IDX " ;
+				}				
+				if(isset($params['Share_To']) == false || empty($params['Share_To'])){
+					$this->_errorNo = ConfTask::ERROR_USER_NOT_LOGIN;
+					$this->_errorMessage = " Share_To " ;
+				}				
+				break;
+			case '5001':
+				if(isset($params['User_IDX']) == false || empty($params['User_IDX'])){
+					$this->_errorNo = ConfTask::ERROR_USER_NOT_LOGIN;
+					$this->_errorMessage = " User_IDX " ;
+				}				
+				if(isset($params['Task_IDX']) == false || empty($params['Task_IDX'])){
+					$this->_errorNo = ConfTask::ERROR_USER_NOT_LOGIN;
+					$this->_errorMessage = " Task_IDX " ;
+				}				
+				if(isset($params['Finish_Score']) == false || empty($params['Finish_Score'])){
+					$this->_errorNo = ConfTask::ERROR_USER_NOT_LOGIN;
+					$this->_errorMessage = " Finish_Score " ;
 				}				
 				break;
 			case '9001':
@@ -680,5 +737,108 @@ class InterfaceController extends CController
 		$errno = 1 ;
 		$this->_echoResponse($errno); 
 
+	}
+
+	/**
+	 * 分享
+	 * @param  [type] $params [description]
+	 * @return [type]         [description]
+	 */
+	private function shareOut($params){
+		$User_IDX = $params['User_IDX'];
+		$Share_Type = $params['Share_Type'];
+		$Share_IDX = $params['Share_IDX'];
+		$Share_To = $params['Share_To'];
+
+
+		$mod_user_share = ModUserShare::getInstance();
+		$ret_user_share = $mod_user_share->addUserShare($User_IDX,$Share_Type,$Share_IDX,$Share_To);
+		if($ret_user_share === false){
+			$errno = ConfTask::ERROR_USER_QUESTION_RECORD ;
+			$this->_echoResponse($errno,'',$ret);
+			return;
+		}
+		$errno = 1 ;
+		$this->_echoResponse($errno);
+	}
+
+	// 任务评价
+	private function taskEvaluate($params){
+		$User_IDX = $params['User_IDX'];
+		$Task_IDX = $params['Task_IDX'];
+		$Finish_Score = $params['Finish_Score'];
+		$Finish_Pic = isset($params['Finish_Pic']) ?$params['Finish_Pic'] : '' ;
+		$Finish_Document = isset($params['Finish_Document']) ?$params['Finish_Document'] : '' ;
+
+
+		$mod_user_task = ModUserTask::getInstance();
+		$ret_user_task = $mod_user_task->updateUserTask($User_IDX,$Task_IDX,'','',$Finish_Score,$Finish_Pic,$Finish_Document);
+		if($ret_user_task === false){
+			$errno = ConfTask::ERROR_QUEYR_USER_TASK_EVALUATION ;
+			$this->_echoResponse($errno,'',$ret);
+			return;
+		}
+		$errno = 1 ;
+		$this->_echoResponse($errno);
+	}
+
+	// 按月查询用户已完成任务数
+	public function queryUserTaskMonth($params){
+
+	}
+
+	// 按日查询用户已完成任务数
+	public function queryUserTaskDay($params){
+		
+	}
+
+	//微信登录
+	public function wechatLogin($params){
+		$url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=".WxHelper::WX_APP_ID."&redirect_uri=http%3A%2F%2Fapi.fumuwin.com%2Fsite%2FwxIndex%3Fv%3D1&response_type=code&scope=snsapi_base&state=1&connect_redirect=1#wechat_redirect";
+		$data = array('url'=>$url);
+		$errno = 1 ;
+		$this->_echoResponse($errno,'',$data);
+
+	}
+
+	//微信登录
+	public function wechatToken($params){
+
+	}
+
+	//微信签名
+	public function wechatSign($params){
+		$sign = '';
+		$data = array('sign'=>$sign);
+		$errno = 1 ;
+		$this->_echoResponse($errno,'',$data);
+
+	}
+
+	// 上传图片
+	public function uploadFile($params){
+		if(isset($_FILES) && is_array($_FILES) && count($_FILES)>0){
+			foreach ($_FILES as $uploadedFile){
+				if(empty($uploadedFile["name"])==false){
+					$appConfig=LunaConfigMagt::getInstance()->getAppConfig();
+					$imgName=CGuidManager::GetFullGuid().".jpg";
+					$img_path=$appConfig["UploadImage_Root"]."/".$imgName;
+					if(copy($uploadedFile["tmp_name"],$img_path)){
+						$img_url=$appConfig["UploadImage_Domain"]."/".$imgName;
+						// echo json_encode(array(
+						// 	"return_code"	=>	0,
+						// 	"url"			=>	$img_url,
+						// ));
+						$errno = 1 ;
+						$this->_echoResponse($errno,'',array("url" => $img_url));
+						return;
+					}
+				}
+			}
+		}	
+		echo json_encode(array(
+			"return_code"	=>	-1,
+			"message"		=>	"图片上传失败",
+		));
 	}
 }

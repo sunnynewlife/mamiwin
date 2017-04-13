@@ -65,5 +65,48 @@ class ModUserTask {
 		$params=array($User_IDX,$Task_IDX);
 		return LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params);
 	}	
+
+
+	/**
+	 * 修改用户任务信息，评价
+	 * @param  [type] $User_IDX        [description]
+	 * @param  [type] $Task_IDX        [description]
+	 * @param  [type] $Finish_Status   [description]
+	 * @param  [type] $Finish_Date     [description]
+	 * @param  [type] $Finish_Score    [description]
+	 * @param  [type] $Finish_Pic      [description]
+	 * @param  [type] $Finish_Document [description]
+	 * @return [type]                  [description]
+	 */
+	public function updateUserTask($User_IDX,$Task_IDX,$Finish_Status,$Finish_Date,$Finish_Score,$Finish_Pic,$Finish_Document){
+		$sql="update User_Tasks set UpdateTime=NOW() " ;
+		$params = array();
+		if(!empty($Finish_Status)){
+			$sql .= " ,Finish_Status = ?  ";
+			$params['Finish_Status'] = $$Finish_Status;
+		}
+		if(!empty($Finish_Date)){
+			$sql .= " ,Finish_Date = ?  ";
+			$params['Finish_Date'] = $Finish_Date;
+		}
+		if(!empty($Finish_Score)){
+			$sql .= " ,Finish_Score = ?  ";
+			$params['Finish_Score'] = $Finish_Score;
+		}
+		if(!empty($Finish_Pic)){
+			$sql .= " ,Finish_Pic = ?  ";
+			$params['Finish_Pic'] = $Finish_Pic;
+		}
+		if(!empty($Finish_Document)){
+			$sql .= " ,Finish_Document = ?  ";
+			$params['Finish_Document'] = $Finish_Document;
+		}
+		$sql .= "where  LoginName=? and AcctSource=?";
+		$params=array($loginPwd,$loginName,$acctSource);
+		return (LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params)>0);
+
+	}
 }	
+
+
 ?>
