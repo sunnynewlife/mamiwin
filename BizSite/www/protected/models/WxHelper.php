@@ -94,6 +94,11 @@ class WxHelper
 	
 	public static function getJSSDKData($url)
 	{
+		//check 地址是否以 #结束
+		$lastStr=substr($url,-1);
+		if($lastStr=="#"){
+			$url=substr($url,0,-1);
+		}
 		$data=array(
 				"appId"			=>	WxHelper::WX_APP_ID,
 				"timestamp"		=>	time(),
