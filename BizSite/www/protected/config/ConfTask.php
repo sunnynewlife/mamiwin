@@ -33,6 +33,13 @@ class ConfTask {
 	const ERROR_QUESTION_GET_NEXT_EMPTY		= -201000002 ;
 	const ERROR_USER_QUESTION_GET			= -201000003 ;
 	const ERROR_USER_QUESTION_RECORD		= -201000004 ;
+	
+
+
+	const ERROR_USER_SHARE				= -401000001 ;
+
+	const ERROR_QUEYR_USER_TASK_EVALUATION	= -501000001 ;
+	
 
 	const ERROR_USER_LOGIN 	 			= -901000001;
 	const ERROR_USER_REGIST 			= -901000002;
@@ -86,6 +93,10 @@ class ConfTask {
 		self::ERROR_QUEYR_USER_TASK_DETAIL		=>	"查询用户任务详情失败",
 		self::ERROR_QUEYR_USER_TASK_START		=>	"开始用户任务失败",
 		self::ERROR_QUEYR_USER_TASK_FINISH		=>	"完成用户任务失败",
+		
+		self::ERROR_QUEYR_USER_TASK_EVALUATION	=>	"任务评介失败",
+
+		self::ERROR_USER_SHARE					=> 	"分享失败",
 
 		self::ERROR_USER_LOGIN				=>	"用户登录失败" ,
 		self::ERROR_USER_REGIST				=>	"用户注册失败" ,
