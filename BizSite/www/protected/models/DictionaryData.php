@@ -96,5 +96,14 @@ class DictionaryData {
 	const Task_Material_Task_Status_UnDeploy=1;
 	const Task_Material_Task_Status_Publish=2;
 	const Task_Material_Task_Status_Test=3;
+
+	const User_Task_Status = array(
+		"1" => "尚未开始",
+		"2" => "已经开始",
+		"9" => "已经完成",
+	);
+	const User_Task_Status_Not_Yet = 1 ; 
+	const User_Task_Status_Start = 2 ;
+	const User_Task_Status_Finish = 9 ; 
 	
 }
