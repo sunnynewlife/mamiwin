@@ -28,8 +28,8 @@ class LibUserQuestions{
 	 * @return [type]                   [description]
 	 */
 	public static function distributeUserTask($UserIDX,$Question_Set_IDX){
-		$mod_user_question = 
-		$sql = ""
+		// $mod_user_question = 
+		// $sql = ""
 
 	}
 }

@@ -189,7 +189,7 @@ class LunaCodeVerify {
 				return -2;
 			}
 			$code_info["verify_count"]+=1;
-			if($code!=$code_info["code"] || $phone!= $code_info["phone"]){
+			if(strtolower($code)!=strtolower($code_info["code"]) || $phone!= $code_info["phone"]){
 				if($code_type==self::_CODE_TYPE_IMG && $code_info["verify_count"]>=$this->_max_img_verify_counts){
 					unset(Yii::app()->session[$session_code_key]);
 					return -3;
