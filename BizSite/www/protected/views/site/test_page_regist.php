@@ -57,7 +57,8 @@ function sendSmsCode()
          async:false,
          url: "/user/sendSms",
          type: "GET",
-         dataType: 'json',
+         dataType: 'jsonp',
+         jsonp: "callback",
          data: {"phone":$("#txtPhone").val()},
          success: function (data) {
       		if(data.code==0){

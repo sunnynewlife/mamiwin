@@ -29,7 +29,7 @@
 			<array key="SmsParameters">
 				<string key="code_charset" value="1234567890" />
 				<string key="senderClassName"  value="SMSSender" />
-				<string key="skip_sms_send" value="false" />
+				<string key="skip_sms_send" value="true" />
 			</array>
 		</array>	
 		<array key="Logger" name="logger 配置">

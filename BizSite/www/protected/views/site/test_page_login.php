@@ -29,9 +29,10 @@ function login()
 {
 	 $.ajax({
          async:false,
-         url: "/user/login",
+         url: "http://api.fumuwin.com/user/login",
          type: "GET",
-         dataType: 'json',
+         dataType: 'jsonp',
+         jsonp: "callback",
          data: { 
              	"phone":$("#txtPhone").val(),
              	"password":$("#txtPwd").val()
@@ -49,9 +50,10 @@ function logout()
 {
 	 $.ajax({
          async:false,
-         url: "/user/logout",
+         url: "http://api.fumuwin.com/user/logout",
          type: "GET",
-         dataType: 'json',
+         dataType: 'jsonp',
+         jsonp: "callback",
          data: {},
          success: function (data) {
              alert("已注销");
@@ -62,9 +64,10 @@ function showUser()
 {
 	 $.ajax({
          async:false,
-         url: "/user/getLoginInfo",
+         url: "http://api.fumuwin.com/user/getLoginInfo",
          type: "GET",
-         dataType: 'json',
+         dataType: 'jsonp',
+         jsonp: "callback",
          data: {},
          success: function (data) {
         	 if(data.code==0){

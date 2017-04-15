@@ -14,7 +14,7 @@
 			</div>
 			<div class="f_item">
 				<input id="txtImgCode" type="text" placeholder="图片验证码" class="input_s" style="width:40%;">
-				<a href="javascript:refreshImg();"><img src="/user/showImgCode" id="btnImg" /></a>
+				<a href="javascript:refreshImg();"><img src="http://api.fumuwin.com/user/showImgCode" id="btnImg" /></a>
 			</div>	
 			<div class="f_item">
 				<input id="txtSmsCode" type="text" placeholder="短信验证码" class="input_s" style="width:40%;">
@@ -32,9 +32,10 @@ function resetpwd()
 {
 	 $.ajax({
          async:false,
-         url: "/user/resetpwd",
+         url: "http://api.fumuwin.com/user/resetpwd",
          type: "GET",
-         dataType: 'json',
+         dataType: 'jsonp',
+         jsonp: "callback",
          data: { 
              	"phone":$("#txtPhone").val(),
              	"password":$("#txtPwd").val(),
@@ -55,9 +56,10 @@ function sendSmsCode()
 {
 	 $.ajax({
          async:false,
-         url: "/user/sendSms",
+         url: "http://api.fumuwin.com/user/sendSms",
          type: "GET",
-         dataType: 'json',
+         dataType: 'jsonp',
+         jsonp: "callback",
          data: {"phone":$("#txtPhone").val()},
          success: function (data) {
       		if(data.code==0){
@@ -71,7 +73,7 @@ function sendSmsCode()
 function refreshImg()
 {
 	var t=new Date();
-	var url="/user/showImgCode?_v="+t.getTime();
+	var url="http://api.fumuwin.com/user/showImgCode?_v="+t.getTime();
 	$("#btnImg").attr("src",url);
 }
 </script>
