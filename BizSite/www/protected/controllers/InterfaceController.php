@@ -160,19 +160,19 @@ class InterfaceController extends CController
 			case '1003':
 				if(isset($params['Parent_Gender']) == false || empty($params['Parent_Gender'])){
 					$this->_errorNo = ConfTask::ERROR_PARAMS;
-					$this->_errorMessage = " phone " ;
+					$this->_errorMessage = " Parent_Gender " ;
 				}				
-				if(isset($params['Parent_Marriage']) == false || empty($params['Parent_Marriage '])){
+				if(isset($params['Parent_Marriage']) == false || empty($params['Parent_Marriage'])){
 					$this->_errorNo = ConfTask::ERROR_PARAMS;
-					$this->_errorMessage = " phone " ;
+					$this->_errorMessage = " Parent_Marriage " ;
 				}				
 				if(isset($params['Child_Gender']) == false || empty($params['Child_Gender'])){
 					$this->_errorNo = ConfTask::ERROR_PARAMS;
-					$this->_errorMessage = " phone " ;
+					$this->_errorMessage = " Child_Gender " ;
 				}				
 				if(isset($params['Child_Birthday']) == false || empty($params['Child_Birthday'])){
 					$this->_errorNo = ConfTask::ERROR_PARAMS;
-					$this->_errorMessage = " phone " ;
+					$this->_errorMessage = " Child_Birthday " ;
 				}				
 				break;
 			case '1005':
@@ -194,21 +194,25 @@ class InterfaceController extends CController
 				}				
 				break;
 			case '3004':
-				if(isset($params['User_IDX']) == false || empty($params['User_IDX'])){
+				if(isset($params['UserIDX']) == false || empty($params['UserIDX'])){
 					$this->_errorNo = ConfTask::ERROR_USER_NOT_LOGIN;
-					$this->_errorMessage = " User_IDX " ;
+					$this->_errorMessage = " UserIDX " ;
+				}				
+				if(isset($params['Question_Set_IDX']) == false || empty($params['Question_Set_IDX'])){
+					$this->_errorNo = ConfTask::ERROR_USER_NOT_LOGIN;
+					$this->_errorMessage = " Question_Set_IDX " ;
 				}				
 				break;
 			case '3005':
-				if(isset($params['User_IDX']) == false || empty($params['User_IDX'])){
+				if(isset($params['UserIDX']) == false || empty($params['UserIDX'])){
 					$this->_errorNo = ConfTask::ERROR_USER_NOT_LOGIN;
-					$this->_errorMessage = " User_IDX " ;
+					$this->_errorMessage = " UserIDX " ;
 				}				
 				break;
 			case '4001':
-				if(isset($params['User_IDX']) == false || empty($params['User_IDX'])){
+				if(isset($params['UserIDX']) == false || empty($params['UserIDX'])){
 					$this->_errorNo = ConfTask::ERROR_USER_NOT_LOGIN;
-					$this->_errorMessage = " User_IDX " ;
+					$this->_errorMessage = " UserIDX " ;
 				}				
 				if(isset($params['Share_Type']) == false || empty($params['Share_Type'])){
 					$this->_errorNo = ConfTask::ERROR_USER_NOT_LOGIN;
@@ -224,9 +228,9 @@ class InterfaceController extends CController
 				}				
 				break;
 			case '5001':
-				if(isset($params['User_IDX']) == false || empty($params['User_IDX'])){
+				if(isset($params['UserIDX']) == false || empty($params['UserIDX'])){
 					$this->_errorNo = ConfTask::ERROR_USER_NOT_LOGIN;
-					$this->_errorMessage = " User_IDX " ;
+					$this->_errorMessage = " UserIDX " ;
 				}				
 				if(isset($params['Task_IDX']) == false || empty($params['Task_IDX'])){
 					$this->_errorNo = ConfTask::ERROR_USER_NOT_LOGIN;
@@ -317,15 +321,15 @@ class InterfaceController extends CController
 		);
 		if(isset($userInfo)){
 			$LoginName = $userInfo[0]["LoginName"];
-			$User_IDX = $userInfo[0]["IDX"];
+			$UserIDX = $userInfo[0]["IDX"];
 			$body = array_merge(array(
 					'LoginName'=>$LoginName,
-					'User_IDX'=>$User_IDX
+					'UserIDX'=>$UserIDX
 				),$body);
 		}
 		$body = array_merge(array(
-					'LoginName'=>'18917518989',
-					'User_IDX'=>"23"
+					'LoginName'=>'15900828187',
+					'UserIDX'=>"2"
 				),$body);
 		if(array_key_exists('type',$body)){
 			$type	= $body['type'];	
@@ -389,7 +393,7 @@ class InterfaceController extends CController
 
 	//用户基础资料录入,自动分配评测题给用户
 	private function addUserBasicInfo($params){
-		$UserIDX = isset($params['UserIDX']) ? 1 :$params['UserIDX']  ;
+		$UserIDX = $params['UserIDX'] ;
 		$Parent_Gender = $params['Parent_Gender'] ;
 		$Parent_Marriage = $params['Parent_Marriage'] ;
 		$Child_Gender = $params['Child_Gender'] ;
@@ -406,6 +410,7 @@ class InterfaceController extends CController
 		$this->_echoResponse($errno,'',$ret); 
 	}
 
+	//查询任务列表
 	private function queryTaskMeterialList($params){
 		if(isset($params['page'])){
 			$page 	= $params['page'];
@@ -438,17 +443,59 @@ class InterfaceController extends CController
 
 
 	private function getUserTaskList($params){
-		$User_IDX = $params['User_IDX'];
+		$UserIDX = $params['UserIDX'];
 		$Task_Type = isset($params['Task_Type']) ? $params['Task_Type'] : 0 ;
 		$mod = new ModUserTask();
-		$ret = $mod->getUserTaskList($User_IDX,$Task_Type);
+		$ret = $mod->getUserTaskList($UserIDX,$Task_Type);
 		if($ret === false){			
 			$errno = ConfTask::ERROR_QUEYR_USER_TASK_LIST ;
 			$this->_echoResponse($errno,'',$ret);
 			return;
 		}
+
 		$errno = 1 ;
 		$this->_echoResponse($errno,'',$ret); 
+	}
+
+	//开始任务
+	public function startUserTask($params){
+		$UserIDX = $params['UserIDX'];
+		$Task_IDX = $params['Task_IDX'];
+		$Finish_Score = 0;
+		$Finish_Pic = '' ;
+		$Finish_Document = '' ;
+		$Finish_Status = DictionaryData::User_Task_Status_Start ;
+		$Finish_Date = '';
+
+		$mod_user_task = ModUserTask::getInstance();
+		$ret_user_task = $mod_user_task->updateUserTask($UserIDX,$Task_IDX,$Finish_Status,$Finish_Date,$Finish_Score,$Finish_Pic,$Finish_Document);
+		if($ret_user_task === false){
+			$errno = ConfTask::ERROR_QUEYR_USER_TASK_START ;
+			$this->_echoResponse($errno,'',$ret);
+			return;
+		}
+		$errno = 1 ;
+		$this->_echoResponse($errno);
+	}
+
+	//结束任务
+	public function finishUserTask($params){
+		$UserIDX = $params['UserIDX'];
+		$Task_IDX = $params['Task_IDX'];
+		$Finish_Score = 0;
+		$Finish_Pic = '' ;
+		$Finish_Document = '' ;
+		$Finish_Status = DictionaryData::User_Task_Status_Finish ;
+
+		$mod_user_task = ModUserTask::getInstance();
+		$ret_user_task = $mod_user_task->updateUserTask($UserIDX,$Task_IDX,$Finish_Status,$Finish_Date,$Finish_Score,$Finish_Pic,$Finish_Document);
+		if($ret_user_task === false){
+			$errno = ConfTask::ERROR_QUEYR_USER_TASK_START ;
+			$this->_echoResponse($errno,'',$ret);
+			return;
+		}
+		$errno = 1 ;
+		$this->_echoResponse($errno);
 	}
 
 	/**
@@ -597,21 +644,43 @@ class InterfaceController extends CController
 		$errno = 1 ;
 		$this->_echoResponse($errno);
 	}
-	//获取登录用户信息
+	//获取登录用户信息,以及是否已经填写过基础资料 尚未进行评测的时间 天
 	private  function getUserInfo()
 	{
-		if(isset(Yii::app()->session[$this->_USER_SESSION_KEY])==false){
-			$errno = ConfTask::ERROR_USER_NOT_LOGIN ;
-			$this->_echoResponse($errno);
-			return;
-		}
+		// if(isset(Yii::app()->session[$this->_USER_SESSION_KEY])==false){
+		// 	$errno = ConfTask::ERROR_USER_NOT_LOGIN ;
+		// 	$this->_echoResponse($errno);
+		// 	return;
+		// }
 		$userInfo=Yii::app()->session[$this->_USER_SESSION_KEY];
 		$ret = array(
-			"LoginName"		=>	$userInfo[0]["LoginName"],
-			"IDX"			=>	$userInfo[0]["IDX"],
+			"LoginName"			=>	$userInfo[0]["LoginName"],
+			"UserIDX"			=>	$userInfo[0]["IDX"],
+			"UserBasicInfo"		=>	0,
+			"UserEvaluationDay"	=>	0,
 		);
+		$UserIDX = $ret['UserIDX'];
+		// $mod_user_basicinfo = ModUserBasicInfo::getInstance();
+		$mod_user_basicinfo = new ModUserBasicInfo();
+		$ret_user_basicinfo = $mod_user_basicinfo->queryUserBasicInfo($UserIDX);
+		if(empty($ret_user_basicinfo) == false){
+			$ret['UserBasicInfo'] = 1 ;
+		}
+		$UserIDX = $ret['UserIDX'];		
+		$mod_user_evaluation = new ModUserEvaluationQuesitons();
+		$ret_user_evaluation = $mod_user_evaluation->getEvaluationQuesitonsList($UserIDX);
+		if(empty($ret_user_evaluation)){
+			$mod_user_info = new ModUserInfo();
+			$ret_user_info = $mod_user_info->queryUserInfo($UserIDX);
+			if(empty($ret_user_info) == false){
+				$user_register_date = $ret_user_info['CreateTime'];
+				$diff = CommonHelper::getDateDiff($user_register_date,date());
+				$ret['UserEvaluationDay'] = $diff ;
+			}				
+		}
+
 		$errno = 1 ;
-		$this->_echoResponse($errno);
+		$this->_echoResponse($errno,'',$ret);
 	}
 	//发送短信前，必须 输入图片验证码，注册、修改密码
 	private function sendSms($params){
@@ -682,9 +751,10 @@ class InterfaceController extends CController
 	 * @return [type]         [description]
 	 */
 	private function getUserNextQuestion($params){
-		$User_IDX = $params['User_IDX'];
+		$UserIDX = $params['UserIDX'];
+		$Question_Set_IDX = $params['Question_Set_IDX'];
 		$mod = new ModUserEvaluationQuesitons();
-		$ret = $mod->getNextQuestion($User_IDX);
+		$ret = $mod->getNextQuestion($Question_Set_IDX,$UserIDX);
 		if($ret === false){			
 			$errno = ConfTask::ERROR_QUESTION_GET_NEXT ;
 			$this->_echoResponse($errno,'',$ret);
@@ -707,7 +777,7 @@ class InterfaceController extends CController
 	 * @return [type]         [description]
 	 */
 	private function recordUserQuestionResult($params){
-		$User_IDX = $params['User_IDX'];
+		$UserIDX = $params['UserIDX'];
 		$Question_IDX = $params['Question_IDX'];
 		$Option = trim($params['Option']);
 		$mod_question = ModEvaluationQuesitons::getInstance();
@@ -728,7 +798,7 @@ class InterfaceController extends CController
 			$Point = $ret_question['Point_D'];
 		}
 		$mod_user_question = ModUserEvaluationQuesitons::getInstance();
-		$ret_user_question = $mod_user_question->recordUserQuestionResult($User_IDX,$Question_IDX,$Point);
+		$ret_user_question = $mod_user_question->recordUserQuestionResult($UserIDX,$Question_IDX,$Point);
 		if($ret_user_question === false){
 			$errno = ConfTask::ERROR_USER_QUESTION_RECORD ;
 			$this->_echoResponse($errno,'',$ret);
@@ -745,14 +815,14 @@ class InterfaceController extends CController
 	 * @return [type]         [description]
 	 */
 	private function shareOut($params){
-		$User_IDX = $params['User_IDX'];
+		$UserIDX = $params['UserIDX'];
 		$Share_Type = $params['Share_Type'];
 		$Share_IDX = $params['Share_IDX'];
 		$Share_To = $params['Share_To'];
 
 
 		$mod_user_share = ModUserShare::getInstance();
-		$ret_user_share = $mod_user_share->addUserShare($User_IDX,$Share_Type,$Share_IDX,$Share_To);
+		$ret_user_share = $mod_user_share->addUserShare($UserIDX,$Share_Type,$Share_IDX,$Share_To);
 		if($ret_user_share === false){
 			$errno = ConfTask::ERROR_USER_QUESTION_RECORD ;
 			$this->_echoResponse($errno,'',$ret);
@@ -764,15 +834,14 @@ class InterfaceController extends CController
 
 	// 任务评价
 	private function taskEvaluate($params){
-		$User_IDX = $params['User_IDX'];
+		$UserIDX = $params['UserIDX'];
 		$Task_IDX = $params['Task_IDX'];
 		$Finish_Score = $params['Finish_Score'];
 		$Finish_Pic = isset($params['Finish_Pic']) ?$params['Finish_Pic'] : '' ;
 		$Finish_Document = isset($params['Finish_Document']) ?$params['Finish_Document'] : '' ;
 
-
 		$mod_user_task = ModUserTask::getInstance();
-		$ret_user_task = $mod_user_task->updateUserTask($User_IDX,$Task_IDX,'','',$Finish_Score,$Finish_Pic,$Finish_Document);
+		$ret_user_task = $mod_user_task->updateUserTask($UserIDX,$Task_IDX,'','',$Finish_Score,$Finish_Pic,$Finish_Document);
 		if($ret_user_task === false){
 			$errno = ConfTask::ERROR_QUEYR_USER_TASK_EVALUATION ;
 			$this->_echoResponse($errno,'',$ret);

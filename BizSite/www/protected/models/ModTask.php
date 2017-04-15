@@ -60,10 +60,10 @@ class ModTask {
 
 /**
  * 给用户分配 学习任务 ，TODO待确认
- * @param  [type] $User_IDX [description]
+ * @param  [type] $UserIDX [description]
  * @return [type]           [description]
  */
-	public function generateUserTask($User_IDX){
+	public function generateUserTask($UserIDX){
 
 	}
 

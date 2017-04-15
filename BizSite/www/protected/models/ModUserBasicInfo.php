@@ -16,5 +16,17 @@ class ModUserBasicInfo {
 		$rowCount=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params);
 		return $rowCount;
 	}
+
+	/**
+	 * 查询用户填写的基础资料
+	 * @param  [type] $UserIDX [description]
+	 * @return [type]          [description]
+	 */
+	public function queryUserBasicInfo($UserIDX){
+		$sql="select * from User_BasicInfo where UserIDX=? ";
+		$params=array($UserIDX);
+		$user_info=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
+		return (isset($user_info) && is_array($user_info) && count($user_info)>0)?$user_info:array();
+	}
 }	
 ?>	
