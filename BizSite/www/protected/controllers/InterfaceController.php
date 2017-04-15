@@ -39,7 +39,13 @@ class InterfaceController extends CController
         	$showdata['count'] 	= $count;	
         }
 		// LibLogger::log(' return  #(showdata:),('.json_encode($showdata).')');
-    	echo(json_encode($showdata));
+        $callback=Yii::app()->request->getParam('callback',"");
+        if(empty($callback)){
+        	echo(json_encode($showdata));
+        }else{
+        	echo $callback."(". json_encode($showdata).");";
+        }
+    	
     	return ;
     }
 

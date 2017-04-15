@@ -49,7 +49,12 @@ class UserController extends CController
 			"message"	=>	$message,
 			"data"		=>	$data,
 		);
-		echo json_encode($responseData);
+		$callback=Yii::app()->request->getParam('callback',"");
+		if(empty($callback)){
+			echo json_encode($responseData);
+		}else{
+			echo $callback."(". json_encode($responseData).");";
+		}
 	}
 	
 	private function _response_error($component_name,$error_code){
