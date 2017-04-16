@@ -11,8 +11,7 @@ class InterfaceController extends CController
 	public $_errorNo;
 	public $_errorMessage;
 	private $_USER_SESSION_KEY="user";								//session key
-	private $_need_login_method_type = array(
-		3004,3005);
+	private $_need_login_method_type = array(1003,2003,2004,2005,2006,2007,2008,3003,3004,3005,4001,5001,9003,9004,9006,);
 
 	public function _echoResponse($errno, $attach_errmsg = '', $data = array(), $count = null) {
 		$origin = isset($_SERVER['HTTP_ORIGIN'])? $_SERVER['HTTP_ORIGIN'] : '*';  		
@@ -35,9 +34,9 @@ class InterfaceController extends CController
         if(!empty($data)){
         	$showdata['data'] 	= $data;	
         }		
-		if(!is_null($count)){
-        	$showdata['count'] 	= $count;	
-        }
+		// if(!is_null($count)){
+  //       	$showdata['count'] 	= $count;	
+  //       }
 		// LibLogger::log(' return  #(showdata:),('.json_encode($showdata).')');
         $callback=Yii::app()->request->getParam('callback',"");
         if(empty($callback)){
@@ -181,69 +180,89 @@ class InterfaceController extends CController
 					$this->_errorMessage = " Child_Birthday " ;
 				}				
 				break;
-			case '1005':
-				if(isset($params['IDX']) == false || empty($params['IDX'])){
-					$this->_errorNo = ConfTask::ERROR_PARAMS;
-					$this->_errorMessage = " phone " ;
-				}				
-				break;
-			case '1007':
-				if(isset($params['IDX']) == false || empty($params['IDX'])){
-					$this->_errorNo = ConfTask::ERROR_PARAMS;
-					$this->_errorMessage = " phone " ;
-				}				
-				break;
+			// case '1005':
+			// 	if(isset($params['IDX']) == false || empty($params['IDX'])){
+			// 		$this->_errorNo = ConfTask::ERROR_PARAMS;
+			// 		$this->_errorMessage = " phone " ;
+			// 	}				
+			// 	break;
+			// case '1007':
+			// 	if(isset($params['IDX']) == false || empty($params['IDX'])){
+			// 		$this->_errorNo = ConfTask::ERROR_PARAMS;
+			// 		$this->_errorMessage = " phone " ;
+			// 	}				
+			// 	break;
 			case '2002':
 				if(isset($params['IDX']) == false || empty($params['IDX'])){
 					$this->_errorNo = ConfTask::ERROR_PARAMS;
 					$this->_errorMessage = " phone " ;
 				}				
 				break;
-			case '3004':
-				if(isset($params['UserIDX']) == false || empty($params['UserIDX'])){
-					$this->_errorNo = ConfTask::ERROR_USER_NOT_LOGIN;
-					$this->_errorMessage = " UserIDX " ;
+			case '2004':
+				if(isset($params['Task_IDX']) == false || empty($params['Task_IDX'])){
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
+					$this->_errorMessage = " Task_IDX " ;
 				}				
+				break;
+			case '2005':
+				if(isset($params['Task_IDX']) == false || empty($params['Task_IDX'])){
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
+					$this->_errorMessage = " Task_IDX " ;
+				}				
+				break;
+			case '2007':
+				if(isset($params['Query_Month']) == false || empty($params['Query_Month'])){
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
+					$this->_errorMessage = " Query_Month " ;
+				}				
+				if(isset($params['Finish_Status']) == false || empty($params['Finish_Status'])){
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
+					$this->_errorMessage = " Finish_Status " ;
+				}				
+				break;
+			case '2008':
+				if(isset($params['Query_Day']) == false || empty($params['Query_Day'])){
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
+					$this->_errorMessage = " Query_Day " ;
+				}				
+				break;
+			case '3004':
 				if(isset($params['Question_Set_IDX']) == false || empty($params['Question_Set_IDX'])){
-					$this->_errorNo = ConfTask::ERROR_USER_NOT_LOGIN;
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
 					$this->_errorMessage = " Question_Set_IDX " ;
 				}				
 				break;
 			case '3005':
-				if(isset($params['UserIDX']) == false || empty($params['UserIDX'])){
-					$this->_errorNo = ConfTask::ERROR_USER_NOT_LOGIN;
-					$this->_errorMessage = " UserIDX " ;
+				if(isset($params['Question_IDX']) == false || empty($params['Question_IDX'])){
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
+					$this->_errorMessage = " Question_IDX " ;
+				}				
+				if(isset($params['Option']) == false || empty($params['Option'])){
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
+					$this->_errorMessage = " Option " ;
 				}				
 				break;
 			case '4001':
-				if(isset($params['UserIDX']) == false || empty($params['UserIDX'])){
-					$this->_errorNo = ConfTask::ERROR_USER_NOT_LOGIN;
-					$this->_errorMessage = " UserIDX " ;
-				}				
 				if(isset($params['Share_Type']) == false || empty($params['Share_Type'])){
-					$this->_errorNo = ConfTask::ERROR_USER_NOT_LOGIN;
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
 					$this->_errorMessage = " Share_Type " ;
 				}				
 				if(isset($params['Share_IDX']) == false || empty($params['Share_IDX'])){
-					$this->_errorNo = ConfTask::ERROR_USER_NOT_LOGIN;
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
 					$this->_errorMessage = " Share_IDX " ;
 				}				
 				if(isset($params['Share_To']) == false || empty($params['Share_To'])){
-					$this->_errorNo = ConfTask::ERROR_USER_NOT_LOGIN;
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
 					$this->_errorMessage = " Share_To " ;
 				}				
 				break;
 			case '5001':
-				if(isset($params['UserIDX']) == false || empty($params['UserIDX'])){
-					$this->_errorNo = ConfTask::ERROR_USER_NOT_LOGIN;
-					$this->_errorMessage = " UserIDX " ;
-				}				
 				if(isset($params['Task_IDX']) == false || empty($params['Task_IDX'])){
-					$this->_errorNo = ConfTask::ERROR_USER_NOT_LOGIN;
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
 					$this->_errorMessage = " Task_IDX " ;
 				}				
 				if(isset($params['Finish_Score']) == false || empty($params['Finish_Score'])){
-					$this->_errorNo = ConfTask::ERROR_USER_NOT_LOGIN;
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
 					$this->_errorMessage = " Finish_Score " ;
 				}				
 				break;
@@ -325,6 +344,16 @@ class InterfaceController extends CController
 		// 		return;
 		// }
 		
+		
+		if(array_key_exists('type',$body)){
+			$type	= $body['type'];	
+		}else{
+			$errno  = ConfTask::ERROR_PARAMS ;
+			$this->_errorMessage = " type " ;
+			$this->_echoResponse($errno);
+			return;
+		}
+		$UserIDX = 0 ;
 		$userInfo=Yii::app()->session[$this->_USER_SESSION_KEY];
 		$ret = array(
 			"LoginName"		=>	$userInfo[0]["LoginName"],
@@ -338,22 +367,23 @@ class InterfaceController extends CController
 					'UserIDX'=>$UserIDX
 				),$body);
 		}
-		$body = array_merge(array(
-					'LoginName'=>'15900828187',
-					'UserIDX'=>"2"
-				),$body);
-		if(array_key_exists('type',$body)){
-			$type	= $body['type'];	
-		}else{
-			$errno  = ConfTask::ERROR_PARAMS ;
-			$this->_errorMessage = " type " ;
-			$this->_echoResponse($errno);
-			return;
-		}
+		// $UserIDX =  9 ; 
+		// $body = array_merge(array(
+		// 	'LoginName'=>'15900828187',
+		// 	'UserIDX'=> $UserIDX,
+		// ),$body);
 
 		if(isset($type) && !empty($type)){
+			if(in_array($type, $this->_need_login_method_type) && empty($UserIDX)){
+				$errno  = ConfTask::ERROR_USER_NOT_LOGIN ;
+				$this->_echoResponse($errno);
+				return;
+			}
 			$method	= $this->urlRouter($type);
 		}
+		
+		
+
 		if(isset($method) && !empty($method)){
 			$this->checkParams($body);
 			if(!empty($this->_errorNo)){
@@ -897,11 +927,55 @@ class InterfaceController extends CController
 
 	// 按月查询用户已完成任务数
 	public function queryUserTaskMonth($params){
+		$UserIDX = $params['UserIDX'];
+		$Query_Month = $params['Query_Month'];
+		$Finish_Status = $params['Finish_Status'];
+		$mod_user_task = new ModUserTask();
+		$Start_Date = CommonHelper::getDateMonthFirstDay($Query_Month);
+		$End_Date = CommonHelper::getDateMonthLastDay($Query_Month);
+		$Month_Days = date('t',strtotime($Start_Date));
+		$ret_user_tasks = $mod_user_task->queryUserTaskMonth($UserIDX,$Query_Month,$Finish_Status);
+		if($ret_user_tasks === false){
+			$errno = ConfTask::ERROR_QUEYR_USER_TASK_LIST ;
+			$this->_echoResponse($errno,'',$ret);
+			return;
+		}
+
+		$data = array();
+		for($i = 0 ; $i < $Month_Days ; $i++ ){
+			$Task_Date  = date('Y-m-d', strtotime("$Start_Date +$i day")) ;
+			$Task_Qty = 0 ;
+			for($j = 0 ; $j < count($ret_user_tasks) ; $j++){
+				if($Task_Date == $ret_user_tasks[$j]['Finish_Date']){
+					$Task_Qty = $ret_user_tasks[$j]['Task_Qty'];
+				}
+
+			}
+			$data[] = array(
+				'Task_Date' => $Task_Date,
+				'Task_Qty'	=> $Task_Qty
+				);
+		}
+		$errno = 1 ;
+		$this->_echoResponse($errno,'',$data);
 
 	}
 
-	// 按日查询用户已完成任务数
+	// 按日查询用户任务列表
 	public function queryUserTaskDay($params){
+		$UserIDX = $params['UserIDX'];
+		$Query_Day = $params['Query_Day'];
+		$Task_Type = $params['Task_Type'];
+		$mod_user_task = new ModUserTask();		
+		$ret = $mod_user_task->getUserTaskList($UserIDX,$Task_Type,$Query_Day);
+		if($ret === false){			
+			$errno = ConfTask::ERROR_QUEYR_USER_TASK_LIST ;
+			$this->_echoResponse($errno,'',$ret);
+			return;
+		}
+
+		$errno = 1 ;
+		$this->_echoResponse($errno,'',$ret); 
 		
 	}
 

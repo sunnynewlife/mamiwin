@@ -18,7 +18,7 @@ class ModUserTask {
 	 * @param  integer $pagesize [description]
 	 * @return [type]            [description]
 	 */
-	public function getUserTaskList($UserIDX,$Task_Type = 0  ,$page_size = 10 ,$offSet = 0){
+	public function getUserTaskList($UserIDX,$Task_Type = 0 ,$Query_Day = 0  ,$page_size = 10 ,$offSet = 0){
 		$page_size = (is_null($page_size)) ? 10 : $page_size;
 		$offSet = (is_null($offSet)) ? 0 : $offSet;
 			
@@ -29,8 +29,35 @@ class ModUserTask {
 			$sql .= " AND b.Task_Type = ? ";
 			$params[] = $Task_Type;			
 		}
+		if(!empty($Query_Day) ){
+			$sql .= " AND TIMESTAMPDIFF(MONTH,?,a.Finish_Date) = 0 ";
+			$params[] = $Query_Day;			
+		}
 		$sql .= " order by a.IDX asc ;" ;
 		$sql .= " limit $offSet,$page_size " ; 
+		$list=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
+		if(isset($list) && is_array($list) && count($list)>0){
+			return $list;
+		}
+		return array();
+	}
+
+	/**
+	 * 按月查询用户任务数，分不同状态
+	 * @param  [type] $UserIDX       [description]
+	 * @param  [type] $Query_Month   [description]
+	 * @param  [type] $Finish_Status [description]
+	 * @return [type]                [description]
+	 */
+	public function queryUserTaskMonth($UserIDX,$Query_Month,$Finish_Status){
+		$sql=" SELECT DISTINCT DATE_FORMAT(Finish_Date,'%Y-%m-%d'),COUNT(*) AS counts FROM user_tasks GROUP BY DATE_FORMAT(Finish_Date,'%Y-%m-%d')  where  UserIDX = ? and TIMESTAMPDIFF(MONTH,?,Finish_Date) = 0 ";
+		$params[] = $UserIDX;			
+		$params[] = $Query_Month;			
+		if(!empty($Finish_Status) ){
+			$sql .= " AND Finish_Status = ? ";
+			$params[] = $Finish_Status;			
+		}
+		$sql .= " order by a.IDX asc ;" ;
 		$list=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
 		if(isset($list) && is_array($list) && count($list)>0){
 			return $list;
