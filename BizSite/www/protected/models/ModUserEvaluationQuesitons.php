@@ -52,12 +52,39 @@ class ModUserEvaluationQuesitons {
 	}
 
 	// 获取要做的下一题
-	public function getNextQuestion($Question_Set_IDX,$UserIDX){
-		$sql="SELECT a.UserIDX,a.Question_Set_IDX,a.Question_IDX,b.Option_A,b.Option_B,b.Option_C,b.Option_D from User_Evaluation_Questions a ,Evaluation_Questions b  where a.Question_IDX = b.IDX  AND a.Question_Set_IDX=? AND a.UserIDX=? AND a.status = 0  order by a.IDX  limit 1 ";
+	public function getNextQuestion($UserIDX,$Question_Set_IDX){
+		$sql="SELECT a.UserIDX,a.Question_Set_IDX,a.Question_IDX,b.Option_A,b.Option_B,b.Option_C,b.Option_D,c.Set_Qty from User_Evaluation_Questions a ,Evaluation_Questions b,Evaluation_Questions_Set c where a.Question_IDX = b.IDX and a.Question_Set_IDX = c.IDX  AND a.Question_Set_IDX=? AND a.UserIDX=? AND a.status = 0  order by a.IDX  limit 1 ";
 		$params=array($Question_Set_IDX,$UserIDX);
 		$ret=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
 		return (isset($ret) && is_array($ret) && count($ret)>0)?$ret[0]:array();
 	}
+
+	public function getUserEvaluationQuesitonsList($UserIDX,$Question_Set_IDX,$Question_Answer_Status ,$pagesize = 10 ,$offSet = 0 ){
+		$pagesize = (is_null($pagesize)) ? 10 : $pagesize;
+		$offSet = (is_null($offSet)) ? 0 : $offSet;
+		
+		$params=array();
+		$sql=" SELECT * from User_Evalution_Questions	where UserIDX = ? and Question_Set_IDX = ?";
+		// if(!empty($Question_Set_IDX) ){
+		// 	$sql .= " AND Question_Set_IDX = ? ";
+		// 	$params[] = $Question_Set_IDX;			
+		// }
+		$params[] = $UserIDX;
+		$params[] = $Question_Set_IDX;
+		if($Question_Answer_Status == 0 ||$Question_Answer_Status == 1){
+			$sql .= " AND  status = ?";
+			$params[] = $Question_Answer_Status;
+		}
+		$sql .= " order by IDX asc ;" ;
+		// $sql .= " limit $offSet,$pagesize " ; 
+		$list=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
+		if(isset($list) && is_array($list) && count($list)>0){
+			return $list;
+		}
+		return array();
+	}
+
+
 
 	/**
 	 * 提交评测题答案

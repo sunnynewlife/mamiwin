@@ -40,6 +40,7 @@ class ConfTask {
 
 	const ERROR_QUEYR_USER_TASK_EVALUATION	= -501000001 ;
 	
+	const ERROR_FILE_UPLOAD 	 			= -800100001;
 
 	const ERROR_USER_LOGIN 	 			= -901000001;
 	const ERROR_USER_REGIST 			= -901000002;
@@ -53,12 +54,6 @@ class ConfTask {
 	const ERROR_USER_PHONE_REGIST		= -901000010;
 	const ERROR_USER_PASSWORD_RESET		= -901000011;
 
-
-
-	
-	
-	//权限相关
-	const ERROR_CLUB_GAME_RIGHT					= -301000001 ;
 
 
 
@@ -98,6 +93,7 @@ class ConfTask {
 
 		self::ERROR_USER_SHARE					=> 	"分享失败",
 
+		self::ERROR_FILE_UPLOAD				=> 	"文件上传失败",
 		self::ERROR_USER_LOGIN				=>	"用户登录失败" ,
 		self::ERROR_USER_REGIST				=>	"用户注册失败" ,
 		self::ERROR_USER_LOGIN_PASSWORD		=>	"账号或者密码错误" ,
@@ -109,10 +105,6 @@ class ConfTask {
 		self::ERROR_SMS_SEND				=>	"短信发送失败" ,
 		self::ERROR_USER_PHONE_REGIST		=>	"手机号未注册" ,
 		self::ERROR_USER_PASSWORD_RESET		=>	"密码重设失败" ,
-
-		
-		self::ERROR_CLUB_GAME_RIGHT 		=>	"您没有此操作权限" ,
-
 
 	);
 

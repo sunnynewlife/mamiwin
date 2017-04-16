@@ -283,10 +283,14 @@ class InterfaceController extends CController
 				if(isset($params['password']) == false || empty($params['password'])){
 					$this->_errorNo = ConfTask::ERROR_PARAMS;
 					$this->_errorMessage = " password " ;
-				}
-				
+				}				
 				break;
-
+			case '9012':
+				if(isset($params['url']) == false || empty($params['url'])){
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
+					$this->_errorMessage = " url " ;
+				}
+				break;
 			default:
 				# code...
 				break;
@@ -297,7 +301,8 @@ class InterfaceController extends CController
 
 	}
 	public function actionIndex(){		
-		$body	= file_get_contents("php://input");
+		// $body	= file_get_contents("php://input");
+		$body = Yii::app()->request->getParam('body',"");
 		$bodys	= json_decode($body,true);
 
 		if(!is_array($bodys)){
@@ -306,7 +311,7 @@ class InterfaceController extends CController
 			return;
 		}
 		// LibLogger::log(' Ok #(body:),('.json_encode($bodys).')');
-		$header = $bodys['header'];
+		$header = isset($bodys['header'])?$bodys['header']:'';
 		$body = $bodys['body'];
 		
 		
@@ -434,6 +439,7 @@ class InterfaceController extends CController
 		$this->_echoResponse($errno,'',$ret); 
 	}  
 
+	// 获取任务详情
 	private function getTaskMeterialDetail($params){
 		$IDX = $params['IDX'] ;
 		$mod = new ModTaskMaterial();
@@ -443,6 +449,35 @@ class InterfaceController extends CController
 			$this->_echoResponse($errno,'',$ret);
 			return;
 		}
+		$Material_Files_File_Type = $ret['File_Type'];
+		$Material_Files_Location_Type = $ret['Location_Type'];
+		$ret['Show_Url'] = '';
+		if( $Material_Files_Location_Type == DictionaryData::Material_Files_Location_Type_OutUrl ){
+			$ret['Show_Url'] = $ret['File_Content'];//如果是外链接，返回外链url	
+		}
+		unset($ret['File_Content']);
+		$errno = 1 ;
+		$this->_echoResponse($errno,'',$ret); 
+	}
+
+	// 获取另一项任务
+	private function getAnotherTaskMeterialDetail($params){
+		$UserIDX = $params['UserIDX'] ;
+		$IDX = 2 ; //TODO，逻辑待完善
+		$mod = new ModTaskMaterial();
+		$ret = $mod->getTaskMeterialDetail($IDX);
+		if($ret === false){			
+			$errno = ConfTask::ERROR_QUEYR_TASK_DETAIL ;
+			$this->_echoResponse($errno,'',$ret);
+			return;
+		}
+		$Material_Files_File_Type = $ret['File_Type'];
+		$Material_Files_Location_Type = $ret['Location_Type'];
+		$ret['Show_Url'] = '';
+		if( $Material_Files_Location_Type == DictionaryData::Material_Files_Location_Type_OutUrl ){
+			$ret['Show_Url'] = $ret['File_Content'];//如果是外链接，返回外链url	
+		}
+		unset($ret['File_Content']);
 		$errno = 1 ;
 		$this->_echoResponse($errno,'',$ret); 
 	}
@@ -760,17 +795,20 @@ class InterfaceController extends CController
 		$UserIDX = $params['UserIDX'];
 		$Question_Set_IDX = $params['Question_Set_IDX'];
 		$mod = new ModUserEvaluationQuesitons();
-		$ret = $mod->getNextQuestion($Question_Set_IDX,$UserIDX);
+		$ret = $mod->getNextQuestion($UserIDX,$Question_Set_IDX);
 		if($ret === false){			
 			$errno = ConfTask::ERROR_QUESTION_GET_NEXT ;
 			$this->_echoResponse($errno,'',$ret);
 			return;
-		}
+		}		
 		if(empty($ret)){
-			$errno = ConfTask::ERROR_QUESTION_GET_NEXT_EMPTY ;
-			$this->_echoResponse($errno,'',$ret);
-			return;	
+			$Unfinish_Qty = 0 ; 
+		}else{
+			$Question_Answer_Status = 0 ; 	//查询用户尚未完成的评测题数量
+			$ret_user_question = $mod->getUserEvaluationQuesitonsList($UserIDX,$Question_Set_IDX,$Question_Answer_Status);
+			$Unfinish_Qty = count($ret_user_question);
 		}
+		$ret['Unfinish_Qty'] = $Unfinish_Qty;
 		$errno = 1 ;
 		$this->_echoResponse($errno,'',$ret); 
 
@@ -869,29 +907,31 @@ class InterfaceController extends CController
 
 	//微信登录
 	public function wechatLogin($params){
-		$url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=".WxHelper::WX_APP_ID."&redirect_uri=http%3A%2F%2Fapi.fumuwin.com%2Fsite%2FwxIndex%3Fv%3D1&response_type=code&scope=snsapi_base&state=1&connect_redirect=1#wechat_redirect";
+		$redirect_uri = "http://m.fumuwin.com";	//http%3A%2F%2Fapi.fumuwin.com%2Fsite%2FwxIndex%3Fv%3D1
+		$url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=".WxHelper::WX_APP_ID."&redirect_uri=". $redirect_uri ."&response_type=code&scope=snsapi_base&state=1&connect_redirect=1#wechat_redirect";
 		$data = array('url'=>$url);
 		$errno = 1 ;
 		$this->_echoResponse($errno,'',$data);
 
 	}
 
-	//微信登录
+	//微信获取Tolen
 	public function wechatToken($params){
 
 	}
 
 	//微信签名
 	public function wechatSign($params){
-		$sign = '';
-		$data = array('sign'=>$sign);
+		$url =	Yii::app()->request->getParam('url',"");
+		
+		$data =	WxHelper::getJSSDKData($url);
 		$errno = 1 ;
 		$this->_echoResponse($errno,'',$data);
-
 	}
 
+
 	// 上传图片
-	public function uploadFile($params){
+	public function actionUploadFile($params){
 		if(isset($_FILES) && is_array($_FILES) && count($_FILES)>0){
 			foreach ($_FILES as $uploadedFile){
 				if(empty($uploadedFile["name"])==false){
@@ -911,9 +951,8 @@ class InterfaceController extends CController
 				}
 			}
 		}	
-		echo json_encode(array(
-			"return_code"	=>	-1,
-			"message"		=>	"图片上传失败",
-		));
+		$errno = ConfTask::ERROR_FILE_UPLOAD ;
+		$this->_echoResponse($errno,'',$ret);
+		return;
 	}
 }
