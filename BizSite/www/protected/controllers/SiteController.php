@@ -90,5 +90,13 @@ class SiteController extends CController
 		);
 		$this->layout="test_page_list";
 		$this->render("test_page_wxlogin",$data);
+	}
+	public function actionWbLogin()
+	{
+		$data=array(
+				"code"		=>	Yii::app()->request->getParam('code',""),
+		);
+		$this->layout="test_page_list";
+		$this->render("test_page_wblogin",$data);
 	}	
 }
