@@ -37,7 +37,7 @@ class ModEvaluationQuesitons {
 		$offSet = (is_null($offSet)) ? 0 : $offSet;
 		
 		$params=array();
-		$sql=" SELECT IDX,Question_Stems,Ability_Type_ID,Option_A,Option_B,Option_C,Option_D,Point_A,Point_B,Point_C,Point_D,Create_time,Update_time from Evaluation_Quesitons	where 1 = 1 ";
+		$sql=" SELECT IDX,Question_Stems,Ability_Type_ID,Option_A,Option_B,Option_C,Option_D,Option_E,Option_F,Point_A,Point_B,Point_C,Point_D,Point_E,Point_F,Create_time,Update_time from Evaluation_Quesitons	where 1 = 1 ";
 		if(!empty($Question_Set_IDX) ){
 			$sql .= " AND Question_Set_IDX = ? ";
 			$params[] = $Question_Set_IDX;			
@@ -58,7 +58,7 @@ class ModEvaluationQuesitons {
 	 */
 	public function getEvaluationQuesitons($IDX){
 		$params=array();
-		$sql="SELECT IDX,Question_Stems,Ability_Type_ID,Option_A,Option_B,Option_C,Option_D,Point_A,Point_B,Point_C,Point_D,Create_time,Update_time from Evaluation_Quesitons where IDX = ? ";
+		$sql="SELECT IDX,Question_Stems,Ability_Type_ID,Option_A,Option_B,Option_C,Option_D,Option_E,Option_F,Point_A,Point_B,Point_C,Point_D,Point_E,Point_F,Create_time,Update_time from Evaluation_Quesitons where IDX = ? ";
 		$params = array_merge($params,array($IDX));	
 		// if($del_flag === 1 || $del_flag === 0 ){
 		// 	$sql .= " AND del_flag = ? ";

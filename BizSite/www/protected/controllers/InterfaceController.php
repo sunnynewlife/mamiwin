@@ -446,7 +446,7 @@ class InterfaceController extends CController
 			$this->_echoResponse($errno,'',$ret);
 			return;
 		}
-		LibUserQuestions::distributeUserQuestsion($UserIDX,$Parent_Gender,$Parent_Marriage,$Child_Gender,$Child_Birthday);
+		// LibUserQuestions::distributeUserQuestsion($UserIDX,$Parent_Gender,$Parent_Marriage,$Child_Gender,$Child_Birthday);
 		$errno = 1 ;
 		$this->_echoResponse($errno,'',$ret); 
 	}
@@ -817,20 +817,47 @@ class InterfaceController extends CController
 	}
 
 	/**
+	 * 先判断此题集是否已经分配给用户，是则直接取，否则分配后再取题 
 	 * 获取用户下一题
 	 * @param  [type] $params [description]
 	 * @return [type]         [description]
 	 */
-	private function getUserNextQuestion($params){
+	private function getUserNextQuestion($params){		
 		$UserIDX = $params['UserIDX'];
 		$Question_Set_IDX = $params['Question_Set_IDX'];
+
 		$mod = new ModUserEvaluationQuesitons();
+		$ret_query_user_question = $mod->getUserEvaluationQuesitonsList($UserIDX,$Question_Set_IDX,'');
+		if(empty($ret_query_user_question)){//将此评测题分配给用户
+			$mod_user_question = new ModUserEvaluationQuesitons();
+			$ret_user_question = $mod_user_question->generateUserQuestion($UserIDX,$Question_Set_IDX);
+		}
 		$ret = $mod->getNextQuestion($UserIDX,$Question_Set_IDX);
 		if($ret === false){			
 			$errno = ConfTask::ERROR_QUESTION_GET_NEXT ;
 			$this->_echoResponse($errno,'',$ret);
 			return;
-		}		
+		}
+
+		$Option_List = array();
+		if(!empty($ret['Option_A'])){
+			$Option_List['A'] = $ret['Option_A'];
+		}
+		if(!empty($ret['Option_B'])){
+			$Option_List['B'] = $ret['Option_B'];
+		}
+		if(!empty($ret['Option_C'])){
+			$Option_List['C'] = $ret['Option_C'];
+		}
+		if(!empty($ret['Option_D'])){
+			$Option_List['D'] = $ret['Option_D'];
+		}
+		if(!empty($ret['Option_E'])){
+			$Option_List['E'] = $ret['Option_E'];
+		}
+		if(!empty($ret['Option_F'])){
+			$Option_List['F'] = $ret['Option_F'];
+		}
 		if(empty($ret)){
 			$Unfinish_Qty = 0 ; 
 		}else{
@@ -838,7 +865,14 @@ class InterfaceController extends CController
 			$ret_user_question = $mod->getUserEvaluationQuesitonsList($UserIDX,$Question_Set_IDX,$Question_Answer_Status);
 			$Unfinish_Qty = count($ret_user_question);
 		}
+		unset($ret['Option_A']);
+		unset($ret['Option_B']);
+		unset($ret['Option_C']);
+		unset($ret['Option_D']);
+		unset($ret['Option_E']);
+		unset($ret['Option_F']);
 		$ret['Unfinish_Qty'] = $Unfinish_Qty;
+		$ret['Option_List'] = $Option_List;
 		$errno = 1 ;
 		$this->_echoResponse($errno,'',$ret); 
 
