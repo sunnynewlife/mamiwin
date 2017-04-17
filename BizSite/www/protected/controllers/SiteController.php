@@ -90,7 +90,6 @@ class SiteController extends CController
 		);
 		$this->layout="test_page_list";
 		$this->render("test_page_wxlogin",$data);
-<<<<<<< HEAD
 	}
 	public function actionWbLogin()
 	{
@@ -99,7 +98,5 @@ class SiteController extends CController
 		);
 		$this->layout="test_page_list";
 		$this->render("test_page_wblogin",$data);
-=======
->>>>>>> aedc04038c6ac9403e1b1e0317dd2c810f3a02ff
 	}	
 }

@@ -207,8 +207,7 @@ class UserController extends CController
 		$JsSDKData=	WxHelper::getJSSDKData($url);
 		$this->_response(0,"success",$JsSDKData);
 	}
-	
-<<<<<<< HEAD
+
 	public function actionWbLogin()
 	{
 		$code			=	Yii::app()->request->getParam('code',"");
@@ -240,8 +239,5 @@ class UserController extends CController
 				"AcctSource"	=>		BizDataDictionary::User_AcctSource_Sina_Wb,
 				"OpenUserInfo"	=>		$userInfo[0]["OpenUserInfo"],
 		));
-	}
-	
-=======
->>>>>>> aedc04038c6ac9403e1b1e0317dd2c810f3a02ff
+	}	
 }
