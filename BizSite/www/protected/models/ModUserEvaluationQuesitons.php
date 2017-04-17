@@ -59,10 +59,7 @@ class ModUserEvaluationQuesitons {
 		return (isset($ret) && is_array($ret) && count($ret)>0)?$ret[0]:array();
 	}
 
-	public function getUserEvaluationQuesitonsList($UserIDX,$Question_Set_IDX,$Question_Answer_Status ,$pagesize = 10 ,$offSet = 0 ){
-		$pagesize = (is_null($pagesize)) ? 10 : $pagesize;
-		$offSet = (is_null($offSet)) ? 0 : $offSet;
-		
+	public function getUserEvaluationQuesitonsList($UserIDX,$Question_Set_IDX,$Question_Answer_Status  ){
 		$params=array();
 		$sql=" SELECT * from User_Evaluation_Questions	where UserIDX = ? and Question_Set_IDX = ?";
 		// if(!empty($Question_Set_IDX) ){
@@ -76,7 +73,6 @@ class ModUserEvaluationQuesitons {
 			$params[] = $Question_Answer_Status;
 		}
 		$sql .= " order by IDX asc ;" ;
-		// $sql .= " limit $offSet,$pagesize " ; 
 		$list=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
 		if(isset($list) && is_array($list) && count($list)>0){
 			return $list;
@@ -93,9 +89,9 @@ class ModUserEvaluationQuesitons {
 	 * @param  [type] $Point        [description]
 	 * @return [type]               [description]
 	 */
-	public function recordUserQuestionResult($UserIDX,$Question_IDX,$Point){
-		$sql="update User_Evaluation_Questions set Point=?,Status=?,Update_Time=now() where UserIDX=? and Question_IDX = ?";
-		$params=array($Point,$UserIDX,$Question_IDX);
+	public function recordUserQuestionResult($UserIDX,$Question_IDX,$Option,$Point){
+		$sql="update User_Evaluation_Questions set Option_Chose=?,Point=?,Status=1,Update_Time=now() where UserIDX=? and Question_IDX = ?";
+		$params=array($Option,$Point,$UserIDX,$Question_IDX);
 		return LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params);
 	}
 

@@ -881,6 +881,7 @@ class InterfaceController extends CController
 	/**
 	 * 提交评测题答案
 	 * TODO 全部评测结束 ，根据评测结果分配任务
+	 * 当完成最后一题时，返回评测得分结果
 	 * @param  [type] $params [description]
 	 * @return [type]         [description]
 	 */
@@ -888,13 +889,14 @@ class InterfaceController extends CController
 		$UserIDX = $params['UserIDX'];
 		$Question_IDX = $params['Question_IDX'];
 		$Option = trim($params['Option']);
-		$mod_question = ModEvaluationQuesitons::getInstance();
+		$mod_question = new ModEvaluationQuesitons();
 		$ret_question = $mod_question->getEvaluationQuesitons($Question_IDX);
 		if(empty($ret_question)){
 			$errno = ConfTask::ERROR_USER_QUESTION_GET ;
 			$this->_echoResponse($errno,'',$ret);
 			return;
 		}
+		$Question_Set_IDX = $ret_question['Question_Set_IDX'];
 	
 		if($Option == "A"){
 			$Point = $ret_question['Point_A'];
@@ -904,17 +906,41 @@ class InterfaceController extends CController
 			$Point = $ret_question['Point_C'];
 		}else  if($Option == "D"){
 			$Point = $ret_question['Point_D'];
+		}else  if($Option == "E"){
+			$Point = $ret_question['Point_E'];
+		}else  if($Option == "F"){
+			$Point = $ret_question['Point_F'];
 		}
-		$mod_user_question = ModUserEvaluationQuesitons::getInstance();
-		$ret_user_question = $mod_user_question->recordUserQuestionResult($UserIDX,$Question_IDX,$Point);
+		$mod_user_question = new ModUserEvaluationQuesitons();
+		$ret_user_question = $mod_user_question->recordUserQuestionResult($UserIDX,$Question_IDX,$Option,$Point);
 		if($ret_user_question === false){
 			$errno = ConfTask::ERROR_USER_QUESTION_RECORD ;
-			$this->_echoResponse($errno,'',$ret);
+			$this->_echoResponse($errno);
 			return;
 		}
-		$errno = 1 ;
-		$this->_echoResponse($errno); 
+		//判断是否已经全部答完，是否则返回得分，并同时返回剩余题目数
+		$Question_Answer_Status = 0 ; 	//查询用户尚未完成的评测题数量
+		$ret_user_question = $mod_user_question->getUserEvaluationQuesitonsList($UserIDX,$Question_Set_IDX,$Question_Answer_Status);
+		$Unfinish_Qty = count($ret_user_question);
 
+		$Finish_Point = 0 ;
+		if(empty($Unfinish_Qty)){
+			$Question_Answer_Status = 1 ; 	//查询用户已经完成的评测题
+			$ret_user_question_finished = $mod_user_question->getUserEvaluationQuesitonsList($UserIDX,$Question_Set_IDX,$Question_Answer_Status);
+			
+			if(!empty($ret_user_question_finished)){
+				foreach ($ret_user_question_finished as $key => $value) {
+					$Point = (is_numeric($value['Point'])) ? $value['Point'] : 0 ;
+					$Finish_Point += $Point;
+				}
+			}
+		}
+		$data = array();
+		if($Unfinish_Qty == 0 ){
+			$data = array('Finish_Point' => $Finish_Point);
+		}
+		$errno = 1 ;
+		$this->_echoResponse($errno,'',$data); 
 	}
 
 	/**
