@@ -725,10 +725,26 @@ class InterfaceController extends CController
 		// }
 		$userInfo=Yii::app()->session[$this->_USER_SESSION_KEY];
 		$ret = array(
-			"LoginName"			=>	$userInfo[0]["LoginName"],
-			"UserIDX"			=>	$userInfo[0]["IDX"],
-			"UserBasicInfo"		=>	0,
-			"UserEvaluationDay"	=>	0,
+			"UserIDX"			=>	$userInfo[0]["IDX"],				
+			"User_Info"		=> array(
+				"LoginName"			=>	$userInfo[0]["LoginName"],				
+				"UserEmpiricValue"	=> 	0,
+				"UserLevel"			=> 	0,
+				),
+			"User_Evaluation_Info"	=>	array(
+				"UserBasicInfo"		=>	0,
+				"UserEvaluationDay"	=>	0,
+				),
+			"User_Task_Info" 	=>	array(
+				'Finish_Task'	=>	array(
+					'Qty'		=> 0,
+					'Minutes'	=> 0 ,
+					),
+				'UnFinish_Task'	=>	array(
+					'Qty'		=> 0,
+					'Minutes'	=> 0 ,
+					),
+				),
 		);
 		$UserIDX = $ret['UserIDX'];
 		// $mod_user_basicinfo = ModUserBasicInfo::getInstance();
