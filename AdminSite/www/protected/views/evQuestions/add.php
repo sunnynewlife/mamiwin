@@ -79,7 +79,27 @@
 						<td>
 							<input type="text"  name="Point_D" value="0" class="input-xlarge" autofocus="false"  style="width:50px;"/>							
 						</td>											
-					</tr>					
+					</tr>	
+					<tr>						
+						<td >选项E</td>
+						<td colspan=2>
+							<input type="text" maxlength="50" name="Option_E" value="" class="input-xlarge" autofocus="true" style="width:450px;" />
+						</td>
+						<td style="width:100px;">选项E分值</td>
+						<td>
+							<input type="text"  name="Point_E" value="0" class="input-xlarge" autofocus="false"  style="width:50px;"/>							
+						</td>											
+					</tr>
+					<tr>						
+						<td >选项F</td>
+						<td colspan=2>
+							<input type="text" maxlength="50" name="Option_F" value="" class="input-xlarge" autofocus="true" style="width:450px;" />
+						</td>
+						<td style="width:100px;">选项F分值</td>
+						<td>
+							<input type="text"  name="Point_F" value="0" class="input-xlarge" autofocus="false"  style="width:50px;"/>							
+						</td>											
+					</tr>				
 				</table>
 
 				<input type="hidden" name="submit" value="1" />

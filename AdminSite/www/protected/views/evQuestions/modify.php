@@ -82,6 +82,26 @@
 						</td>											
 					</tr>		
 					<tr>						
+						<td >选项E</td>
+						<td colspan=2>
+							<input type="text" maxlength="50" name="Option_E" value="<?php echo $Evaluation_Quesiton["Option_E"]?>" class="input-xlarge" autofocus="true" style="width:450px;" />
+						</td>
+						<td style="width:100px;">选项E分值</td>
+						<td>
+							<input type="text"  name="Point_E" value="<?php echo $Evaluation_Quesiton["Point_E"]?>" class="input-xlarge" autofocus="false"  style="width:50px;"/>							
+						</td>											
+					</tr>		
+					<tr>						
+						<td >选项F</td>
+						<td colspan=2>
+							<input type="text" maxlength="50" name="Option_F" value="<?php echo $Evaluation_Quesiton["Option_F"]?>" class="input-xlarge" autofocus="true" style="width:450px;" />
+						</td>
+						<td style="width:100px;">选项F分值</td>
+						<td>
+							<input type="text"  name="Point_F" value="<?php echo $Evaluation_Quesiton["Point_F"]?>" class="input-xlarge" autofocus="false"  style="width:50px;"/>							
+						</td>											
+					</tr>		
+					<tr>						
 						<td >排序</td>
 						<td colspan=2>
 							<input type="text" maxlength="50" name="Order_Index" value="<?php echo $Evaluation_Quesiton["Order_Index"]?>" class="input-xlarge" autofocus="true" style="width:100px;" />

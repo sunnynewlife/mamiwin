@@ -6,7 +6,7 @@ class EvQuestionsController extends TableMagtController
 	private $_tableName="Evaluation_Questions";
 	private $_searchName="";
 	private $_next_url="/evQuestions/index";
-	private $_columns=array("Question_Stems","Option_A","Option_B","Option_C","Option_D","Point_A","Point_B","Point_C","Point_D");
+	private $_columns=array("Question_Stems","Option_A","Option_B","Option_C","Option_D","Option_E","Option_F","Point_A","Point_B","Point_C","Point_D","Point_E","Point_F");
 	private $_title="素材资料";
 	private $_primaryKey="IDX";
 	
@@ -27,6 +27,15 @@ class EvQuestionsController extends TableMagtController
 	public function actionIndex()
 	{	
 		$this->_actionIndex("v_Questions", $this->_searchName, $this->_next_url, $this->_tableName,"index");
+		// $EvaluationQuestionsSetData	=new EvaluationQuestionsSetData();
+		// $Evaluation_Questions_List = 
+
+		// $this->renderData['users']= $users;
+  //   	$this->renderData['page']= $page_str;
+  //   	$this->renderData['Evaluation_Questions'] = $Evaluation_Questions;
+  //   	$this->render('indx',$this->renderData);
+    // }
+
 	}
 	public function actionAdd()
 	{	
@@ -45,18 +54,22 @@ class EvQuestionsController extends TableMagtController
 			$Option_B=Yii::app()->request->getParam("Option_B","");
 			$Option_C=Yii::app()->request->getParam("Option_C","");
 			$Option_D=Yii::app()->request->getParam("Option_D","");
-			$Option_D=Yii::app()->request->getParam("Option_D","");
+			$Option_E=Yii::app()->request->getParam("Option_E","");
+			$Option_F=Yii::app()->request->getParam("Option_F","");
 			$Point_A=Yii::app()->request->getParam("Point_A","");
 			$Point_B=Yii::app()->request->getParam("Point_B","");
 			$Point_C=Yii::app()->request->getParam("Point_C","");
 			$Point_D=Yii::app()->request->getParam("Point_D","");
+			$Point_E=Yii::app()->request->getParam("Point_E","");
+			$Point_F=Yii::app()->request->getParam("Point_F","");
 
 			if(empty($Question_Stems) || empty($Option_A) || empty($Option_B) || empty($Point_A) ) {
 				$this->alert('error',"请正确设置评测题及选项AB");
 			}else{
 				
-				if($EvQuestionData->insertEvQuestion($Question_Set_IDX,$Ability_Type_ID,$Question_Stems,$Option_A,$Option_B,$Option_C,$Option_D,$Point_A,$Point_B,$Point_C,$Point_D,0)){
-					return $this->exitWithSuccess("增加评测题成功",$this->_next_url);
+				if($EvQuestionData->insertEvQuestion($Question_Set_IDX,$Ability_Type_ID,$Question_Stems,$Option_A,$Option_B,$Option_C,$Option_D,$Option_E,$Option_F,$Point_A,$Point_B,$Point_C,$Point_D,$Point_E,$Point_F,0)){
+					$next_url = "/evQuestions/add";
+					return $this->exitWithSuccess("增加评测题成功",$next_url);
 				}
 				$this->alert('error',"增加评测题失败，请正确设置字段值");
 			}
@@ -86,11 +99,14 @@ class EvQuestionsController extends TableMagtController
 			$Option_B=Yii::app()->request->getParam("Option_B","");
 			$Option_C=Yii::app()->request->getParam("Option_C","");
 			$Option_D=Yii::app()->request->getParam("Option_D","");
-			$Option_D=Yii::app()->request->getParam("Option_D","");
+			$Option_E=Yii::app()->request->getParam("Option_E","");
+			$Option_F=Yii::app()->request->getParam("Option_F","");
 			$Point_A=Yii::app()->request->getParam("Point_A","");
 			$Point_B=Yii::app()->request->getParam("Point_B","");
 			$Point_C=Yii::app()->request->getParam("Point_C","");
 			$Point_D=Yii::app()->request->getParam("Point_D","");
+			$Point_E=Yii::app()->request->getParam("Point_E","");
+			$Point_F=Yii::app()->request->getParam("Point_F","");
 			$Order_Index=Yii::app()->request->getParam("Order_Index",0);
 				
 			if(empty($Question_Stems) || empty($Option_A) || empty($Option_B) || empty($Point_A) ) {
@@ -102,7 +118,7 @@ class EvQuestionsController extends TableMagtController
 				// 		$AbilityIds[]=$rowItem["IDX"];
 				// 	}
 				// }
-				if($EvQuestionData->updateEvQuestion($Question_Set_IDX,$Ability_Type_ID,$Question_Stems,$Option_A,$Option_B,$Option_C,$Option_D,$Point_A,$Point_B,$Point_C,$Point_D,$Order_Index,$value)){
+				if($EvQuestionData->updateEvQuestion($Question_Set_IDX,$Ability_Type_ID,$Question_Stems,$Option_A,$Option_B,$Option_C,$Option_D,$Option_E,$Option_F,$Point_A,$Point_B,$Point_C,$Point_D,$Point_E,$Point_F,$Order_Index,$value)){
 					return $this->exitWithSuccess("修改评测题成功",$this->_next_url);
 				}
 				$this->alert('error',"修改评测题失败，请正确设置字段值");

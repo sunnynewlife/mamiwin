@@ -72,4 +72,21 @@ Class CommonHelper{
         return $diff / $diff_divider ; 
 
     }
+
+
+    //获取查询月份第一天的日期
+    public static function getDateMonthFirstDay($query_date){
+        $begin_date=date('Y-m-01', strtotime($query_date));
+        return $begin_date;
+    }
+
+
+    //获取查询月份最后一天的日期
+    public static function getDateMonthLastDay($query_date){
+        $begin_date=date('Y-m-01', strtotime($query_date));
+        $last_date = date('Y-m-d', strtotime("$begin_date +1 month -1 day")); 
+        return $last_date;
+    }
+
+    
 }

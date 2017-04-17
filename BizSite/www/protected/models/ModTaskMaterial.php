@@ -57,7 +57,7 @@ class ModTaskMaterial {
 	 */
 	public function getTaskMeterialDetail($IDX){
 		$params=array();
-		$sql="SELECT IDX,Task_Type,Task_Title,Task_Status,Min_Time,Max_Time,Matrial_IDX,Min_Age,Max_Age,Child_Gender,Parent_Gender,Parent_Marriage,Only_Children,Create_time,Update_time from Task_Material where IDX = ? ";
+		$sql="SELECT a.*,b.File_Title,b.File_Type,b.Location_Type,b.Original_Name,b.Download_Id,b.File_Content,b.Is_Show_Index from Task_Material a, Material_Files b  where b.Matrial_IDX = a.IDX and  a.IDX = ? ";
 		$params = array_merge($params,array($IDX));	
 		// if($del_flag === 1 || $del_flag === 0 ){
 		// 	$sql .= " AND del_flag = ? ";

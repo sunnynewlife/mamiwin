@@ -9,17 +9,17 @@ class EvQuestionData
 		LunaPdo::GetInstance($this->_PDO_NODE_NAME)->lastInsertId($name);
 	}
 	
-	public function insertEvQuestion($Question_Set_IDX,$Ability_Type_ID,$Question_Stems,$Option_A,$Option_B,$Option_C,$Option_D,$Point_A,$Point_B,$Point_C,$Point_D,$Order_Index)
+	public function insertEvQuestion($Question_Set_IDX,$Ability_Type_ID,$Question_Stems,$Option_A,$Option_B,$Option_C,$Option_D,$Option_E,$Option_F,$Point_A,$Point_B,$Point_C,$Point_D,$Point_E,$Point_F,$Order_Index)
 	{
-		$sql="insert into Evaluation_Questions(Question_Set_IDX,Ability_Type_ID,Question_Stems,Option_A,Option_B,Option_C,Option_D,Point_A,Point_B,Point_C,Point_D,Order_Index) values (?,?,?,?,?,?,?,?,?,?,?,?)";
-		$params=array($Question_Set_IDX,$Ability_Type_ID,$Question_Stems,$Option_A,$Option_B,$Option_C,$Option_D,$Point_A,$Point_B,$Point_C,$Point_D,$Order_Index);
+		$sql="insert into Evaluation_Questions(Question_Set_IDX,Ability_Type_ID,Question_Stems,Option_A,Option_B,Option_C,Option_D,Option_E,Option_F,Point_A,Point_B,Point_C,Point_D,Point_E,Point_F,Order_Index) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		$params=array($Question_Set_IDX,$Ability_Type_ID,$Question_Stems,$Option_A,$Option_B,$Option_C,$Option_D,$Option_E,$Option_F,$Point_A,$Point_B,$Point_C,$Point_D,$Point_E,$Point_F,$Order_Index);
 		return LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params);
 	}
 	
-	public function updateEvQuestion($Question_Set_IDX,$Ability_Type_ID,$Question_Stems,$Option_A,$Option_B,$Option_C,$Option_D,$Point_A,$Point_B,$Point_C,$Point_D,$Order_Index,$IDX)
+	public function updateEvQuestion($Question_Set_IDX,$Ability_Type_ID,$Question_Stems,$Option_A,$Option_B,$Option_C,$Option_D,$Option_E,$Option_F,$Point_A,$Point_B,$Point_C,$Point_D,$Point_E,$Point_F,$Order_Index,$IDX)
 	{
-		$sql="update Evaluation_Questions set Question_Set_IDX=?,Ability_Type_ID=?,Question_Stems=?,Option_A=?,Option_B=?,Option_C=?,Option_D=?,Point_A=?,Point_B=?,Point_C=?,Point_D=?,Order_Index=?,Update_Time=now() where IDX=?";
-		$params=array($Question_Set_IDX,$Ability_Type_ID,$Question_Stems,$Option_A,$Option_B,$Option_C,$Option_D,$Point_A,$Point_B,$Point_C,$Point_D,$Order_Index,$IDX);
+		$sql="update Evaluation_Questions set Question_Set_IDX=?,Ability_Type_ID=?,Question_Stems=?,Option_A=?,Option_B=?,Option_C=?,Option_D=?,Option_E=?,Option_F=?,Point_A=?,Point_B=?,Point_C=?,Point_D=?,Point_E=?,Point_F=?,Order_Index=?,Update_Time=now() where IDX=?";
+		$params=array($Question_Set_IDX,$Ability_Type_ID,$Question_Stems,$Option_A,$Option_B,$Option_C,$Option_D,$Option_E,$Option_F,$Point_A,$Point_B,$Point_C,$Point_D,$Point_E,$Point_F,$Order_Index,$IDX);
 		return LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params);
 	}
 
