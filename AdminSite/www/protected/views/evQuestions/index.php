@@ -55,7 +55,7 @@ $rowsHtmlTag=<<<EndOfRowTag
 	<td>%s</td>
 	<td>%s</td>
 	<td>%s</td>
-	<td>%s</td>	
+	<td>%s</td>				
 	<td>%s</td>				
 	<td>
 		<a href="/evQuestions/modify?IDX=%s" title="修改"><i class="icon-pencil"></i></a>&nbsp;
@@ -75,10 +75,14 @@ EndOfRowTag;
 				$Option_B=$item["Option_B"];
 				$Option_C=$item["Option_C"];
 				$Option_D=$item["Option_D"];
+				// $Option_E=$item["Option_E"];
+				// $Option_F=$item["Option_F"];
 				$Point_A=$item["Point_A"];
 				$Point_B=$item["Point_B"];
 				$Point_C=$item["Point_C"];
 				$Point_D=$item["Point_D"];
+				// $Point_E=$item["Point_E"];
+				// $Point_F=$item["Point_F"];
 				$Order_Index=$item["Order_Index"];
 				if(mb_strlen($title,"utf-8")>$titleLen){
 					$title=mb_substr($title, 0,$titleLen,"utf-8")."..";
@@ -92,10 +96,14 @@ EndOfRowTag;
 					$Option_B,
 					$Option_C,
 					$Option_D,
+					// $Option_E,
+					// $Option_F,
 					$Point_A,
 					$Point_B,
 					$Point_C,
 					$Point_D,
+					// $Point_E,
+					// $Point_F,
 					$Order_Index,
 					$item["IDX"],$item["IDX"]			
 				);
