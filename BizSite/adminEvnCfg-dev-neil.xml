@@ -145,6 +145,7 @@
 						<string key="url" value="cgi-bin/message/template/send" />
 					</array>
 				</array>
+<<<<<<< HEAD
 			</array>
 			<array key="WeiBo" name="微博平台">
 				<string key="domain" value="https://api.weibo.com" />
@@ -164,6 +165,8 @@
 						<string key="method" value="GET" />
 					</array>					
 				</array>
+=======
+>>>>>>> aedc04038c6ac9403e1b1e0317dd2c810f3a02ff
 			</array>	
 		</array>
 	</array>

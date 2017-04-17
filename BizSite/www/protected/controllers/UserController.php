@@ -208,6 +208,7 @@ class UserController extends CController
 		$this->_response(0,"success",$JsSDKData);
 	}
 	
+<<<<<<< HEAD
 	public function actionWbLogin()
 	{
 		$code			=	Yii::app()->request->getParam('code',"");
@@ -241,4 +242,6 @@ class UserController extends CController
 		));
 	}
 	
+=======
+>>>>>>> aedc04038c6ac9403e1b1e0317dd2c810f3a02ff
 }
