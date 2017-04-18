@@ -22,4 +22,19 @@ class 	EvaluationQuestionsSetData
 		return (isset($EvQuestion) && is_array($EvQuestion) && count($EvQuestion)>0)?$EvQuestion:array();		
 	}
 	
+	public function updateEvQuestionSet($Set_Name,$Set_Qty,$Set_Type,$Remark,$Conditon_Child_Gender,$Condition_Parent_Gender,$Condition_Parent_Marriage,$Condition_Min_Age,$Condition_Max_age,$Condition_Only_Children,$IDX)
+	{
+		$sql="update Evaluation_Questions_Set set Set_Name=?,Set_Qty=?,Set_Type=?,Remark=?,Conditon_Child_Gender=?,Condition_Parent_Gender=?,Condition_Parent_Marriage=?,Condition_Min_Age=?,Condition_Max_age=?,Condition_Only_Children=?,Update_Time=now() where IDX=?";
+		$params=array($Set_Name,$Set_Qty,$Set_Type,$Remark,$Conditon_Child_Gender,$Condition_Parent_Gender,$Condition_Parent_Marriage,$Condition_Min_Age,$Condition_Max_age,$Condition_Only_Children,$IDX);
+		return LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params);
+	}
+
+	public function  getEvQuestionSetByIDX($IDX)
+	{
+		$sql="select * from Evaluation_Questions_Set where IDX=?";
+		$params=array($IDX);
+		$Material_info=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
+		return (isset($Material_info) && is_array($Material_info) && count($Material_info)>0)?$Material_info[0]:array();
+	}
+	
 }

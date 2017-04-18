@@ -3,16 +3,16 @@ LunaLoader::import("luna_lib.util.CGuidManager");
 
 class EvQuestionsSetController extends TableMagtController 
 {
-	private $_tableName="Evaluation_Questions";
+	private $_tableName="Evaluation_Questions_Set";
 	private $_searchName="";
 	private $_next_url="/evQuestions/index";
-	private $_columns=array("Question_Stems","Option_A","Option_B","Option_C","Option_D","Option_E","Option_F","Point_A","Point_B","Point_C","Point_D","Point_E","Point_F");
-	private $_title="素材资料";
+	private $_columns=array("IDX","Set_Name","Set_Qty","Set_Type","Remark","Conditon_Child_Gender","Condition_Parent_Gender","Condition_Parent_Marriage","Condition_Min_Age","Condition_Max_age","Condition_Only_Children");
+	private $_title="评测题集";
 	private $_primaryKey="IDX";
 	
 	protected $_EXTRA_SEARCH_FIELDS=array(
 		"File_Type" 	=> array("compartion_type" =>"equal","field_name" =>"File_Type"),
-		"File_Title" 	=> array("compartion_type" =>"like","field_name" =>"Question_Stems"),
+		"File_Title" 	=> array("compartion_type" =>"like","field_name" =>"Set_Name"),
 	);
 	
 	
@@ -21,21 +21,12 @@ class EvQuestionsSetController extends TableMagtController
 		$this->_PDO_NODE_NAME="BizDatabase";
 		$this->_MEMCACHE_NODE_NAME="";
 		$this->_memcacheKey=array("");
-	
+		
 	}
 	
 	public function actionIndex()
 	{	
-		$this->_actionIndex("v_Questions", $this->_searchName, $this->_next_url, $this->_tableName,"index");
-		// $EvaluationQuestionsSetData	=new EvaluationQuestionsSetData();
-		// $Evaluation_Questions_List = 
-
-		// $this->renderData['users']= $users;
-  //   	$this->renderData['page']= $page_str;
-  //   	$this->renderData['Evaluation_Questions'] = $Evaluation_Questions;
-  //   	$this->render('indx',$this->renderData);
-    // }
-
+		$this->_actionIndex("Evaluation_Questions_Set", $this->_searchName, $this->_next_url, $this->_tableName,"index");	
 	}
 	public function actionAdd()
 	{	
@@ -86,30 +77,22 @@ class EvQuestionsSetController extends TableMagtController
 			$this->exitWithError("参数错误",$this->_next_url);
 		}
 		$submit = trim(Yii::app()->request->getParam('submit',0));
-		$EvQuestionData=new EvQuestionData();$EvaluationQuestionsSetData	=new EvaluationQuestionsSetData();
-		$EvaluationQuestionsSet_List=$EvaluationQuestionsSetData->getEvaluationQuestionsSetList();
-		$mwData=new MWData();
-		$Ability_Type=$mwData->getAbility_Type();
-
+		$EvaluationQuestionsSetData	=new EvaluationQuestionsSetData();
+		
 		if ($submit){			
-			$Question_Set_IDX =Yii::app()->request->getParam("Question_Set","");
-			$Ability_Type_ID =Yii::app()->request->getParam("Ability_Type_ID","");
-			$Question_Stems=Yii::app()->request->getParam("Question_Stems","");
-			$Option_A=Yii::app()->request->getParam("Option_A","");
-			$Option_B=Yii::app()->request->getParam("Option_B","");
-			$Option_C=Yii::app()->request->getParam("Option_C","");
-			$Option_D=Yii::app()->request->getParam("Option_D","");
-			$Option_E=Yii::app()->request->getParam("Option_E","");
-			$Option_F=Yii::app()->request->getParam("Option_F","");
-			$Point_A=Yii::app()->request->getParam("Point_A","");
-			$Point_B=Yii::app()->request->getParam("Point_B","");
-			$Point_C=Yii::app()->request->getParam("Point_C","");
-			$Point_D=Yii::app()->request->getParam("Point_D","");
-			$Point_E=Yii::app()->request->getParam("Point_E","");
-			$Point_F=Yii::app()->request->getParam("Point_F","");
-			$Order_Index=Yii::app()->request->getParam("Order_Index",0);
+			$IDX =Yii::app()->request->getParam("IDX","");
+			$Set_Name =Yii::app()->request->getParam("Set_Name","");
+			$Set_Qty=Yii::app()->request->getParam("Set_Qty",0);
+			$Set_Type=Yii::app()->request->getParam("Set_Type","");
+			$Remark=Yii::app()->request->getParam("Remark","");
+			$Conditon_Child_Gender=Yii::app()->request->getParam("Conditon_Child_Gender",1);
+			$Condition_Parent_Gender=Yii::app()->request->getParam("Condition_Parent_Gender",1);
+			$Condition_Parent_Marriage=Yii::app()->request->getParam("Condition_Parent_Marriage",1);
+			$Condition_Min_Age=Yii::app()->request->getParam("Condition_Min_Age",0);
+			$Condition_Max_age=Yii::app()->request->getParam("Condition_Max_age",99);
+			$Condition_Only_Children=Yii::app()->request->getParam("Condition_Only_Children",1);
 				
-			if(empty($Question_Stems) || empty($Option_A) || empty($Option_B) || empty($Point_A) ) {
+			if(empty($Set_Name)) {
 				$this->alert('error',"请正确设置字段");
 			}else{
 				// $AbilityIds=array();
@@ -118,20 +101,17 @@ class EvQuestionsSetController extends TableMagtController
 				// 		$AbilityIds[]=$rowItem["IDX"];
 				// 	}
 				// }
-				if($EvQuestionData->updateEvQuestion($Question_Set_IDX,$Ability_Type_ID,$Question_Stems,$Option_A,$Option_B,$Option_C,$Option_D,$Option_E,$Option_F,$Point_A,$Point_B,$Point_C,$Point_D,$Point_E,$Point_F,$Order_Index,$value)){
-					return $this->exitWithSuccess("修改评测题成功",$this->_next_url);
+				if($EvaluationQuestionsSetData->updateEvQuestionSet($Set_Name,$Set_Qty,$Set_Type,$Remark,$Conditon_Child_Gender,$Condition_Parent_Gender,$Condition_Parent_Marriage,$Condition_Min_Age,$Condition_Max_age,$Condition_Only_Children,$value)){
+					return $this->exitWithSuccess("修改评测题集成功",$this->_next_url);
 				}
-				$this->alert('error',"修改评测题失败，请正确设置字段值");
+				$this->alert('error',"修改评测题集失败，请正确设置字段值");
 			}			
 		}
-		// $this->renderData["Ability_Type"]=$Ability_Type;
-		// $this->renderData["Material_Files"]=$EvQuestionData->getMaterial_Files();
-		// $this->renderData["Task_Material"]=$EvQuestionData->getTask_Material($value);
-		// $this->renderData["Task_Ability"]=$EvQuestionData->getTask_Ability($value);
-		$Evaluation_Quesiton = $EvQuestionData->getEvQuestionByIDX($value);
-		$this->renderData["Evaluation_Quesiton"]=$Evaluation_Quesiton;
-		$this->renderData["Ability_Type"]=$Ability_Type;
-		$this->renderData["EvaluationQuestionsSet_List"]=$EvaluationQuestionsSet_List;
+
+		$Evaluation_Quesiton_Set = $EvaluationQuestionsSetData->getEvQuestionSetByIDX($value);
+		$this->renderData["Evaluation_Quesiton"]=$Evaluation_Quesiton_Set;
+		// $EvaluationQuestionsSet_List=$EvaluationQuestionsSetData->getEvaluationQuestionsSetList();
+		// $this->renderData["EvaluationQuestionsSet_List"]=$EvaluationQuestionsSet_List;
 
 		$this->render("modify",$this->renderData);
 	}

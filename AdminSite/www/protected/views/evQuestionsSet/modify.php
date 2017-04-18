@@ -16,8 +16,8 @@
 		<div class="tab-pane active in" id="home">
 			<form id="tab" method="post" action="" enctype="multipart/form-data">
 				<br/>
-				<label>文件内容标题</label> 
-				<input type="text" maxlength="50" name="File_Title" value="<?php echo $Material_Files["File_Title"];?>" class="input-xlarge" required="true" autofocus="true" />
+				<label>题集名称</label> 
+				<input type="text" maxlength="50" name="Set_Name" value="<?php echo $Material_Files["Set_Name"];?>" class="input-xlarge" required="true" autofocus="true" />
 				<br/>
 				<label>资料文件类型</label> 
 				<select name="File_Type">
