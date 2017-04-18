@@ -207,5 +207,37 @@ class UserController extends CController
 		$JsSDKData=	WxHelper::getJSSDKData($url);
 		$this->_response(0,"success",$JsSDKData);
 	}
-	
+
+	public function actionWbLogin()
+	{
+		$code			=	Yii::app()->request->getParam('code',"");
+		if(empty($code)){
+			return $this->_response(-99,"参数错误");
+		}
+		$wbUser=WbHelper::getOpenId($code);
+		//{"access_token":"2.0044i1GBmccLbBd7d5f0b751fQqoOE","remind_in":"157679999","expires_in":157679999,"uid":"1009727993"}
+		if($wbUser==false){
+			return $this->_response("-1","code 错误");
+		}
+		$bizAppData= new BizAppData();
+		$userInfo=$bizAppData->getUserInfoByLoginName($wbUser["uid"], BizDataDictionary::User_AcctSource_Sina_Wb);
+		if(count($userInfo)==0){
+			$bizAppData->registThirdUserInfo($wbUser["uid"], BizDataDictionary::User_AcctSource_Sina_Wb);
+			$userInfo=$bizAppData->getUserInfoByLoginName($wbUser["uid"], BizDataDictionary::User_AcctSource_Sina_Wb);
+		}
+		if(count($userInfo)==0){
+			return $this->_response("-2","记录第3方账号出错");
+		}
+		$userInfo[0]["AcctSource"]	=	BizDataDictionary::User_AcctSource_Sina_Wb;
+		$userInfo[0]["OpenUserInfo"]=   WbHelper::getOpenIdUserInfo($wbUser["uid"]);
+		
+		$session_code_key="user";
+		Yii::app()->session[$this->_USER_SESSION_KEY]=$userInfo[0];
+		$this->_response(0,"success",array(
+				"LoginName"		=>		$wbUser["uid"],
+				"IDX"			=>		$userInfo[0]["IDX"],
+				"AcctSource"	=>		BizDataDictionary::User_AcctSource_Sina_Wb,
+				"OpenUserInfo"	=>		$userInfo[0]["OpenUserInfo"],
+		));
+	}	
 }

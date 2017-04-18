@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LunaConfigEvnSwitch name="LUNA 配置切换">
 	<array key="SwitchConf">
-		<string key="defaultXml" value="adminEvnCfg.xml" />
+		<string key="defaultXml" value="adminEvnCfg-dev.xml" />
 		<string key="enableEvnSwitch" value="true" />
 		<array key="EvnSwitch" name="环境切换">
+			<array key="adminEvnCfg-dev-yang.xml" name="开发环境">
+				<string key="hostName" value="admin-PC" />
+				<string key="ip" value="127.0.0.1,192.168.1.7" />
+			</array>
 			<array key="adminEvnCfg-dev.xml" name="开发环境">
-				<string key="ip" value="192.168.18.74,192.168.18.64,192.168.1.7" />
+				<string key="ip" value="192.168.18.74,192.168.18.64" />
 			</array>
-			<array key="adminEvnCfg-dev-neil.xml" name="开发环境">
-				<string key="hostName" value="HOME" />
-				<string key="ip" value="172.27.23.2,192.168.11" />
-			</array>
+			
 		</array>
 	</array>
 </LunaConfigEvnSwitch>
