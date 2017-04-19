@@ -9,44 +9,27 @@
 
 
 <div class="well">
-	<ul class="nav nav-tabs">
-		<li class="active"><a href="#home" data-toggle="tab">请填写文件信息</a></li>
-	</ul>
+
 	<div id="myTabContent">
 		<div class="tab-pane active in" id="home">
 			<form id="tab" method="post" action="" enctype="multipart/form-data">
 				<br/>
 				<label>题集名称</label> 
-				<input type="text" maxlength="50" name="Set_Name" value="<?php echo $Material_Files["Set_Name"];?>" class="input-xlarge" required="true" autofocus="true" />
+				<input type="text" maxlength="200" name="Set_Name" value="<?php echo $Evaluation_Quesiton_Set["Set_Name"];?>" class="input-xlarge" required="true" autofocus="true" />
 				<br/>
-				<label>资料文件类型</label> 
-				<select name="File_Type">
-					<option value="1" <?php echo $Material_Files["File_Type"]==DictionaryData::Material_Files_File_Type_Text?"selected":""; ?>>文本</option>
-					<option value="2" <?php echo $Material_Files["File_Type"]==DictionaryData::Material_Files_File_Type_Audio?"selected":""; ?>>音频</option>
-					<option value="3" <?php echo $Material_Files["File_Type"]==DictionaryData::Material_Files_File_Type_Video?"selected":""; ?>>视频</option>								
-				</select>						
+				<label>题目数量</label> 
+				<input type="text" maxlength="50" name="Set_Qty" value="<?php echo $Evaluation_Quesiton_Set["Set_Qty"];?>" class="input-large" required="true" autofocus="true" />
+				<br/>
 				
-				<label>文件存储</label> 
-				<select name="Location_Type" onchange="javascript:locationTypeChange();" id="Location_Type">
-					<option value="1" <?php echo $Material_Files["Location_Type"]==DictionaryData::Material_Files_Location_Type_Text?"selected":""; ?>>站点内文本</option>
-					<option value="2" <?php echo $Material_Files["Location_Type"]==DictionaryData::Material_Files_Location_Type_Binary?"selected":""; ?>>站点内二进制文件</option>
-					<option value="3" <?php echo $Material_Files["Location_Type"]==DictionaryData::Material_Files_Location_Type_OutUrl?"selected":""; ?>>外站点URL</option>								
-				</select>		
 
-				<div id="summernote" style="display:<?php echo $Material_Files["Location_Type"]==DictionaryData::Material_Files_Location_Type_Text?"":"none"; ?>;"><p><?php echo $Material_Files["Location_Type"]==1?$Material_Content:""; ?></p></div>
+				<div id="summernote"><p><?php echo $Evaluation_Quesiton_Set["Remark"]; ?></p></div>
 				
 				<br/>	
 				<br/>
-						
-				<label id="lblSelectFile" style="display:<?php echo $Material_Files["Location_Type"]==DictionaryData::Material_Files_Location_Type_Binary?"":"none"; ?>;"><font color="red">如果需要修改文件请重新上传文件</font></label> 
-				<input type="file"  enctype="multipart/form-data" name="File_Content" class="input-xlarge"  autofocus="true" id="txtSelectFile" style="display:<?php echo $Material_Files["Location_Type"]==DictionaryData::Material_Files_Location_Type_Binary?"":"none"; ?>;">
-				
-				<label id="lblUrl" style="display:<?php echo $Material_Files["Location_Type"]==DictionaryData::Material_Files_Location_Type_OutUrl?"":"none"; ?>;">外站点URL</label> 
-				<input type="text" maxlength="50" name="File_Content_URL" value="<?php echo $Material_Files["Location_Type"]==3?$Material_Content:""; ?>" class="input-xlarge"  autofocus="true"  style="height:35px;width:520px;display:<?php echo $Material_Files["Location_Type"]==DictionaryData::Material_Files_Location_Type_OutUrl?"":"none"; ?>;" id="txtInputUrl"  />
 				
 				
 				<input type="hidden" name="submit" value="1" />
-				<input type="hidden" name="Article_Content" value="" id="Article_Content" />
+				<input type="hidden" name="Set_Remark" value="" id="Set_Remark" />
 				
 				<div class="btn-toolbar">
 					<button type="submit" class="btn btn-primary" onclick="return checkUserInput();">
@@ -61,61 +44,36 @@
 <script>
   	function checkUserInput()
   	{
-  		var locaitonType=$("#Location_Type").val();
-		switch(locaitonType){
-			case "1":
-				var article_txt=$('#summernote').summernote('code');
-				if(article_txt!="" && article_txt!=null ){
-					$("#Article_Content").val(article_txt);
-					return true;
-				}
-				alert("文章内容不能为空！");
-				break;
-			case "2":
-				return true;				
-			case "3":
-				var file_Url=$("#txtInputUrl").val();
-				if(file_Url!="" && file_Url!=null ){
-					return true;
-				}
-				alert("请输入外部资源地址！");
-				break;
-			default:
-				break;
-		}  	  	
-  	  	return false;
-  	}
-	function locationTypeChange()
-	{
-		var locaitonType=$("#Location_Type").val();
-		switch(locaitonType){
-			case "1":
-				$("#lblSelectFile").hide();
-				$("#txtSelectFile").hide();
-				$("#lblUrl").hide();
-				$("#txtInputUrl").hide();
-				showTextEditer();
-				break;
-			case "2":
-				$("#lblUrl").hide();
-				$("#txtInputUrl").hide();
-				$('#summernote').summernote('destroy');
-				$('#summernote').hide();
-				$("#lblSelectFile").show();		
-				$("#txtSelectFile").show();
-				break;
-			case "3":
-				$("#lblSelectFile").hide();
-				$("#txtSelectFile").hide();
-				$('#summernote').summernote('destroy');
-				$('#summernote').hide();
-				$("#lblUrl").show();
-				$("#txtInputUrl").show();								
-				break;
-			default:
-				break;
+		var Remark=$('#summernote').summernote('code');
+		if(Remark!="" && Remark!=null ){
+			$("#Set_Remark").val(Remark);
+			return true;
 		}
-	}
+  // 		var locaitonType=$("#Location_Type").val();
+		// switch(locaitonType){
+		// 	case "1":
+		// 		var article_txt=$('#summernote').summernote('code');
+		// 		if(article_txt!="" && article_txt!=null ){
+		// 			$("#Article_Content").val(article_txt);
+		// 			return true;
+		// 		}
+		// 		alert("文章内容不能为空！");
+		// 		break;
+		// 	case "2":
+		// 		return true;				
+		// 	case "3":
+		// 		var file_Url=$("#txtInputUrl").val();
+		// 		if(file_Url!="" && file_Url!=null ){
+		// 			return true;
+		// 		}
+		// 		alert("请输入外部资源地址！");
+		// 		break;
+		// 	default:
+		// 		break;
+		// }  	  	
+  // 	  	return false;
+  	}
+	
 	function showTextEditer()
 	{
 		$('#summernote').summernote({
@@ -160,10 +118,6 @@
 	}
   
     $(document).ready(function() {
-<?php 
-		if($Material_Files["Location_Type"]==DictionaryData::Material_Files_Location_Type_Text){
-			echo "showTextEditer();";
-		}
-?>           	
+    	showTextEditer();          	
     });
 </script>

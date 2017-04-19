@@ -5,7 +5,7 @@ class EvQuestionsSetController extends TableMagtController
 {
 	private $_tableName="Evaluation_Questions_Set";
 	private $_searchName="";
-	private $_next_url="/evQuestions/index";
+	private $_next_url="/evQuestionsSet/index";
 	private $_columns=array("IDX","Set_Name","Set_Qty","Set_Type","Remark","Conditon_Child_Gender","Condition_Parent_Gender","Condition_Parent_Marriage","Condition_Min_Age","Condition_Max_age","Condition_Only_Children");
 	private $_title="评测题集";
 	private $_primaryKey="IDX";
@@ -84,14 +84,14 @@ class EvQuestionsSetController extends TableMagtController
 			$Set_Name =Yii::app()->request->getParam("Set_Name","");
 			$Set_Qty=Yii::app()->request->getParam("Set_Qty",0);
 			$Set_Type=Yii::app()->request->getParam("Set_Type","");
-			$Remark=Yii::app()->request->getParam("Remark","");
+			$Remark=Yii::app()->request->getParam("Set_Remark","");
 			$Conditon_Child_Gender=Yii::app()->request->getParam("Conditon_Child_Gender",1);
 			$Condition_Parent_Gender=Yii::app()->request->getParam("Condition_Parent_Gender",1);
 			$Condition_Parent_Marriage=Yii::app()->request->getParam("Condition_Parent_Marriage",1);
 			$Condition_Min_Age=Yii::app()->request->getParam("Condition_Min_Age",0);
 			$Condition_Max_age=Yii::app()->request->getParam("Condition_Max_age",99);
 			$Condition_Only_Children=Yii::app()->request->getParam("Condition_Only_Children",1);
-				
+			
 			if(empty($Set_Name)) {
 				$this->alert('error',"请正确设置字段");
 			}else{
@@ -109,7 +109,7 @@ class EvQuestionsSetController extends TableMagtController
 		}
 
 		$Evaluation_Quesiton_Set = $EvaluationQuestionsSetData->getEvQuestionSetByIDX($value);
-		$this->renderData["Evaluation_Quesiton"]=$Evaluation_Quesiton_Set;
+		$this->renderData["Evaluation_Quesiton_Set"]=$Evaluation_Quesiton_Set;
 		// $EvaluationQuestionsSet_List=$EvaluationQuestionsSetData->getEvaluationQuestionsSetList();
 		// $this->renderData["EvaluationQuestionsSet_List"]=$EvaluationQuestionsSet_List;
 

@@ -24,8 +24,8 @@ class 	EvaluationQuestionsSetData
 	
 	public function updateEvQuestionSet($Set_Name,$Set_Qty,$Set_Type,$Remark,$Conditon_Child_Gender,$Condition_Parent_Gender,$Condition_Parent_Marriage,$Condition_Min_Age,$Condition_Max_age,$Condition_Only_Children,$IDX)
 	{
-		$sql="update Evaluation_Questions_Set set Set_Name=?,Set_Qty=?,Set_Type=?,Remark=?,Conditon_Child_Gender=?,Condition_Parent_Gender=?,Condition_Parent_Marriage=?,Condition_Min_Age=?,Condition_Max_age=?,Condition_Only_Children=?,Update_Time=now() where IDX=?";
-		$params=array($Set_Name,$Set_Qty,$Set_Type,$Remark,$Conditon_Child_Gender,$Condition_Parent_Gender,$Condition_Parent_Marriage,$Condition_Min_Age,$Condition_Max_age,$Condition_Only_Children,$IDX);
+		$sql="update Evaluation_Questions_Set set Set_Name=?,Set_Qty=?,Remark=?,Update_Time=now() where IDX=?";//Set_Type=?,Conditon_Child_Gender=?,Condition_Parent_Gender=?,Condition_Parent_Marriage=?,Condition_Min_Age=?,Condition_Max_age=?,Condition_Only_Children=?,
+		$params=array($Set_Name,$Set_Qty,$Remark,$IDX);//$Set_Type,$Conditon_Child_Gender,$Condition_Parent_Gender,$Condition_Parent_Marriage,$Condition_Min_Age,$Condition_Max_age,$Condition_Only_Children,
 		return LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params);
 	}
 
