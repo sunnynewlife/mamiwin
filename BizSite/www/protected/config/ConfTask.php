@@ -53,6 +53,8 @@ class ConfTask {
 	const ERROR_SMS_SEND				= -901000009;
 	const ERROR_USER_PHONE_REGIST		= -901000010;
 	const ERROR_USER_PASSWORD_RESET		= -901000011;
+	const ERROR_WECHAT_CODE				= -902000001;
+	const ERROR_THIRD_USER_REGIST		= -902000002;
 
 
 
@@ -105,6 +107,10 @@ class ConfTask {
 		self::ERROR_SMS_SEND				=>	"短信发送失败" ,
 		self::ERROR_USER_PHONE_REGIST		=>	"手机号未注册" ,
 		self::ERROR_USER_PASSWORD_RESET		=>	"密码重设失败" ,
+		self::ERROR_WECHAT_CODE				=>	"微信CODE不正确" ,
+		self::ERROR_THIRD_USER_REGIST		=>	"记录第3方账号出错" ,
+
+
 
 	);
 

@@ -132,7 +132,7 @@ class InterfaceController extends CController
 				return 'resetPassword';	
 				break;
 			case '9010':	//微信登录
-				return 'wechatLogin';	
+				return 'getWechatRedirectUrl';	
 				break;
 			case '9011':	//微信token
 				return 'wechatToken';	
@@ -140,6 +140,10 @@ class InterfaceController extends CController
 			case '9012':	//微信签名，用于分享
 				return 'wechatSign';	
 				break;
+			case '9013':	//微信签名，用于分享
+				return 'wechatLogin';	
+				break;
+
 			
 			case '9999':	//TEST
 				return 'test';		
@@ -308,6 +312,12 @@ class InterfaceController extends CController
 				if(isset($params['url']) == false || empty($params['url'])){
 					$this->_errorNo = ConfTask::ERROR_PARAMS;
 					$this->_errorMessage = " url " ;
+				}
+				break;
+			case '9013':
+				if(isset($params['code']) == false || empty($params['code'])){
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
+					$this->_errorMessage = " code " ;
 				}
 				break;
 			default:
@@ -1039,13 +1049,44 @@ class InterfaceController extends CController
 		
 	}
 
-	//微信登录
-	public function wechatLogin($params){
-		$redirect_uri = "http://m.fumuwin.com";	//http%3A%2F%2Fapi.fumuwin.com%2Fsite%2FwxIndex%3Fv%3D1
-		$url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=".WxHelper::WX_APP_ID."&redirect_uri=". $redirect_uri ."&response_type=code&scope=snsapi_base&state=1&connect_redirect=1#wechat_redirect";
+	//获取微信授权URL
+	public function getWechatRedirectUrl($params){
+		$redirect_uri = "http://api.fumuwin.com/site/wxIndex?v=1";	//http%3A%2F%2Fapi.fumuwin.com%2Fsite%2FwxIndex%3Fv%3D1
+		$url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=".WxHelper::WX_APP_ID."&redirect_uri=". $redirect_uri ."&response_type=code&scope=snsapi_userinfo&state=2&connect_redirect=1#wechat_redirect";
 		$data = array('url'=>$url);
 		$errno = 1 ;
 		$this->_echoResponse($errno,'',$data);
+
+	}
+
+	//微信登录
+	public function wechatLogin($params){
+		$code = $params['code'];	
+
+		$wxUser=WxHelper::getOpenId($code);
+		if($wxUser==false){
+			$errno = ConfTask::ERROR_WECHAT_CODE ;
+			$this->_echoResponse($errno);
+			return;
+		}
+		$bizAppData= new BizAppData();
+		$userInfo=$bizAppData->getUserInfoByLoginName($wxUser["openid"], BizDataDictionary::User_AcctSource_Tencent_Wx);
+		if(count($userInfo)==0){
+			$bizAppData->registThirdUserInfo($wxUser["openid"], BizDataDictionary::User_AcctSource_Tencent_Wx);
+			$userInfo=$bizAppData->getUserInfoByLoginName($wxUser["openid"], BizDataDictionary::User_AcctSource_Tencent_Wx);
+		}
+		if(count($userInfo)==0){
+			$errno = ConfTask::ERROR_THIRD_USER_REGIST ;
+			$this->_echoResponse($errno);
+			return;
+		}
+		$userInfo[0]["AcctSource"]	=	BizDataDictionary::User_AcctSource_Tencent_Wx;
+		$userInfo[0]["OpenUserInfo"]=  ($needUserInfo=="1"? WxHelper::getOpenIdUserInfo($wxUser["openid"]):array());
+
+		$session_code_key="user";
+		Yii::app()->session[$this->_USER_SESSION_KEY]=$userInfo[0];
+		$errno = 1 ;
+		$this->_echoResponse($errno);
 
 	}
 
