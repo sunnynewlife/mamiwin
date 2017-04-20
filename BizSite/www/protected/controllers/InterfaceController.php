@@ -1,8 +1,8 @@
 <?php
-
 LunaLoader::import("luna_lib.verify.LunaCodeVerify");
 require_once(dirname(__FILE__).'/../config/ConfTask.php');
 require_once(dirname(__FILE__).'/../libraries/LibUserQuestions.php');
+
 
 
 class InterfaceController extends CController 
@@ -484,7 +484,7 @@ class InterfaceController extends CController
 		$IDX = $params['IDX'] ;
 		$mod = new ModTaskMaterial();
 		$ret = $mod->getTaskMeterialDetail($IDX);
-		if($ret === false){			
+		if($ret === false ||empty($ret)){			
 			$errno = ConfTask::ERROR_QUEYR_TASK_DETAIL ;
 			$this->_echoResponse($errno,'',$ret);
 			return;
@@ -493,9 +493,10 @@ class InterfaceController extends CController
 		$Material_Files_Location_Type = $ret['Location_Type'];
 		$ret['Show_Url'] = '';
 		if( $Material_Files_Location_Type == DictionaryData::Material_Files_Location_Type_OutUrl ){
-			$ret['Show_Url'] = $ret['File_Content'];//如果是外链接，返回外链url	
+			$ret['Show_Url'] = $ret['File_Content'];//如果是外链接，返回外链url
+			unset($ret['File_Content']);	
 		}
-		unset($ret['File_Content']);
+		
 		$errno = 1 ;
 		$this->_echoResponse($errno,'',$ret); 
 	}
@@ -735,17 +736,34 @@ class InterfaceController extends CController
 		// }
 		$userInfo=Yii::app()->session[$this->_USER_SESSION_KEY];
 		$ret = array(
-			"LoginName"			=>	$userInfo[0]["LoginName"],
 			"UserIDX"			=>	$userInfo[0]["IDX"],
-			"UserBasicInfo"		=>	0,
-			"UserEvaluationDay"	=>	0,
+			"User_Info"        => array(
+                "LoginName"            =>    $userInfo[0]["LoginName"],               
+                "UserEmpiricValue"    =>     0,
+                "UserLevel"            =>     0,
+                ),
+            "User_Evaluation_Info"    =>    array(
+                "UserBasicInfo"        =>    0,
+                "UserEvaluationDay"    =>    0,
+                ),
+            "User_Task_Info"     =>    array(
+                'Finish_Task'    =>    array(
+                    'Qty'        => 0,
+                    'Minutes'    => 0 ,
+                    ),
+                'UnFinish_Task'    =>    array(
+                    'Qty'        => 0,
+                    'Minutes'    => 0 ,
+                    ),
+                ),
+
 		);
 		$UserIDX = $ret['UserIDX'];
 		// $mod_user_basicinfo = ModUserBasicInfo::getInstance();
 		$mod_user_basicinfo = new ModUserBasicInfo();
 		$ret_user_basicinfo = $mod_user_basicinfo->queryUserBasicInfo($UserIDX);
 		if(empty($ret_user_basicinfo) == false){
-			$ret['UserBasicInfo'] = 1 ;
+			$ret['User_Evaluation_Info']['UserBasicInfo'] = 1 ;
 		}
 		$UserIDX = $ret['UserIDX'];		
 		$mod_user_evaluation = new ModUserEvaluationQuesitons();
@@ -756,7 +774,7 @@ class InterfaceController extends CController
 			if(empty($ret_user_info) == false){
 				$user_register_date = $ret_user_info['CreateTime'];
 				$diff = CommonHelper::getDateDiff($user_register_date,date());
-				$ret['UserEvaluationDay'] = $diff ;
+				$ret['User_Evaluation_Info']['UserEvaluationDay'] = $diff ;
 			}				
 		}
 
