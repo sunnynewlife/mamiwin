@@ -838,9 +838,9 @@ class InterfaceController extends CController
 
 		$mod = new ModUserEvaluationQuesitons();
 		$ret_query_user_question = $mod->getUserEvaluationQuesitonsList($UserIDX,$Question_Set_IDX,'');
+
 		if(empty($ret_query_user_question)){//将此评测题分配给用户
-			$mod_user_question = new ModUserEvaluationQuesitons();
-			$ret_user_question = $mod_user_question->generateUserQuestion($UserIDX,$Question_Set_IDX);
+			$ret_user_question = $mod->generateUserQuestion($UserIDX,$Question_Set_IDX);
 		}
 		$ret = $mod->getNextQuestion($UserIDX,$Question_Set_IDX);
 		if($ret === false){			

@@ -46,8 +46,8 @@ class ModUserEvaluationQuesitons {
 
 	//为用户生成评测题
 	public function generateUserQuestion($UserIDX,$Question_Set_IDX){
-		$sql = " INSERT INTO User_Evaluation_Questions(UserIDX,Question_Set_IDX,Question_IDX,Ability_Type_ID) SELECT $UserIDX,$Question_Set_IDX,IDX,Ability_Type_ID FROM Evaluation_Questions WHERE Question_Set_IDX = ? ";
-		$params = $Question_Set_IDX;
+		$sql = " INSERT INTO User_Evaluation_Questions(UserIDX,Question_Set_IDX,Question_IDX,Ability_Type_ID,Status) SELECT $UserIDX,$Question_Set_IDX,IDX,Ability_Type_ID,0 FROM Evaluation_Questions WHERE Question_Set_IDX = ? ";
+		$params = array($Question_Set_IDX);
 		return LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params);
 	}
 
@@ -68,7 +68,7 @@ class ModUserEvaluationQuesitons {
 		// }
 		$params[] = $UserIDX;
 		$params[] = $Question_Set_IDX;
-		if($Question_Answer_Status == 0 ||$Question_Answer_Status == 1){
+		if($Question_Answer_Status === 0 ||$Question_Answer_Status === 1){
 			$sql .= " AND  status = ?";
 			$params[] = $Question_Answer_Status;
 		}
