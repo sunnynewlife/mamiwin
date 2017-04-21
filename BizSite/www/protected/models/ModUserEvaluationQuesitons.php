@@ -53,7 +53,7 @@ class ModUserEvaluationQuesitons {
 
 	// 获取要做的下一题
 	public function getNextQuestion($UserIDX,$Question_Set_IDX){
-		$sql="SELECT a.UserIDX,a.Question_Set_IDX,a.Question_IDX,b.Option_A,b.Option_B,b.Option_C,b.Option_D,b.Option_E,b.Option_F,c.Set_Qty from User_Evaluation_Questions a ,Evaluation_Questions b,Evaluation_Questions_Set c where a.Question_IDX = b.IDX and a.Question_Set_IDX = c.IDX  AND a.Question_Set_IDX=? AND a.UserIDX=? AND a.status = 0  order by a.IDX  limit 1 ";
+		$sql="SELECT a.UserIDX,a.Question_Set_IDX,a.Question_IDX,b.Question_Stems,b.Option_A,b.Option_B,b.Option_C,b.Option_D,b.Option_E,b.Option_F,c.Set_Qty from User_Evaluation_Questions a ,Evaluation_Questions b,Evaluation_Questions_Set c where a.Question_IDX = b.IDX and a.Question_Set_IDX = c.IDX  AND a.Question_Set_IDX=? AND a.UserIDX=? AND a.status = 0  order by a.IDX  limit 1 ";
 		$params=array($Question_Set_IDX,$UserIDX);
 		$ret=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
 		return (isset($ret) && is_array($ret) && count($ret)>0)?$ret[0]:array();

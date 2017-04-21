@@ -91,7 +91,7 @@ class ConfTask {
 		self::ERROR_QUEYR_USER_TASK_START		=>	"开始用户任务失败",
 		self::ERROR_QUEYR_USER_TASK_FINISH		=>	"完成用户任务失败",
 		
-		self::ERROR_QUEYR_USER_TASK_EVALUATION	=>	"任务评介失败",
+		self::ERROR_QUEYR_USER_TASK_EVALUATION	=>	"任务评价失败",
 
 		self::ERROR_USER_SHARE					=> 	"分享失败",
 
