@@ -17,8 +17,8 @@
 								<option value="3">视频</option>								
 							</select>						
 						</td>
-						<td style="width:120px;">下载标识：</td>
-						<td><input type='text'  name="Download_Id" /></td>
+						<!--td style="width:120px;">下载标识：</td>
+						<td><input type='text'  name="Download_Id" /></td-->
 					</tr>																		
 					<tr>
 						<td style="width:120px;">内容标题：</td>
@@ -42,7 +42,6 @@
 					<th>内容标题</th>
 					<th width="140px;">原始文件名称</th>
 					<th width="80px;">文件大小</th>
-					<th width="270px;">下载标识</th>
 					<th width="80px;">首页显示</th>
 					<th width="60px">操作</th>
 				</tr>
@@ -51,7 +50,6 @@
 			<?php
 $rowsHtmlTag=<<<EndOfRowTag
 <tr>
-	<td>%s</td>
 	<td>%s</td>
 	<td>%s</td>
 	<td>%s</td>
@@ -82,7 +80,6 @@ EndOfRowTag;
 					$title,
 					$item["Original_Name"],
 					$item["File_Size"],
-					$item["Download_Id"],
 					$item["IDX"],$item["Is_Show_Index"],$Is_Show_Index_Name,
 					$item["IDX"],$item["IDX"],$item["IDX"]
 				);

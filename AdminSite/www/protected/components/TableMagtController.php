@@ -121,7 +121,7 @@ class TableMagtController extends Controller
 		$page_no  = Yii::app()->request->getParam('page_no',1);
 		$search   = Yii::app()->request->getParam('search','');
 	
-		$page_size = 50;
+		$page_size = 20;
 		$page_no=$page_no<1?1:$page_no;
 		$info =$this->getRowsCountByFieldName($tableName, $searchFieldName, $value);
 	
