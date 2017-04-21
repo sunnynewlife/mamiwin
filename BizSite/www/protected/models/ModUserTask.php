@@ -72,6 +72,18 @@ class ModUserTask {
 		return LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params);
 	}
 
+	//随机分配任务给用户,具体业务逻辑待定TODO
+	public function generateUserTaskRandom($UserIDX,$Task_Type){
+		$sql = " INSERT INTO User_Tasks(UserIDX,Task_IDX) SELECT ?,IDX FROM Task_Material WHERE IDX not in (SELECT Task_IDX FROM User_Tasks)  ";
+		$params = array($UserIDX);
+		if(empty($Task_Type) == false){
+			$sql .= " AND Task_Type = ? " ; 
+			$params[] = $Task_Type;
+		}
+		$sql .= " order by RAND() limit 3 ";
+		return LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params);
+	}
+
 	// 获取要做的下一个任务
 	public function getNextTask($UserIDX){
 		$sql="SELECT a.UserIDX,a.Task_IDX,b.Task_Title,b.Matrial_IDX,c.File_Title,c.File_Type,c.Location_Type,c.Mime_Type,c.Original_Name,c.File_Size,c.Download_Id,c.File_Content FROM User_Tasks a ,Task_Material b ,Material_Files c  where a.Task_IDX = b.IDX and b.Matrial_IDX = c.IDX AND a.UserIDX=? AND a.Finish_Status = 0  order by a.IDX  limit 1 ";
@@ -111,27 +123,27 @@ class ModUserTask {
 		$params = array();
 		if(!empty($Finish_Status)){
 			$sql .= " ,Finish_Status = ?  ";
-			$params['Finish_Status'] = $$Finish_Status;
+			$params[] = $Finish_Status;
 			if(($Finish_Status == DictionaryData::User_Task_Status_Finish)){
 				$sql .= " ,Finish_Date = NOW()  ";				
 			}
 		}			
 		if(!empty($Finish_Score)){
 			$sql .= " ,Finish_Score = ?  ";
-			$params['Finish_Score'] = $Finish_Score;
+			$params[] = $Finish_Score;
 		}
 		if(!empty($Finish_Pic)){
 			$sql .= " ,Finish_Pic = ?  ";
-			$params['Finish_Pic'] = $Finish_Pic;
+			$params[] = $Finish_Pic;
 		}
 		if(!empty($Finish_Document)){
 			$sql .= " ,Finish_Document = ?  ";
-			$params['Finish_Document'] = $Finish_Document;
+			$params[] = $Finish_Document;
 		}
-		$sql .= "where  UserIDX=? and Task_IDX=?";
-		$params=array($UserIDX,$Task_IDX);
+		$sql .= "where  UserIDX=? and IDX=?";
+		$params[] = $UserIDX ;
+		$params[] = $Task_IDX ;
 		return (LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params)>0);
-
 	}
 }	
 

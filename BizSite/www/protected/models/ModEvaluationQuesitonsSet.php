@@ -27,26 +27,28 @@ class ModEvaluationQuesitonsSet {
 		if(!empty($IDX) ){
 			$sql .= " AND IDX = ? ";
 			$params[] = $IDX;			
+		}else{
+			if(($Conditon_Child_Gender != 1 ) ){
+				$sql .= " AND Conditon_Child_Gender = ? ";
+				$params[] = $Conditon_Child_Gender;			
+			}
+			if(($Condition_Parent_Gender != 1 ) ){
+				$sql .= " AND Condition_Parent_Gender = ? ";
+				$params[] = $Condition_Parent_Gender;			
+			}
+			if(($Condition_Parent_Marriage != 1 ) ){
+				$sql .= " AND Condition_Parent_Marriage = ? ";
+				$params[] = $Condition_Parent_Marriage;			
+			}
+			if(($Condition_Age > 0  ) ){
+				$sql .= " AND $Condition_Age between  Condition_Min_Age AND Condition_Max_age ";
+			}
+			if(($Condition_Only_Children != 1 ) ){
+				$sql .= " AND Condition_Only_Children = ? ";
+				$params[] = $Condition_Only_Children;			
+			}
 		}
-		if(($Conditon_Child_Gender != 1 ) ){
-			$sql .= " AND Conditon_Child_Gender = ? ";
-			$params[] = $Conditon_Child_Gender;			
-		}
-		if(($Condition_Parent_Gender != 1 ) ){
-			$sql .= " AND Condition_Parent_Gender = ? ";
-			$params[] = $Condition_Parent_Gender;			
-		}
-		if(($Condition_Parent_Marriage != 1 ) ){
-			$sql .= " AND Condition_Parent_Marriage = ? ";
-			$params[] = $Condition_Parent_Marriage;			
-		}
-		if(($Condition_Age > 0  ) ){
-			$sql .= " AND $Condition_Age between  Condition_Min_Age AND Condition_Max_age ";
-		}
-		if(($Condition_Only_Children != 1 ) ){
-			$sql .= " AND Condition_Only_Children = ? ";
-			$params[] = $Condition_Only_Children;			
-		}
+			
 		$sql .= " order by IDX asc ;" ;
 		$sql .= " limit $offSet,$pagesize " ; 
 		if($Is_Random){
@@ -59,6 +61,9 @@ class ModEvaluationQuesitonsSet {
 		}
 		return array();
 	}
+
+
+	
 
 
 }	
