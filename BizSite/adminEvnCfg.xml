@@ -7,13 +7,13 @@
 	<array key="LunaSection" name="LUNA SDK 配置">
 		<array key="CodeVerify">
 			<string key="expire_seconds" value="300" />
-			<string key="code_lenth" value="6"	/>
+			<string key="code_lenth" value="4"	/>
 			<string key="enable_logger" value="true" />
 			<string key="max_sms_verify_counts"	value="10" />
 			<string key="max_img_verify_counts" value="1" />
 			
 			<array key="ImgParameters">
-				<string key="code_charset" value="abcdefghkmnprstuvwxyzABCDEFGHKMNPRSTUVWXYZ23456789" />
+				<string key="code_charset" value="0123456789" />
 				<string key="width"	value="160" />
 				<string key="height" value="50" />
 				<string key="regenerate_showing" value="true" />
