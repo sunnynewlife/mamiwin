@@ -39,7 +39,6 @@
 				<string key="persist" value="lib.log.YIILogerPersist" />
 				<array key="param">
 					<string key="dir" value="/opt/logs/api.fumuwin.com" />
-					<string key="senderClassName"  value="" />
 				</array>
 			</array>
 		</array>
@@ -123,6 +122,25 @@
 					</array>
 				</array>
 			</array>
+			<array key="WeiBo" name="微博平台">
+				<string key="domain" value="https://api.weibo.com" />
+				<string key="needMd5Sign" value="false" />
+				<string key="signPwd" value="" />
+				<string key="signPosition" value="bottom" />
+				<string key="signParaName" value="sign"/>
+				<string key="signParamJoinChar" value="="/>
+				<string key="responseType" value="json" />
+				<string key="method" value="POST" />
+				<array key="interface" name="">
+					<array key="AccessToken" name="Access接口凭证">
+						<string key="url" value="oauth2/access_token" />
+					</array>
+					<array key="UserInfo" name="Userinfo">
+						<string key="url" value="2/users/show.json" />
+						<string key="method" value="GET" />
+					</array>					
+				</array>
+			</array>		
 		</array>
 	</array>
 </LunaConfigMagt>
