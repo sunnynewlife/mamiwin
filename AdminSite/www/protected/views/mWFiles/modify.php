@@ -42,7 +42,7 @@
 				<input type="file"  enctype="multipart/form-data" name="File_Content" class="input-xlarge"  autofocus="true" id="txtSelectFile" style="display:<?php echo $Material_Files["Location_Type"]==DictionaryData::Material_Files_Location_Type_Binary?"":"none"; ?>;">
 				
 				<label id="lblUrl" style="display:<?php echo $Material_Files["Location_Type"]==DictionaryData::Material_Files_Location_Type_OutUrl?"":"none"; ?>;">外站点URL</label> 
-				<input type="text" maxlength="50" name="File_Content_URL" value="<?php echo $Material_Files["Location_Type"]==3?$Material_Content:""; ?>" class="input-xlarge"  autofocus="true"  style="height:35px;width:520px;display:<?php echo $Material_Files["Location_Type"]==DictionaryData::Material_Files_Location_Type_OutUrl?"":"none"; ?>;" id="txtInputUrl"  />
+				<input type="text" maxlength="500" name="File_Content_URL" value="<?php echo $Material_Files["Location_Type"]==3?$Material_Content:""; ?>" class="input-xlarge"  autofocus="true"  style="height:35px;width:520px;display:<?php echo $Material_Files["Location_Type"]==DictionaryData::Material_Files_Location_Type_OutUrl?"":"none"; ?>;" id="txtInputUrl"  />
 				
 				
 				<input type="hidden" name="submit" value="1" />

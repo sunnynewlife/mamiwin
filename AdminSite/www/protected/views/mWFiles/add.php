@@ -39,7 +39,7 @@
 				<input type="file"  enctype="multipart/form-data" name="File_Content" class="input-xlarge"   autofocus="true" id="txtSelectFile" style="display:none;">
 				
 				<label id="lblUrl" style="display:none;">外站点URL</label> 
-				<input type="text" maxlength="50" name="File_Content_URL" value="" class="input-xlarge"  autofocus="true"  style="height:35px;width:520px;display:none;" id="txtInputUrl"  />
+				<input type="text" maxlength="500" name="File_Content_URL" value="" class="input-xlarge"  autofocus="true"  style="height:35px;width:520px;display:none;" id="txtInputUrl"  />
 				
 				<input type="hidden" name="submit" value="1" />
 				<input type="hidden" name="Article_Content" value=""  id="Article_Content" />

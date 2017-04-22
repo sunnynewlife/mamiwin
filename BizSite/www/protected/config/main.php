@@ -14,7 +14,6 @@ return array(
 	'import'=>array(
 		'application.components.*',
 		'application.models.*',
-		'application.models.event.*',
 		'application.libraries.*',
 		'application.modules.*',
 	),

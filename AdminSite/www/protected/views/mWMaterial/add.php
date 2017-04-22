@@ -17,16 +17,16 @@
 						</td>
 						<td style="width:100px;">学习时间</td>
 						<td>
-							<input type="text"  name="Min_Time" value="" class="input-xlarge" required="true" autofocus="true"  style="width:50px;"/>
+							<input type="text"  name="Min_Time" value="20" class="input-xlarge" required="true" autofocus="true"  style="width:50px;"/>
 							~
-							<input type="text"  name="Max_Time" value="" class="input-xlarge" required="true" autofocus="true" style="width:50px;" />
+							<input type="text"  name="Max_Time" value="60" class="input-xlarge" required="true" autofocus="true" style="width:50px;" />
 							分钟
 						</td>
 						<td style="width:100px;">年龄段</td>
 						<td>
-							<input type="text" maxlength="50" name="Min_Age" value="" class="input-xlarge" required="true" autofocus="true" style="width:50px;" />
+							<input type="text" maxlength="50" name="Min_Age" value="2" class="input-xlarge" required="true" autofocus="true" style="width:50px;" />
 							~
-							<input type="text" maxlength="50" name="Max_Age" value="" class="input-xlarge" required="true" autofocus="true"  style="width:50px;"/>
+							<input type="text" maxlength="50" name="Max_Age" value="6" class="input-xlarge" required="true" autofocus="true"  style="width:50px;"/>
 							岁
 						</td>	
 					</tr>
@@ -94,7 +94,7 @@
 						</td>
 						<td >任务标题</td>
 						<td colspan=5>
-							<input type="text" maxlength="50" name="Task_Title" value="" class="input-xlarge" required="true" autofocus="true" style="width:530px;" />
+							<input type="text" maxlength="50" name="Task_Title" value="<?php echo $Matrial_Data["File_Title"]?>" class="input-xlarge" required="true" autofocus="true" style="width:530px;" />
 						</td>											
 					</tr>
 					<tr>

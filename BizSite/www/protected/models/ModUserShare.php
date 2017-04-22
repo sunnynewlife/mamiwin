@@ -17,7 +17,7 @@ class ModUserShare {
  * @param [type] $Share_IDX  [description]
  * @param [type] $Share_To   [description]
  */
-	public function addUserShare($UserIDX,$Share_Type,$Share_IDX,$Share_To){
+	public function addUserShare($UserIDX,$Share_Type,$Share_IDX,$Share_To,$Amount){
 		$params=array();
 		$sql="	INSERT INTO User_Share (UserIDX,Share_Type,Share_IDX,Share_To) values(?,?,?,?)";
 		$params = array($UserIDX,$Share_Type,$Share_IDX,$Share_To);	

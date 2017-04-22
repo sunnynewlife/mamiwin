@@ -42,6 +42,8 @@ class MWMaterialController extends TableMagtController
 		$submit = trim(Yii::app()->request->getParam('submit',0));
 		$mwData=new MWData();
 		$Ability_Type=$mwData->getAbility_Type();
+		$Matrial_IDX = Yii::app()->request->getParam("Matrial_IDX","");
+		$Matrial_Data = $this->getOneRowByFieldName("V_Material_Files", "IDX", $Matrial_IDX);
 		
 		if ($submit){			
 			$Task_Type =Yii::app()->request->getParam("Task_Type","1");
@@ -81,7 +83,8 @@ class MWMaterialController extends TableMagtController
 		}
 		$this->renderData["Ability_Type"]=$Ability_Type;
 		$this->renderData["Material_Files"]=$mwData->getMaterial_Files();
-		$this->renderData["Matrial_IDX"]=Yii::app()->request->getParam("Matrial_IDX","");
+		$this->renderData["Matrial_IDX"] = $Matrial_IDX;
+		$this->renderData["Matrial_Data"] = $Matrial_Data;
 		$this->render("add",$this->renderData);
 	}
 	public function actionModify()
