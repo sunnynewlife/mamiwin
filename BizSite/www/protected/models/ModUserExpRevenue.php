@@ -10,6 +10,25 @@ class ModUserExpRevenue {
 		LunaPdo::GetInstance($this->_PDO_NODE_NAME)->lastInsertId($name);
 	}
 
+	public function queryUserExperience($UserIDX,$Config_Key,$Query_Date){
+		$params=array();
+		$sql=" SELECT * from User_Exp_Revenue	where UserIDX = ? ";
+		$params[] = $UserIDX;			
+		if(!empty($Config_Key) ){
+			$sql .= " AND Config_Key = ? ";
+			$params[] = $Config_Key;			
+		}
+		if(!empty($Query_Date) ){
+			$sql .= " AND YEAR(Create_Time) = YEAR(NOW()) AND MONTH(Create_Time) = MONTH(NOW()) AND DAY(Create_Time) = DAY(NOW()) ";				
+		}
+		$sql .= " order by IDX asc ;" ;
+		$list=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
+		if(isset($list) && is_array($list) && count($list)>0){
+			return $list;
+		}
+		return array();
+	}
+
 	/**
 	 * 记录用户经验值增加记录，同时更新用户表经验值
 	 * @param [type] $UserIDX [description]
@@ -17,10 +36,10 @@ class ModUserExpRevenue {
 	 * @param [type] $Amount  [description]
 	 * @param [type] $DWMemo  [description]
 	 */
-	public function addUserExpRevenue($UserIDX,$DWType,$Amount,$DWMemo){
+	public function recordUserExpRevenue($UserIDX,$Config_Key,$DWType,$Amount,$DWMemo){
 		$params=array();
-		$sql="	INSERT INTO User_Exp_Revenue (UserIDX,DWType,Amount,DWMemo,Create_Time,Update_TIme) values(?,?,?,?,now(),now())";
-		$params = array($UserIDX,$DWType,$Amount,$DWMemo);	
+		$sql="	INSERT INTO User_Exp_Revenue (UserIDX,Config_Key,DWType,Amount,DWMemo,Create_Time,Update_TIme) values(?,?,?,?,?,now(),now())";
+		$params = array($UserIDX,$Config_Key,$DWType,$Amount,$DWMemo);	
 		$pdo=LunaPdo::GetInstance($this->_PDO_NODE_NAME);
 		$pdo->beginTransaction();
 		if($pdo->exec_with_prepare($sql,$params)>0){
