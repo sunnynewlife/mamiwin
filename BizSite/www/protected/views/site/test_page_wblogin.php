@@ -31,9 +31,10 @@ function login()
 {
 	 $.ajax({
          async:false,
-         url: "/user/wbLogin",
+         url: "http://api.fumuwin.com/user/wbLogin",
          type: "GET",
-         dataType: 'json',
+         dataType: 'jsonp',
+         jsonp: "callback",
          data: { 
              	"code":code,
          },
@@ -56,9 +57,10 @@ function showUser()
 {
 	 $.ajax({
          async:false,
-         url: "/user/getLoginInfo",
+         url: "http://api.fumuwin.com/user/getLoginInfo",
          type: "GET",
-         dataType: 'json',
+         dataType: 'jsonp',
+         jsonp: "callback",
          data: {},
          success: function (data) {
         	 if(data.code==0){
