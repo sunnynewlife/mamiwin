@@ -33,12 +33,30 @@ class ModUserTask {
 			$sql .= " AND TIMESTAMPDIFF(MONTH,?,a.Finish_Date) = 0 ";
 			$params[] = $Query_Day;			
 		}
-		$sql .= " order by a.IDX asc ;" ;
+		$sql .= " order by a.IDX asc " ;
 		$sql .= " limit $offSet,$page_size " ; 
 		$list=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
 		if(isset($list) && is_array($list) && count($list)>0){
 			return $list;
 		}
+		return array();
+	}
+
+	/**
+	 * 查询用户任务详情
+	 * @param  [type] $UserIDX  [description]
+	 * @param  [type] $Task_IDX [description]
+	 * @return [type]           [description]
+	 */
+	public function getUserTaskDetail($UserIDX,$Task_IDX){
+		$params=array();
+		$sql=" SELECT a.*,b.Task_Type,b.Task_Title from User_Tasks a,Task_Material b where  a.Task_IDX = b.IDX and  a.UserIDX = ? AND a.Task_IDX = ? ";
+		$params[] = $UserIDX;			
+		$params[] = $Task_IDX;			
+		$list=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
+		if(isset($list) && is_array($list) && count($list)>0){
+			return $list[0];
+		}		
 		return array();
 	}
 
@@ -119,7 +137,7 @@ class ModUserTask {
 	 * @return [type]                  [description]
 	 */
 	public function updateUserTask($UserIDX,$Task_IDX,$Finish_Status,$Finish_Date,$Finish_Score,$Finish_Pic,$Finish_Document){
-		$sql="update User_Tasks set UpdateTime=NOW() " ;
+		$sql="update User_Tasks set Update_Time=NOW() " ;
 		$params = array();
 		if(!empty($Finish_Status)){
 			$sql .= " ,Finish_Status = ?  ";
@@ -140,7 +158,7 @@ class ModUserTask {
 			$sql .= " ,Finish_Document = ?  ";
 			$params[] = $Finish_Document;
 		}
-		$sql .= "where  UserIDX=? and IDX=?";
+		$sql .= "where  UserIDX=? and Task_IDX = ?";
 		$params[] = $UserIDX ;
 		$params[] = $Task_IDX ;
 		return (LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params)>0);

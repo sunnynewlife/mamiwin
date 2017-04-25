@@ -393,11 +393,11 @@ class InterfaceController extends CController
 				),$body);
 		}
 		
-		$UserIDX =  2 ; 
-		$body = array_merge(array(
-			'LoginName'=>'15900828187',
-			'UserIDX'=> $UserIDX,
-		),$body);
+		// $UserIDX =  2 ; 
+		// $body = array_merge(array(
+		// 	'LoginName'=>'15900828187',
+		// 	'UserIDX'=> $UserIDX,
+		// ),$body);
 
 		if(isset($type) && !empty($type)){
 			if(in_array($type, $this->_need_login_method_type) && empty($UserIDX)){
@@ -511,6 +511,15 @@ class InterfaceController extends CController
 		if( $Material_Files_Location_Type == DictionaryData::Material_Files_Location_Type_OutUrl ){
 			$ret['Show_Url'] = $ret['File_Content'];//如果是外链接，返回外链url
 			unset($ret['File_Content']);	
+		}
+		//登录用户，还将返回任务状态信息
+		if(isset($params['UserIDX'])){
+			$UserIDX = $params['UserIDX'] ;
+			$mod_user_task = new ModUserTask();
+			$ret_user_task = $mod_user_task->getUserTaskDetail($UserIDX,$IDX);
+			if($ret_user_task){
+				$ret['Finish_Status'] = $ret_user_task['Finish_Status'];
+			}
 		}
 		
 		$errno = 1 ;
@@ -728,13 +737,19 @@ class InterfaceController extends CController
 		}
 		$bizAppData= new BizAppData();
 		$userInfo=$bizAppData->getUserInfoByLoginName($phone, BizDataDictionary::User_AcctSource_SelfSite);
-		if(count($userInfo)>0){
-			// return $this->_response("-1","手机号已注册");
-			$errno = ConfTask::ERROR_USER_EXISTS ;
-			$this->_echoResponse($errno);
-			return;
-		}
 		$md5password=md5($password);
+		if(count($userInfo)>0){
+			// $errno = ConfTask::ERROR_USER_EXISTS ;
+			// $this->_echoResponse($errno);
+			// return;
+			//已注册手机用户，直接重置密码
+			if($bizAppData->resetPwd($phone, BizDataDictionary::User_AcctSource_SelfSite, $md5password)){
+				$errno = 1 ;
+				$this->_echoResponse($errno);
+				return;
+			}
+		}
+		
 		if($bizAppData->registUserInfo($phone, BizDataDictionary::User_AcctSource_SelfSite, $md5password)){
 			// return $this->_response();
 			$errno = 1 ;
