@@ -146,7 +146,7 @@ class InterfaceController extends CController
 			case '9012':	//微信签名，用于分享
 				return 'wechatSign';	
 				break;
-			case '9013':	//微信签名，用于分享
+			case '9013':	//微信用户完成登录
 				return 'wechatLogin';	
 				break;
 
@@ -302,7 +302,10 @@ class InterfaceController extends CController
 					$this->_errorNo = ConfTask::ERROR_PARAMS;
 					$this->_errorMessage = " password " ;
 				}
-				
+				if(isset($params['sms_verify_code']) == false || empty($params['sms_verify_code'])){
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
+					$this->_errorMessage = " sms_verify_code " ;
+				}
 				break;
 			case '9005':
 				if(isset($params['phone']) == false || empty($params['phone'])){
@@ -716,11 +719,11 @@ class InterfaceController extends CController
 		// 	return;
 		// }
 		$lunaCodeVerify=LunaCodeVerify::getInstance();
-		$smsVerifyCode=$lunaCodeVerify->verifySmsCode($sms_verify_code);
+		$smsVerifyCode=$lunaCodeVerify->verifySmsCode($sms_verify_code,$phone);
 		if($smsVerifyCode!=0){
-			return $this->_response_error("sms_code", $smsVerifyCode-20);
-			$errno = ConfTask::ERROR_USER_LOGIN_PASSWORD ;
-			$this->_echoResponse($errno,'',$ret);
+			// return $this->_response_error("sms_code", $smsVerifyCode-20);
+			$errno = ConfTask::ERROR_USER_SMS_CODE ;
+			$this->_echoResponse($errno);
 			return;
 		}
 		$bizAppData= new BizAppData();
@@ -1024,9 +1027,15 @@ class InterfaceController extends CController
 		$this->_echoResponse($errno,'',$data); 
 	}
 
-	//用户签到 TODO ,增加经验值
+	//用户签到 ,增加经验值
 	public function userSignIn($params){
 		$UserIDX = $params['UserIDX'];
+		$Config_Key = 'SignIn_Exp_Point';
+		$DWType = DictionaryData::User_Experience_DW_Type_Increase ;
+		$Amount = LibUserExperience::getValueByConfigKey($Config_Key);
+		$DWMemo = '用户签到，增加经验值';
+
+		LibUserExperience::recordUserExperience($UserIDX,$Config_Key,$DWType,$Amount,$DWMemo);
 		
 		$errno = 1 ;
 		$this->_echoResponse($errno);

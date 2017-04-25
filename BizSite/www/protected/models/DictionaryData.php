@@ -82,7 +82,7 @@ class DictionaryData {
 			"3"		=>	"任务评价",
 			"4"		=>	"评测题",
 	);	
-	//分享渠道
+	//分享渠道、账号来源
 	const User_Share_To_Type=array(
 			"1"		=>	"微信",
 			"2"		=>	"微博",
@@ -105,5 +105,13 @@ class DictionaryData {
 	const User_Task_Status_Not_Yet = 1 ; 
 	const User_Task_Status_Start = 2 ;
 	const User_Task_Status_Finish = 9 ; 
+
+	const User_Experience_DW_Type = array(
+		"1"	=>	"存",
+		"2"	=>	"取"
+		);
+	const User_Experience_DW_Type_Increase = 1 ;
+	const User_Experience_DW_Type_Decrease = 1 ;
+
 	
 }

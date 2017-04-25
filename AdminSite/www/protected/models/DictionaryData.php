@@ -74,5 +74,12 @@ class DictionaryData {
 	const Task_Material_Task_Status_UnDeploy=1;
 	const Task_Material_Task_Status_Publish=2;
 	const Task_Material_Task_Status_Test=3;
+
+		//分享渠道、账号来源
+	const User_Share_To_Type=array(
+			"1"		=>	"微信",
+			"2"		=>	"微博",
+			"3"		=>	"QQ",
+	);	
 	
 }
