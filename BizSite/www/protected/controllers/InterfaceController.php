@@ -1,5 +1,6 @@
 <?php
 LunaLoader::import("luna_lib.verify.LunaCodeVerify");
+LunaLoader::import("luna_lib.util.CGuidManager");
 require_once(dirname(__FILE__).'/../config/ConfTask.php');
 require_once(dirname(__FILE__).'/../libraries/LibUserQuestions.php');
 
@@ -11,6 +12,7 @@ class InterfaceController extends CController
 	public $_errorNo;
 	public $_errorMessage;
 	private $_USER_SESSION_KEY="user";								//session key
+	private $_OPENID_SESSION_KEY="openid";							//第三方 openid session key
 	private $_need_login_method_type = array(1003,2003,2004,2005,2006,2007,2008,3003,3004,3005,4001,5001,9003,9004,9006,9007);
 
 	public function _echoResponse($errno, $attach_errmsg = '', $data = array(), $count = null) {
@@ -392,12 +394,15 @@ class InterfaceController extends CController
 					'UserIDX'=>$UserIDX
 				),$body);
 		}
-		
-		// $UserIDX =  2 ; 
-		// $body = array_merge(array(
-		// 	'LoginName'=>'15900828187',
-		// 	'UserIDX'=> $UserIDX,
-		// ),$body);
+
+		$hostname = php_uname('n'); //本地环境，免登录
+		if(in_array($hostname, array("ADMIN-PC","SUNNY-PC"))){
+			$UserIDX =  2 ; 
+			$body = array_merge(array(
+				'LoginName'=>'15900828187',
+				'UserIDX'=> $UserIDX,
+			),$body);	
+		}
 
 		if(isset($type) && !empty($type)){
 			if(in_array($type, $this->_need_login_method_type) && empty($UserIDX)){
@@ -407,7 +412,6 @@ class InterfaceController extends CController
 			}
 			$method	= $this->urlRouter($type);
 		}
-		
 		
 
 		if(isset($method) && !empty($method)){
@@ -783,7 +787,14 @@ class InterfaceController extends CController
 			$this->_echoResponse($errno);
 			return;
 		}
-		$session_code_key="user";
+		//登录成功后，判断session中是否有第三方OpenId，且与用户账号是否已经绑定，否则绑定第三方账号
+		$third_UserInfo = Yii::app()->session[$this->_OPENID_SESSION_KEY] ; 
+		if(empty($userInfo[0]['OpenId']) && !empty($third_UserInfo['OpenId'])){
+			$acctSource = BizDataDictionary::User_AcctSource_Tencent_Wx;
+			$mod_user_info = new ModUserInfo();
+			$ret_user_info = $mod_user_info->bindThirdUserInfo($UserIDX,$third_UserInfo['OpenId'],$acctSource);
+		}
+		// $session_code_key="user";
 		Yii::app()->session[$this->_USER_SESSION_KEY]=$userInfo;
 		$errno = 1 ;
 		$this->_echoResponse($errno);
@@ -1163,7 +1174,7 @@ class InterfaceController extends CController
 
 	}
 
-	//微信登录
+	//微信登录、注册 ，必须绑定系统手机账号
 	public function wechatLogin($params){
 		$code = $params['code'];	
 
@@ -1174,21 +1185,22 @@ class InterfaceController extends CController
 			return;
 		}
 		$bizAppData= new BizAppData();
-		$userInfo=$bizAppData->getUserInfoByLoginName($wxUser["openid"], BizDataDictionary::User_AcctSource_Tencent_Wx);
-		if(count($userInfo)==0){
-			$bizAppData->registThirdUserInfo($wxUser["openid"], BizDataDictionary::User_AcctSource_Tencent_Wx);
-			$userInfo=$bizAppData->getUserInfoByLoginName($wxUser["openid"], BizDataDictionary::User_AcctSource_Tencent_Wx);
-		}
-		if(count($userInfo)==0){
-			$errno = ConfTask::ERROR_THIRD_USER_REGIST ;
-			$this->_echoResponse($errno);
-			return;
-		}
-		$userInfo[0]["AcctSource"]	=	BizDataDictionary::User_AcctSource_Tencent_Wx;
-		$userInfo[0]["OpenUserInfo"]=  ($needUserInfo=="1"? WxHelper::getOpenIdUserInfo($wxUser["openid"]):array());
+		// $userInfo=$bizAppData->getUserInfoByLoginName($wxUser["openid"], BizDataDictionary::User_AcctSource_Tencent_Wx);
+		// if(count($userInfo)==0){
+		// 	$bizAppData->registThirdUserInfo($wxUser["openid"], BizDataDictionary::User_AcctSource_Tencent_Wx);
+		// 	$userInfo=$bizAppData->getUserInfoByLoginName($wxUser["openid"], BizDataDictionary::User_AcctSource_Tencent_Wx);
+		// }
+		// if(count($userInfo)==0){
+		// 	$errno = ConfTask::ERROR_THIRD_USER_REGIST ;
+		// 	$this->_echoResponse($errno);
+		// 	return;
+		// }
+		$third_UserInfo = array();
+		$third_UserInfo["AcctSource"]	=	BizDataDictionary::User_AcctSource_Tencent_Wx;
+		$third_UserInfo["OpenId"]	=	$wxUser["openid"] ;
+		$third_UserInfo["OpenUserInfo"]=  WxHelper::getOpenIdUserInfo($wxUser["openid"]);
 
-		$session_code_key="user";
-		Yii::app()->session[$this->_USER_SESSION_KEY]=$userInfo[0];
+		Yii::app()->session[$this->_OPENID_SESSION_KEY]=$third_UserInfo;
 		$errno = 1 ;
 		$this->_echoResponse($errno);
 
@@ -1210,11 +1222,12 @@ class InterfaceController extends CController
 
 
 	// 上传图片
-	public function actionUploadFile($params){
+	public function actionUploadFile(){
 		if(isset($_FILES) && is_array($_FILES) && count($_FILES)>0){
 			foreach ($_FILES as $uploadedFile){
 				if(empty($uploadedFile["name"])==false){
 					$appConfig=LunaConfigMagt::getInstance()->getAppConfig();
+					var_dump($appConfig);die();
 					$imgName=CGuidManager::GetFullGuid().".jpg";
 					$img_path=$appConfig["UploadImage_Root"]."/".$imgName;
 					if(copy($uploadedFile["tmp_name"],$img_path)){
@@ -1233,5 +1246,9 @@ class InterfaceController extends CController
 		$errno = ConfTask::ERROR_FILE_UPLOAD ;
 		$this->_echoResponse($errno,'',$ret);
 		return;
+	}
+
+	public function actionTest(){
+		var_dump("test action");
 	}
 }

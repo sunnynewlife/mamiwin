@@ -82,6 +82,11 @@ class SiteController extends CController
 		$this->layout="test_page_list";
 		$this->render("test_page_wxacct");
 	}	
+	public function actionUpload()
+	{
+		$this->layout="test_page_list";
+		$this->render("test_page_upload");
+	}	
 	public function actionWxIndex()
 	{
 		$data=array(
