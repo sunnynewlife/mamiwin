@@ -4,8 +4,8 @@
 		<string key="defaultXml" value="adminEvnCfg-dev.xml" />
 		<string key="enableEvnSwitch" value="true" />
 		<array key="EvnSwitch" name="环境切换">
-			<array key="adminEvnCfg-dev.xml" name="开发环境">
-				<string key="hostName" value="admin-PC,DESKTOP-D4K54MD" />
+			<array key="adminEvnCfg-dev-yang.xml" name="开发环境">
+				<string key="hostName" value="SUNNY-PC,admin-PC,DESKTOP-D4K54MD" />
 			</array>
 			<array key="adminEvnCfg-dev.xml" name="开发环境">
 				<string key="ip" value="192.168.18.74,192.168.18.64" />

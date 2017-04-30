@@ -44,7 +44,12 @@
 			<array key="appender">
 				<string key="persist" value="lib.log.YIILogerPersist" />
 				<array key="param">
+<<<<<<< .mine
 					<string key="dir" value="/opt/logs/api.fumuwin.com" />					
+=======
+					<string key="db_dir" value="/logs/api.fumuwin.com" />
+>>>>>>> .theirs
+					<string key="dir" value="/logs/api.fumuwin.com" />				
 				</array>
 			</array>
 		</array>

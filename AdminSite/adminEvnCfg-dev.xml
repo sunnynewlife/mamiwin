@@ -12,7 +12,7 @@
 			<array key="appender">
 				<string key="persist" value="lib.log.YIILogerPersist" />
 				<array key="param">
-					<string key="dir" value="/SNDA/mamiwin/logs" />
+					<string key="dir" value="/logs/admin.fumuwin.com" />
 				</array>
 			</array>
 		</array>

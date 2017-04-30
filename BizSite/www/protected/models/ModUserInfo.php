@@ -36,15 +36,16 @@ class ModUserInfo {
 
 
 	/**
-	 * 绑定第三方账号
+	 * 绑定第三方账号，绑定系统手机账号
 	 * @param  [type] $openId     [description]
 	 * @param  [type] $acctSource [description]
 	 * @return [type]             [description]
 	 */
-	public function bindThirdUserInfo($openId,$acctSource)
+	public function bindThirdUserInfo($UserIDX,$openId,$acctSource)
 	{
-		$sql="insert into User_Info (LoginName,AcctSource,OpenId,AcctStatus,CreateTime,UpdateTime) values (?,?,?,?,NOW(),NOW())";
-		$params=array($openId,$acctSource,$openId,BizDataDictionary::User_AcctStatus_Valid);
+		// $sql="insert into User_Info (LoginName,AcctSource,OpenId,AcctStatus,CreateTime,UpdateTime) values (?,?,?,?,NOW(),NOW())";
+		$sql = "UPDATE User_Info SET OpenId = ? ,AcctSource = ?,Update_Time = NOW()  WHERE IDX = ? ";		
+		$params=array($openId,$acctSource,$UserIDX);
 		return (LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params)>0);		
 	}
 }	
