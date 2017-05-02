@@ -151,6 +151,12 @@ class InterfaceController extends CController
 			case '9013':	//微信用户完成登录
 				return 'wechatLogin';	
 				break;
+			case '9014':	//微博用户完成登录
+				return 'wbLogin';	
+				break;
+			case '9015':	//QQ用户完成登录
+				return 'qqLogin';	
+				break;
 
 			
 			case '9999':	//TEST
@@ -789,11 +795,22 @@ class InterfaceController extends CController
 		}
 		//登录成功后，判断session中是否有第三方OpenId，且与用户账号是否已经绑定，否则绑定第三方账号
 		$third_UserInfo = Yii::app()->session[$this->_OPENID_SESSION_KEY] ; 
-		if(empty($userInfo[0]['OpenId']) && !empty($third_UserInfo['OpenId'])){
-			$acctSource = BizDataDictionary::User_AcctSource_Tencent_Wx;
-			$mod_user_info = new ModUserInfo();
-			$ret_user_info = $mod_user_info->bindThirdUserInfo($UserIDX,$third_UserInfo['OpenId'],$acctSource);
+		if(empty($third_UserInfo) == false){
+			$acctSource = $third_UserInfo['AcctSource'];
+			if($acctSource == BizDataDictionary::User_AcctSource_Tencent_Wx){
+				if(empty($userInfo[0]['OpenId_Wechat']) && !empty($third_UserInfo['OpenId'])){
+					$mod_user_info = new ModUserInfo();
+					$ret_user_info = $mod_user_info->bindThirdUserInfo($UserIDX,$third_UserInfo['OpenId'],$acctSource);
+				}
+			}
+			if($acctSource == BizDataDictionary::User_AcctSource_Sina_Wb){
+				if(empty($userInfo[0]['OpenId_Weibo']) && !empty($third_UserInfo['OpenId'])){
+					$mod_user_info = new ModUserInfo();
+					$ret_user_info = $mod_user_info->bindThirdUserInfo($UserIDX,$third_UserInfo['OpenId'],$acctSource);
+				}
+			}
 		}
+			
 		// $session_code_key="user";
 		Yii::app()->session[$this->_USER_SESSION_KEY]=$userInfo;
 		$errno = 1 ;
@@ -1166,7 +1183,7 @@ class InterfaceController extends CController
 
 	//获取微信授权URL
 	public function getWechatRedirectUrl($params){
-		$redirect_uri = "http://api.fumuwin.com/site/wxIndex?v=1";	//http%3A%2F%2Fapi.fumuwin.com%2Fsite%2FwxIndex%3Fv%3D1
+		$redirect_uri = "http://api.fumuwin.com/test/wxIndex?v=1";	//http%3A%2F%2Fapi.fumuwin.com%2Fsite%2FwxIndex%3Fv%3D1
 		$url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=".WxHelper::WX_APP_ID."&redirect_uri=". $redirect_uri ."&response_type=code&scope=snsapi_userinfo&state=2&connect_redirect=1#wechat_redirect";
 		$data = array('url'=>$url);
 		$errno = 1 ;
@@ -1184,21 +1201,43 @@ class InterfaceController extends CController
 			$this->_echoResponse($errno);
 			return;
 		}
-		$bizAppData= new BizAppData();
-		// $userInfo=$bizAppData->getUserInfoByLoginName($wxUser["openid"], BizDataDictionary::User_AcctSource_Tencent_Wx);
-		// if(count($userInfo)==0){
-		// 	$bizAppData->registThirdUserInfo($wxUser["openid"], BizDataDictionary::User_AcctSource_Tencent_Wx);
-		// 	$userInfo=$bizAppData->getUserInfoByLoginName($wxUser["openid"], BizDataDictionary::User_AcctSource_Tencent_Wx);
-		// }
-		// if(count($userInfo)==0){
-		// 	$errno = ConfTask::ERROR_THIRD_USER_REGIST ;
-		// 	$this->_echoResponse($errno);
-		// 	return;
-		// }
+		
 		$third_UserInfo = array();
 		$third_UserInfo["AcctSource"]	=	BizDataDictionary::User_AcctSource_Tencent_Wx;
 		$third_UserInfo["OpenId"]	=	$wxUser["openid"] ;
 		$third_UserInfo["OpenUserInfo"]=  WxHelper::getOpenIdUserInfo($wxUser["openid"]);
+
+		$mod_user_info = new ModUserInfo();
+		$ret_user_info = $mod_user_info->getUserInfoByOpenId($wbUser["openid"],BizDataDictionary::User_AcctSource_Tencent_Wx);
+		if(!empty($ret_user_info)){
+			Yii::app()->session[$this->_USER_SESSION_KEY]=$ret_user_info;
+		}
+
+		Yii::app()->session[$this->_OPENID_SESSION_KEY]=$third_UserInfo;
+		$errno = 1 ;
+		$this->_echoResponse($errno);
+
+	}
+	//微博登录，绑定系统手机账号,保存session
+	public function wbLogin($params){
+		$code = $params['code'];	
+
+		$wbUser=WbHelper::getOpenId($code);
+		if($wbUser==false){
+			$errno = ConfTask::ERROR_WECHAT_CODE ;
+			$this->_echoResponse($errno);
+			return;
+		}
+		$third_UserInfo = array();
+		$third_UserInfo["AcctSource"]	=	BizDataDictionary::User_AcctSource_Sina_Wb;
+		$third_UserInfo["OpenId"]	=	$wbUser["openid"] ;
+		$third_UserInfo["OpenUserInfo"]=  WbHelper::getOpenIdUserInfo($wbUser["uid"]);
+
+		$mod_user_info = new ModUserInfo();
+		$ret_user_info = $mod_user_info->getUserInfoByOpenId($wbUser["openid"],BizDataDictionary::User_AcctSource_Sina_Wb);
+		if(!empty($ret_user_info)){
+			Yii::app()->session[$this->_USER_SESSION_KEY]=$ret_user_info;
+		}
 
 		Yii::app()->session[$this->_OPENID_SESSION_KEY]=$third_UserInfo;
 		$errno = 1 ;
