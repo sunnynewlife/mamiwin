@@ -22,4 +22,5 @@ class LibUserExperience{
 		$ret_user_experience = $mod_user_experience->recordUserExpRevenue($UserIDX,$Config_Key,$DWType,$Amount,$DWMemo);
 		return $ret_user_experience;
 	}
+	
 }

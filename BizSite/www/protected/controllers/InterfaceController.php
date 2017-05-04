@@ -826,21 +826,28 @@ class InterfaceController extends CController
 		$this->_echoResponse($errno);
 	}
 	//获取登录用户信息,以及是否已经填写过基础资料 尚未进行评测的时间 天 
+	//当日是否已经签到
 	//TODO 逻辑待实现
-	private  function getUserInfo()
+	private  function getUserInfo($params)
 	{
-		// if(isset(Yii::app()->session[$this->_USER_SESSION_KEY])==false){
-		// 	$errno = ConfTask::ERROR_USER_NOT_LOGIN ;
-		// 	$this->_echoResponse($errno);
-		// 	return;
-		// }
 		$userInfo=Yii::app()->session[$this->_USER_SESSION_KEY];
+		// var_dump($userInfo);die();
+		$UserIDX =  $params['UserIDX'];
+		$TodaySignIn = 0 ;
+		$mod_user_experience = new ModUserExpRevenue();
+		$Config_Key = 'SignIn_Exp_Point' ;
+		$Query_Date = date('Y-m-d');
+		$ret_user_experience = $mod_user_experience->queryUserExperience($UserIDX,$Config_Key,$Query_Date);
+		if(count($ret_user_experience)>0){
+			$TodaySignIn = 1 ;
+		}
 		$ret = array(
 			"UserIDX"			=>	$userInfo[0]["IDX"],
 			"User_Info"        => array(
                 "LoginName"            =>    $userInfo[0]["LoginName"],               
-                "UserExperiencePoint"    =>     0,
+                "UserExperiencePoint"  =>     0,
                 "UserLevel"            =>     0,
+                "TodaySignIn"          =>     $TodaySignIn,
                 ),
             "User_Evaluation_Info"    =>    array(
                 "UserBasicInfo"        =>    0,
@@ -1192,9 +1199,8 @@ class InterfaceController extends CController
 	}
 
 	//微信登录、注册 ，必须绑定系统手机账号
-	public function wechatLogin($params){
-		$code = $params['code'];	
-
+	public function actionWechatBind(){
+		$code			=	Yii::app()->request->getParam('code',"");
 		$wxUser=WxHelper::getOpenId($code);
 		if($wxUser==false){
 			$errno = ConfTask::ERROR_WECHAT_CODE ;
@@ -1208,7 +1214,7 @@ class InterfaceController extends CController
 		$third_UserInfo["OpenUserInfo"]=  WxHelper::getOpenIdUserInfo($wxUser["openid"]);
 
 		$mod_user_info = new ModUserInfo();
-		$ret_user_info = $mod_user_info->getUserInfoByOpenId($wbUser["openid"],BizDataDictionary::User_AcctSource_Tencent_Wx);
+		$ret_user_info = $mod_user_info->getUserInfoByOpenId($wxUser["openid"],BizDataDictionary::User_AcctSource_Tencent_Wx);
 		if(!empty($ret_user_info)){
 			Yii::app()->session[$this->_USER_SESSION_KEY]=$ret_user_info;
 		}
@@ -1219,8 +1225,8 @@ class InterfaceController extends CController
 
 	}
 	//微博登录，绑定系统手机账号,保存session
-	public function wbLogin($params){
-		$code = $params['code'];	
+	public function wbLogin(){
+		$code			=	Yii::app()->request->getParam('code',"");
 
 		$wbUser=WbHelper::getOpenId($code);
 		if($wbUser==false){
