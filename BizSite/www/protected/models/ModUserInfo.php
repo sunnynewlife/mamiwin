@@ -28,7 +28,7 @@ class ModUserInfo {
 
 	//查询用户信息
 	public function queryUserInfo($UserIDX){
-		$sql="select * from User_Info where UserIDX=? ";
+		$sql="select * from User_Info where IDX=? ";
 		$params=array($UserIDX);
 		$user_info=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
 		return (isset($user_info) && is_array($user_info) && count($user_info)>0)?$user_info[0]:array();

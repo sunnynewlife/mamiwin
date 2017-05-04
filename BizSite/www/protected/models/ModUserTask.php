@@ -23,7 +23,7 @@ class ModUserTask {
 		$offSet = (is_null($offSet)) ? 0 : $offSet;
 			
 		$params=array();
-		$sql=" SELECT a.*,b.Task_Type,b.Task_Title from User_Tasks a,Task_Material b where  a.Task_IDX = b.IDX and  a.UserIDX = ? ";
+		$sql=" SELECT a.*,b.Task_Type,b.Task_Title,b.Min_Time,b.Max_Time from User_Tasks a,Task_Material b where  a.Task_IDX = b.IDX and  a.UserIDX = ? ";
 		$params[] = $UserIDX;			
 		if(!empty($Task_Type) ){
 			$sql .= " AND b.Task_Type = ? ";
@@ -142,7 +142,9 @@ class ModUserTask {
 		if(!empty($Finish_Status)){
 			$sql .= " ,Finish_Status = ?  ";
 			$params[] = $Finish_Status;
-			if(($Finish_Status == DictionaryData::User_Task_Status_Finish)){
+			if(($Finish_Status == DictionaryData::User_Task_Status_Start)){
+				$sql .= " ,Start_Date = NOW()  ";				
+			}else if(($Finish_Status == DictionaryData::User_Task_Status_Finish)){
 				$sql .= " ,Finish_Date = NOW()  ";				
 			}
 		}			

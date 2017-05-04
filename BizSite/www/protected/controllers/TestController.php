@@ -96,7 +96,7 @@ class TestController extends CController
 		$this->layout="test_page_list";
 		$this->render("test_page_wxlogin",$data);
 	}
-	public function actionWbLogin()
+	public function actionWbIndex()
 	{
 		$data=array(
 				"code"		=>	Yii::app()->request->getParam('code',""),

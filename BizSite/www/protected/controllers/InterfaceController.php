@@ -12,7 +12,7 @@ class InterfaceController extends CController
 	public $_errorNo;
 	public $_errorMessage;
 	private $_USER_SESSION_KEY="user";								//session key
-	private $_OPENID_SESSION_KEY="openid";							//第三方 openid session key
+	private $_OPENID_SESSION_KEY="openid";							//µÚÈý·½ openid session key
 	private $_need_login_method_type = array(1003,2003,2004,2005,2006,2007,2008,3003,3004,3005,4001,5001,9003,9004,9006,9007);
 
 	public function _echoResponse($errno, $attach_errmsg = '', $data = array(), $count = null) {
@@ -50,114 +50,117 @@ class InterfaceController extends CController
     	return ;
     }
 
-    //路由
+    //Â·ÓÉ
 	public function urlRouter($type){
 		switch ($type) {
-			case '1001':		// 查询所有资料列表
+			case '1001':		// ²éÑ¯ËùÓÐ×ÊÁÏÁÐ±í
 				return 'queryMeterialList';
 				break;
-			case '1002':	//根据ID查询资料
+			case '1002':	//¸ù¾ÝID²éÑ¯×ÊÁÏ
 				return 'getMeterialDetail';	
 				break;
-			case '1003':	//提交基础资料
+			case '1003':	//Ìá½»»ù´¡×ÊÁÏ
 				return 'addUserBasicInfo';	
 				break;
-			case '2001':		// 查询所有任务列表
+			case '2001':		// ²éÑ¯ËùÓÐÈÎÎñÁÐ±í
 				return 'queryTaskMeterialList';
 				break;
-			case '2002':	//根据ID查询任务
+			case '2002':	//¸ù¾ÝID²éÑ¯ÈÎÎñ
 				return 'getTaskMeterialDetail';	
 				break;
-			case '2003':	//获取用户任务列表
+			case '2003':	//»ñÈ¡ÓÃ»§ÈÎÎñÁÐ±í
 				return 'getUserTaskList';
 				break;
-			case '2004':	//开始任务
+			case '2004':	//¿ªÊ¼ÈÎÎñ
 				return 'startUserTask';
 				break;
-			case '2005':	//完成、结束任务
+			case '2005':	//Íê³É¡¢½áÊøÈÎÎñ
 				return 'finishUserTask';
 				break;
-			case '2006':	//换一个任务
+			case '2006':	//»»Ò»¸öÈÎÎñ
 				return 'switchUserTask';
 				break;
-			case '2007':	//按月查询用户已完成任务数
+			case '2007':	//°´ÔÂ²éÑ¯ÓÃ»§ÒÑÍê³ÉÈÎÎñÊý
 				return 'queryUserTaskMonth';
 				break;
-			case '2008':	//按日查询用户已完成任务数
+			case '2008':	//°´ÈÕ²éÑ¯ÓÃ»§ÒÑÍê³ÉÈÎÎñÊý
 				return 'queryUserTaskDay';
 				break;
 
 
-			case '3001':	// 查询所有测评题列表
+			case '3001':	// ²éÑ¯ËùÓÐ²âÆÀÌâÁÐ±í
 				return 'getEvaluationQuesitonsList';
 				break;
-			case '3002':	//根据ID查询测评题
+			case '3002':	//¸ù¾ÝID²éÑ¯²âÆÀÌâ
 				return 'getEvaluationQuesitons';	
 				break;
-			case '3003':	// 查询所有测评题集列表
+			case '3003':	// ²éÑ¯ËùÓÐ²âÆÀÌâ¼¯ÁÐ±í
 				return 'getEvaluationQuesitonsSetList';
 				break;
-			case '3004':	// 获取下一题
+			case '3004':	// »ñÈ¡ÏÂÒ»Ìâ
 				return 'getUserNextQuestion';
 				break;
-			case '3005':	// 提交评测题结果
+			case '3005':	// Ìá½»ÆÀ²âÌâ½á¹û
 				return 'recordUserQuestionResult';
 				break;
-			case '3006':	// 查询所有测评题集列表
+			case '3006':	// ²éÑ¯ËùÓÐ²âÆÀÌâ¼¯ÁÐ±í
 				return 'getEvaluationQuesitonsSetByIDX';
 				break;
 			
-			case '4001':	// 分享
+			case '4001':	// ·ÖÏí
 				return 'shareOut';
 				break;
 			
-			case '5001':	// 任务评价
+			case '5001':	// ÈÎÎñÆÀ¼Û
 				return 'taskEvaluate';
 				break;
-			case '8001':	// 图片上传
+			case '8001':	// Í¼Æ¬ÉÏ´«
 				return 'uploadFile';
 				break;
 
-			case '9001':	//手机用户登录
+			case '9001':	//ÊÖ»úÓÃ»§µÇÂ¼
 				return 'userLogin';	
 				break;
-			case '9002':	//手机用户注册
+			case '9002':	//ÊÖ»úÓÃ»§×¢²á
 				return 'userRegist';	
 				break;
-			case '9003':	//用户登出
+			case '9003':	//ÓÃ»§µÇ³ö
 				return 'userLogout';	
 				break;
-			case '9004':	//获取用户信息，登录成功后
+			case '9004':	//»ñÈ¡ÓÃ»§ÐÅÏ¢£¬µÇÂ¼³É¹¦ºó
 				return 'getUserInfo';	
 				break;
-			case '9005':	//短信发送
+			case '9005':	//¶ÌÐÅ·¢ËÍ
 				return 'sendSms';	
 				break;
-			case '9006':	//修改密码
+			case '9006':	//ÐÞ¸ÄÃÜÂë
 				return 'resetPassword';	
 				break;
-			case '9007':	//用户签到
+			case '9007':	//ÓÃ»§Ç©µ½
 				return 'userSignIn';	
 				break;
-			case '9010':	//微信登录
+			case '9010':	//Î¢ÐÅÌø×ªURL
 				return 'getWechatRedirectUrl';	
 				break;
-			case '9011':	//微信token
+			case '9011':	//Î¢ÐÅtoken
 				return 'wechatToken';	
 				break;
-			case '9012':	//微信签名，用于分享
+			case '9012':	//Î¢ÐÅÇ©Ãû£¬ÓÃÓÚ·ÖÏí
 				return 'wechatSign';	
 				break;
-			case '9013':	//微信用户完成登录
+			case '9013':	//Î¢ÐÅÓÃ»§Íê³ÉµÇÂ¼
 				return 'wechatLogin';	
 				break;
-			case '9014':	//微博用户完成登录
+			case '9014':	//Î¢²©ÓÃ»§Íê³ÉµÇÂ¼
 				return 'wbLogin';	
 				break;
-			case '9015':	//QQ用户完成登录
+			case '9015':	//QQÓÃ»§Íê³ÉµÇÂ¼
 				return 'qqLogin';	
 				break;
-
+			case '9016':	//Î¢²©Ìø×ªURL
+				return 'getWeiboRedirectUrl';	
+				break;
+			
 			
 			case '9999':	//TEST
 				return 'test';		
@@ -368,9 +371,9 @@ class InterfaceController extends CController
 		
 		
 		// $str_token = empty($header['token']) ?  $_COOKIE["login_token"] : $header['token'] ;
-		// $from  = empty($header['from']) ? "" : $header['from'];		//接口调用者：''：app；'wx'：微信；
+		// $from  = empty($header['from']) ? "" : $header['from'];		//½Ó¿Úµ÷ÓÃÕß£º''£ºapp£»'wx'£ºÎ¢ÐÅ£»
 		// $curlRet	= GamesHelper::token($str_token);
-		// if($curlRet['message'] != '成功')
+		// if($curlRet['message'] != '³É¹¦')
 		// 	{
 		// 		$errno = ConfTask::ERROR_VERIFY_TOKEN ;
 		// 		$this->_echoResponse($errno);
@@ -401,14 +404,14 @@ class InterfaceController extends CController
 				),$body);
 		}
 
-		$hostname = php_uname('n'); //本地环境，免登录
-		if(in_array($hostname, array("ADMIN-PC","SUNNY-PC"))){
-			$UserIDX =  2 ; 
-			$body = array_merge(array(
-				'LoginName'=>'15900828187',
-				'UserIDX'=> $UserIDX,
-			),$body);	
-		}
+		$hostname = php_uname('n'); //±¾µØ»·¾³£¬ÃâµÇÂ¼
+		// if(in_array($hostname, array("ADMIN-PC","SUNNY-PC"))){
+		// 	$UserIDX =  2 ; 
+		// 	$body = array_merge(array(
+		// 		'LoginName'=>'15900828187',
+		// 		'UserIDX'=> $UserIDX,
+		// 	),$body);	
+		// }
 
 		if(isset($type) && !empty($type)){
 			if(in_array($type, $this->_need_login_method_type) && empty($UserIDX)){
@@ -468,7 +471,7 @@ class InterfaceController extends CController
 		$this->_echoResponse($errno,'',$ret); 
 	}
 
-	//用户基础资料录入,自动分配评测题给用户
+	//ÓÃ»§»ù´¡×ÊÁÏÂ¼Èë,×Ô¶¯·ÖÅäÆÀ²âÌâ¸øÓÃ»§
 	private function addUserBasicInfo($params){
 		$UserIDX = $params['UserIDX'] ;
 		$Parent_Gender = $params['Parent_Gender'] ;
@@ -487,7 +490,7 @@ class InterfaceController extends CController
 		$this->_echoResponse($errno,'',$ret); 
 	}
 
-	//查询任务列表
+	//²éÑ¯ÈÎÎñÁÐ±í
 	private function queryTaskMeterialList($params){
 		if(isset($params['page'])){
 			$page 	= $params['page'];
@@ -505,7 +508,7 @@ class InterfaceController extends CController
 		$this->_echoResponse($errno,'',$ret); 
 	}  
 
-	// 获取任务详情
+	// »ñÈ¡ÈÎÎñÏêÇé
 	private function getTaskMeterialDetail($params){
 		$IDX = $params['IDX'] ;
 		$mod = new ModTaskMaterial();
@@ -519,10 +522,10 @@ class InterfaceController extends CController
 		$Material_Files_Location_Type = $ret['Location_Type'];
 		$ret['Show_Url'] = '';
 		if( $Material_Files_Location_Type == DictionaryData::Material_Files_Location_Type_OutUrl ){
-			$ret['Show_Url'] = $ret['File_Content'];//如果是外链接，返回外链url
+			$ret['Show_Url'] = $ret['File_Content'];//Èç¹ûÊÇÍâÁ´½Ó£¬·µ»ØÍâÁ´url
 			unset($ret['File_Content']);	
 		}
-		//登录用户，还将返回任务状态信息
+		//µÇÂ¼ÓÃ»§£¬»¹½«·µ»ØÈÎÎñ×´Ì¬ÐÅÏ¢
 		if(isset($params['UserIDX'])){
 			$UserIDX = $params['UserIDX'] ;
 			$mod_user_task = new ModUserTask();
@@ -536,10 +539,10 @@ class InterfaceController extends CController
 		$this->_echoResponse($errno,'',$ret); 
 	}
 
-	// 获取另一项任务
+	// »ñÈ¡ÁíÒ»ÏîÈÎÎñ
 	private function getAnotherTaskMeterialDetail($params){
 		$UserIDX = $params['UserIDX'] ;
-		$IDX = 2 ; //TODO，逻辑待完善
+		$IDX = 2 ; //TODO£¬Âß¼­´ýÍêÉÆ
 		$mod = new ModTaskMaterial();
 		$ret = $mod->getTaskMeterialDetail($IDX);
 		if($ret === false){			
@@ -551,14 +554,14 @@ class InterfaceController extends CController
 		$Material_Files_Location_Type = $ret['Location_Type'];
 		$ret['Show_Url'] = '';
 		if( $Material_Files_Location_Type == DictionaryData::Material_Files_Location_Type_OutUrl ){
-			$ret['Show_Url'] = $ret['File_Content'];//如果是外链接，返回外链url	
+			$ret['Show_Url'] = $ret['File_Content'];//Èç¹ûÊÇÍâÁ´½Ó£¬·µ»ØÍâÁ´url	
 		}
 		unset($ret['File_Content']);
 		$errno = 1 ;
 		$this->_echoResponse($errno,'',$ret); 
 	}
 
-	//查询用户任务列表，如果没有任务，则自动分配任务给用户
+	//²éÑ¯ÓÃ»§ÈÎÎñÁÐ±í£¬Èç¹ûÃ»ÓÐÈÎÎñ£¬Ôò×Ô¶¯·ÖÅäÈÎÎñ¸øÓÃ»§
 	private function getUserTaskList($params){
 		$UserIDX = $params['UserIDX'];
 		$Task_Type = isset($params['Task_Type']) ? $params['Task_Type'] : 0 ;
@@ -583,7 +586,7 @@ class InterfaceController extends CController
 		$this->_echoResponse($errno,'',$ret); 
 	}
 
-	//开始任务
+	//Â¿ÂªÃŠÂ¼ÃˆÃŽÃŽÃ±
 	public function startUserTask($params){
 		$UserIDX = $params['UserIDX'];
 		$Task_IDX = $params['Task_IDX'];
@@ -591,6 +594,7 @@ class InterfaceController extends CController
 		$Finish_Pic = '' ;
 		$Finish_Document = '' ;
 		$Finish_Status = DictionaryData::User_Task_Status_Start ;
+		$Start_Date = time();
 		$Finish_Date = '';
 
 		$mod_user_task = new ModUserTask();
@@ -604,7 +608,7 @@ class InterfaceController extends CController
 		$this->_echoResponse($errno);
 	}
 
-	//结束任务
+	//Â½Ã¡ÃŠÃ¸ÃˆÃŽÃŽÃ±
 	public function finishUserTask($params){
 		$UserIDX = $params['UserIDX'];
 		$Task_IDX = $params['Task_IDX'];
@@ -612,7 +616,7 @@ class InterfaceController extends CController
 		$Finish_Pic = '' ;
 		$Finish_Document = '' ;
 		$Finish_Status = DictionaryData::User_Task_Status_Finish ;
-		$Finish_Date = '';
+		$Finish_Date = time();
 
 		$mod_user_task = new ModUserTask();
 		$ret_user_task = $mod_user_task->updateUserTask($UserIDX,$Task_IDX,$Finish_Status,$Finish_Date,$Finish_Score,$Finish_Pic,$Finish_Document);
@@ -626,7 +630,7 @@ class InterfaceController extends CController
 	}
 
 	/**
-	 * 查询所有的评测题集
+	 * Â²Ã©Ã‘Â¯Ã‹Ã¹Ã“ÃÂµÃ„Ã†Ã€Â²Ã¢ÃŒÃ¢Â¼Â¯
 	 * @param  [type] $params [description]
 	 * @return [type]         [description]
 	 */
@@ -661,7 +665,7 @@ class InterfaceController extends CController
 				$mod_user_question = new ModUserEvaluationQuesitons();
 				$Finish_Point = 0 ;
 				if(empty($Unfinish_Qty)){
-					$Question_Answer_Status = 1 ; 	//查询用户已经完成的评测题
+					$Question_Answer_Status = 1 ; 	//Â²Ã©Ã‘Â¯Ã“ÃƒÂ»Â§Ã’Ã‘Â¾Â­ÃÃªÂ³Ã‰ÂµÃ„Ã†Ã€Â²Ã¢ÃŒÃ¢
 					$ret_user_question_finished = $mod_user_question->getUserEvaluationQuesitonsList($UserIDX,$Question_Set_IDX,$Question_Answer_Status);				
 					if(!empty($ret_user_question_finished)){
 						foreach ($ret_user_question_finished as $key => $value) {
@@ -678,7 +682,7 @@ class InterfaceController extends CController
 	}
 	
 	/**
-	 * 根据题集选择评测题 
+	 * ¸ù¾ÝÌâ¼¯Ñ¡ÔñÆÀ²âÌâ 
 	 * @param  [type] $params [description]
 	 * @return [type]         [description]
 	 */
@@ -701,7 +705,7 @@ class InterfaceController extends CController
 	}  
 
 	/**
-	 * 获取单道评测题
+	 * »ñÈ¡µ¥µÀÆÀ²âÌâ
 	 * @param  [type] $params [description]
 	 * @return [type]         [description]
 	 */
@@ -719,7 +723,7 @@ class InterfaceController extends CController
 	}
 
 
-	//账号注册
+	//ÕËºÅ×¢²á
 	private function userRegist($params)
 	{
 		$phone=$params['phone'] ;
@@ -728,7 +732,7 @@ class InterfaceController extends CController
 		$sms_verify_code=$params['sms_verify_code'] ;
 		
 		// if(empty($phone) || empty($password) || empty($img_verify_code) || empty($sms_verify_code)){
-		// 	return $this->_response(-99,"参数错误");
+		// 	return $this->_response(-99,"²ÎÊý´íÎó");
 		// }
 		
 		// $imgVerifyCode=$lunaCodeVerify->verifyImageCode($img_verify_code);
@@ -752,7 +756,7 @@ class InterfaceController extends CController
 			// $errno = ConfTask::ERROR_USER_EXISTS ;
 			// $this->_echoResponse($errno);
 			// return;
-			//已注册手机用户，直接重置密码
+			//ÒÑ×¢²áÊÖ»úÓÃ»§£¬Ö±½ÓÖØÖÃÃÜÂë
 			if($bizAppData->resetPwd($phone, BizDataDictionary::User_AcctSource_SelfSite, $md5password)){
 				$errno = 1 ;
 				$this->_echoResponse($errno);
@@ -766,19 +770,19 @@ class InterfaceController extends CController
 			$this->_echoResponse($errno);
 			return;
 		}
-		// return $this->_response("-2","注册失败，请稍后重试");
+		// return $this->_response("-2","×¢²áÊ§°Ü£¬ÇëÉÔºóÖØÊÔ");
 		$errno = ConfTask::ERROR_USER_REGIST ;
 		$this->_echoResponse($errno);
 		return;
 
 	}	
 
-	//用户登录
+	//ÓÃ»§µÇÂ¼
 	private function userLogin($params){
 		$phone=$params['phone'] ;
 		$password=$params['password'] ;
 		// if(empty($phone) || empty($password)){
-		// 	return $this->_response(-99,"参数错误");
+		// 	return $this->_response(-99,"²ÎÊý´íÎó");
 		// }
 		$bizAppData= new BizAppData();
 		$userInfo=$bizAppData->getUserInfoByLoginName($phone, BizDataDictionary::User_AcctSource_SelfSite);
@@ -793,23 +797,23 @@ class InterfaceController extends CController
 			$this->_echoResponse($errno);
 			return;
 		}
-		//登录成功后，判断session中是否有第三方OpenId，且与用户账号是否已经绑定，否则绑定第三方账号
-		$third_UserInfo = Yii::app()->session[$this->_OPENID_SESSION_KEY] ; 
-		if(empty($third_UserInfo) == false){
-			$acctSource = $third_UserInfo['AcctSource'];
-			if($acctSource == BizDataDictionary::User_AcctSource_Tencent_Wx){
-				if(empty($userInfo[0]['OpenId_Wechat']) && !empty($third_UserInfo['OpenId'])){
-					$mod_user_info = new ModUserInfo();
-					$ret_user_info = $mod_user_info->bindThirdUserInfo($UserIDX,$third_UserInfo['OpenId'],$acctSource);
-				}
-			}
-			if($acctSource == BizDataDictionary::User_AcctSource_Sina_Wb){
-				if(empty($userInfo[0]['OpenId_Weibo']) && !empty($third_UserInfo['OpenId'])){
-					$mod_user_info = new ModUserInfo();
-					$ret_user_info = $mod_user_info->bindThirdUserInfo($UserIDX,$third_UserInfo['OpenId'],$acctSource);
-				}
-			}
-		}
+		//µÇÂ¼³É¹¦ºó£¬ÅÐ¶ÏsessionÖÐÊÇ·ñÓÐµÚÈý·½OpenId£¬ÇÒÓëÓÃ»§ÕËºÅÊÇ·ñÒÑ¾­°ó¶¨£¬·ñÔò°ó¶¨µÚÈý·½ÕËºÅ
+		// $third_UserInfo = Yii::app()->session[$this->_OPENID_SESSION_KEY] ; 
+		// if(empty($third_UserInfo) == false){
+		// 	$acctSource = $third_UserInfo['AcctSource'];
+		// 	if($acctSource == BizDataDictionary::User_AcctSource_Tencent_Wx){
+		// 		if(empty($userInfo[0]['OpenId_Wechat']) && !empty($third_UserInfo['OpenId'])){
+		// 			$mod_user_info = new ModUserInfo();
+		// 			$ret_user_info = $mod_user_info->bindThirdUserInfo($UserIDX,$third_UserInfo['OpenId'],$acctSource);
+		// 		}
+		// 	}
+		// 	if($acctSource == BizDataDictionary::User_AcctSource_Sina_Wb){
+		// 		if(empty($userInfo[0]['OpenId_Weibo']) && !empty($third_UserInfo['OpenId'])){
+		// 			$mod_user_info = new ModUserInfo();
+		// 			$ret_user_info = $mod_user_info->bindThirdUserInfo($UserIDX,$third_UserInfo['OpenId'],$acctSource);
+		// 		}
+		// 	}
+		// }
 			
 		// $session_code_key="user";
 		Yii::app()->session[$this->_USER_SESSION_KEY]=$userInfo;
@@ -818,16 +822,16 @@ class InterfaceController extends CController
 		return ;
 	}
 	
-	//账号注销
+	//ÕËºÅ×¢Ïú
 	private function userLogout()
 	{
 		unset(Yii::app()->session[$this->_USER_SESSION_KEY]);
 		$errno = 1 ;
 		$this->_echoResponse($errno);
 	}
-	//获取登录用户信息,以及是否已经填写过基础资料 尚未进行评测的时间 天 
-	//当日是否已经签到
-	//TODO 逻辑待实现
+	//Â»Ã±ÃˆÂ¡ÂµÃ‡Ã‚Â¼Ã“ÃƒÂ»Â§ÃÃ…ÃÂ¢,Ã’Ã”Â¼Â°ÃŠÃ‡Â·Ã±Ã’Ã‘Â¾Â­ÃŒÃ®ÃÂ´Â¹Ã½Â»Ã¹Â´Â¡Ã—ÃŠÃÃ Ã‰ÃÃŽÂ´Â½Ã¸ÃÃÃ†Ã€Â²Ã¢ÂµÃ„ÃŠÂ±Â¼Ã¤ ÃŒÃ¬ 
+	//µ±ÈÕÊÇ·ñÒÑ¾­Ç©µ½
+	//TODO Âß¼­´ýÊµÏÖ
 	private  function getUserInfo($params)
 	{
 		$userInfo=Yii::app()->session[$this->_USER_SESSION_KEY];
@@ -841,26 +845,72 @@ class InterfaceController extends CController
 		if(count($ret_user_experience)>0){
 			$TodaySignIn = 1 ;
 		}
+		// ÓÃ»§»ù±¾ÐÅÏ¢
+		$UserExperiencePoint = 0 ;
+		$mod_user_info = new ModUserInfo();
+		$ret_user_info = $mod_user_info->queryUserInfo($UserIDX)	;
+		
+		if(!empty($ret_user_info)){
+			$UserExperiencePoint = $ret_user_info['Exp_Points'];
+			$User_Sign_Time = $ret_user_info['Create_Time'];
+			$UserEvaluationDay = CommonHelper::getDateDiff($User_Sign_Time,date('Y-m-d'));
+		}
+		// ÓÃ»§ÆÀ²âÐÅÏ¢
+		$UserBasicInfo = 0;
+		$mod_user_evaluation = new ModUserEvaluationQuesitons();
+		$ret_user_evaluation = $mod_user_evaluation->getEvaluationQuesitonsList($UserIDX,999,0);
+		if(!empty($ret_user_evaluation)){
+			$UserBasicInfo = 1 ;
+			$UserEvaluationDay = 0 ;
+		}
+		// ÓÃ»§ÈÎÎñÐÅÏ¢
+		$mod_user_task = new ModUserTask();
+		$Task_Type = 0 ;
+		$Query_Day = 0 ;
+		$ret_user_task = $mod_user_task->getUserTaskList($UserIDX,$Task_Type ,$Query_Day,$page_size = 999 ,$offSet = 0);
+		$Finish_Task_Minutes = 0 ;
+		$Finish_Task_Qty = 0 ;
+		$UnFinish_Task_Minutes = 0 ;
+		$UnFinish_Task_Qty = 0 ;
+		if(!empty($ret_user_task)){
+			foreach ($ret_user_task as $key => $value) {
+				$Finish_Status = $value['Finish_Status'];
+				$Start_Date = $value['Start_Date'];
+				$Finish_Date = $value['Finish_Date'];
+				$Min_Time = $value['Min_Time'];
+				$Max_Time = $value['Max_Time'];
+				if($Finish_Status == DictionaryData::User_Task_Status_Finish){
+					$diff_mi = CommonHelper::getDateDiff($Start_Date,$Finish_Date,'mi');
+					$Finish_Task_Minutes += $diff_mi;
+					$Finish_Task_Qty++;
+				}else if($Finish_Status == DictionaryData::User_Task_Status_Not_Yet || $Finish_Status == DictionaryData::User_Task_Status_Start){
+					$UnFinish_Task_Minutes += $Max_Time;
+					$UnFinish_Task_Qty++;
+				}
+
+
+			}
+		}
 		$ret = array(
 			"UserIDX"			=>	$userInfo[0]["IDX"],
 			"User_Info"        => array(
                 "LoginName"            =>    $userInfo[0]["LoginName"],               
-                "UserExperiencePoint"  =>     0,
+                "UserExperiencePoint"  =>    $UserExperiencePoint,
                 "UserLevel"            =>     0,
                 "TodaySignIn"          =>     $TodaySignIn,
                 ),
             "User_Evaluation_Info"    =>    array(
-                "UserBasicInfo"        =>    0,
-                "UserEvaluationDay"    =>    0,
+                "UserBasicInfo"        =>    $UserBasicInfo,
+                "UserEvaluationDay"    =>    $UserEvaluationDay,
                 ),
             "User_Task_Info"     =>    array(
                 'Finish_Task'    =>    array(
-                    'Qty'        => 0,
-                    'Minutes'    => 0 ,
+                    'Qty'        => $Finish_Task_Qty,
+                    'Minutes'    => $Finish_Task_Minutes ,
                     ),
                 'UnFinish_Task'    =>    array(
-                    'Qty'        => 0,
-                    'Minutes'    => 0 ,
+                    'Qty'        => $UnFinish_Task_Qty,
+                    'Minutes'    => $UnFinish_Task_Minutes ,
                     ),
                 ),
 
@@ -879,7 +929,7 @@ class InterfaceController extends CController
 			$ret_user_info = $mod_user_info->queryUserInfo($UserIDX);
 			if(empty($ret_user_info) == false){
 				$user_register_date = $ret_user_info['CreateTime'];
-				$diff = CommonHelper::getDateDiff($user_register_date,date());
+				$diff = CommonHelper::getDateDiff($user_register_date,date('Y-m-d'));
 				$ret['User_Evaluation_Info']['UserEvaluationDay'] = $diff ;
 			}				
 		}
@@ -887,7 +937,7 @@ class InterfaceController extends CController
 		$errno = 1 ;
 		$this->_echoResponse($errno,'',$ret);
 	}
-	//发送短信前，必须 输入图片验证码，注册、修改密码
+	//·¢ËÍ¶ÌÐÅÇ°£¬±ØÐë ÊäÈëÍ¼Æ¬ÑéÖ¤Âë£¬×¢²á¡¢ÐÞ¸ÄÃÜÂë
 	private function sendSms($params){
 		$phone=$params['phone'] ;
 		$img_verify_code=$params['img_verify_code'] ;
@@ -908,7 +958,7 @@ class InterfaceController extends CController
 		$this->_echoResponse($errno);
 	}
 
-	//修改密码
+	//ÐÞ¸ÄÃÜÂë
 	private function resetPassword($params){
 		$phone=$params['phone'] ;
 		$password=$params['password'] ;
@@ -933,7 +983,7 @@ class InterfaceController extends CController
 		$bizAppData= new BizAppData();
 		$userInfo=$bizAppData->getUserInfoByLoginName($phone, BizDataDictionary::User_AcctSource_SelfSite);
 		if(count($userInfo)==0){
-			// return $this->_response("-1","手机号未注册");
+			// return $this->_response("-1","ÊÖ»úºÅÎ´×¢²á");
 			$errno = ConfTask::ERROR_USER_PHONE_REGIST ;
 			$this->_echoResponse($errno);
 			return ;
@@ -944,15 +994,15 @@ class InterfaceController extends CController
 			$this->_echoResponse($errno);
 			return ;
 		}
-		// return $this->_response("-2","重设失败，请稍后重试");
+		// return $this->_response("-2","ÖØÉèÊ§°Ü£¬ÇëÉÔºóÖØÊÔ");
 		$errno = ConfTask::ERROR_USER_PASSWORD_RESET ;
 		$this->_echoResponse($errno);
 		return ;
 	}
 
 	/**
-	 * 先判断此题集是否已经分配给用户，是则直接取，否则分配后再取题 
-	 * 获取用户下一题
+	 * ÏÈÅÐ¶Ï´ËÌâ¼¯ÊÇ·ñÒÑ¾­·ÖÅä¸øÓÃ»§£¬ÊÇÔòÖ±½ÓÈ¡£¬·ñÔò·ÖÅäºóÔÙÈ¡Ìâ 
+	 * »ñÈ¡ÓÃ»§ÏÂÒ»Ìâ
 	 * @param  [type] $params [description]
 	 * @return [type]         [description]
 	 */
@@ -963,7 +1013,7 @@ class InterfaceController extends CController
 		$mod = new ModUserEvaluationQuesitons();
 		$ret_query_user_question = $mod->getUserEvaluationQuesitonsList($UserIDX,$Question_Set_IDX,'');
 
-		if(empty($ret_query_user_question)){//将此评测题分配给用户
+		if(empty($ret_query_user_question)){//½«´ËÆÀ²âÌâ·ÖÅä¸øÓÃ»§
 			$ret_user_question = $mod->generateUserQuestion($UserIDX,$Question_Set_IDX);
 		}
 		$ret = $mod->getNextQuestion($UserIDX,$Question_Set_IDX);
@@ -995,7 +1045,7 @@ class InterfaceController extends CController
 		if(empty($ret)){
 			$Unfinish_Qty = 0 ; 
 		}else{
-			$Question_Answer_Status = 0 ; 	//查询用户尚未完成的评测题数量
+			$Question_Answer_Status = 0 ; 	//²éÑ¯ÓÃ»§ÉÐÎ´Íê³ÉµÄÆÀ²âÌâÊýÁ¿
 			$ret_user_question = $mod->getUserEvaluationQuesitonsList($UserIDX,$Question_Set_IDX,$Question_Answer_Status);
 			$Unfinish_Qty = count($ret_user_question);
 		}
@@ -1013,9 +1063,9 @@ class InterfaceController extends CController
 	}
 
 	/**
-	 * 提交评测题答案
-	 * TODO 全部评测结束 ，根据评测结果分配任务
-	 * 当完成最后一题时，返回评测得分结果
+	 * Ìá½»ÆÀ²âÌâ´ð°¸
+	 * TODO È«²¿ÆÀ²â½áÊø £¬¸ù¾ÝÆÀ²â½á¹û·ÖÅäÈÎÎñ
+	 * µ±Íê³É×îºóÒ»ÌâÊ±£¬·µ»ØÆÀ²âµÃ·Ö½á¹û
 	 * @param  [type] $params [description]
 	 * @return [type]         [description]
 	 */
@@ -1052,14 +1102,14 @@ class InterfaceController extends CController
 			$this->_echoResponse($errno);
 			return;
 		}
-		//判断是否已经全部答完，是否则返回得分，并同时返回剩余题目数
-		$Question_Answer_Status = 0 ; 	//查询用户尚未完成的评测题数量
+		//ÅÐ¶ÏÊÇ·ñÒÑ¾­È«²¿´ðÍê£¬ÊÇ·ñÔò·µ»ØµÃ·Ö£¬²¢Í¬Ê±·µ»ØÊ£ÓàÌâÄ¿Êý
+		$Question_Answer_Status = 0 ; 	//²éÑ¯ÓÃ»§ÉÐÎ´Íê³ÉµÄÆÀ²âÌâÊýÁ¿
 		$ret_user_question = $mod_user_question->getUserEvaluationQuesitonsList($UserIDX,$Question_Set_IDX,$Question_Answer_Status);
 		$Unfinish_Qty = count($ret_user_question);
 
 		$Finish_Point = 0 ;
 		if(empty($Unfinish_Qty)){
-			$Question_Answer_Status = 1 ; 	//查询用户已经完成的评测题
+			$Question_Answer_Status = 1 ; 	//²éÑ¯ÓÃ»§ÒÑ¾­Íê³ÉµÄÆÀ²âÌâ
 			$ret_user_question_finished = $mod_user_question->getUserEvaluationQuesitonsList($UserIDX,$Question_Set_IDX,$Question_Answer_Status);
 			
 			if(!empty($ret_user_question_finished)){
@@ -1077,13 +1127,13 @@ class InterfaceController extends CController
 		$this->_echoResponse($errno,'',$data); 
 	}
 
-	//用户签到 ,增加经验值
+	//ÓÃ»§Ç©µ½ ,Ôö¼Ó¾­ÑéÖµ
 	public function userSignIn($params){
 		$UserIDX = $params['UserIDX'];
 		$Config_Key = 'SignIn_Exp_Point';
 		$DWType = DictionaryData::User_Experience_DW_Type_Increase ;
 		$Amount = LibUserExperience::getValueByConfigKey($Config_Key);
-		$DWMemo = '用户签到，增加经验值';
+		$DWMemo = 'ÓÃ»§Ç©µ½£¬Ôö¼Ó¾­ÑéÖµ';
 
 		LibUserExperience::recordUserExperience($UserIDX,$Config_Key,$DWType,$Amount,$DWMemo);
 		
@@ -1093,7 +1143,7 @@ class InterfaceController extends CController
 
 
 	/**
-	 * 分享 TODO 分享积分
+	 * ·ÖÏí TODO ·ÖÏí»ý·Ö
 	 * @param  [type] $params [description]
 	 * @return [type]         [description]
 	 */
@@ -1115,7 +1165,7 @@ class InterfaceController extends CController
 		$this->_echoResponse($errno);
 	}
 
-	// 任务评价
+	// ÈÎÎñÆÀ¼Û
 	private function taskEvaluate($params){
 		$UserIDX = $params['UserIDX'];
 		$Task_IDX = $params['Task_IDX'];
@@ -1134,7 +1184,7 @@ class InterfaceController extends CController
 		$this->_echoResponse($errno);
 	}
 
-	// 按月查询用户已完成任务数
+	// °´ÔÂ²éÑ¯ÓÃ»§ÒÑÍê³ÉÈÎÎñÊý
 	public function queryUserTaskMonth($params){
 		$UserIDX = $params['UserIDX'];
 		$Query_Month = $params['Query_Month'];
@@ -1170,7 +1220,7 @@ class InterfaceController extends CController
 
 	}
 
-	// 按日查询用户任务列表
+	// °´ÈÕ²éÑ¯ÓÃ»§ÈÎÎñÁÐ±í
 	public function queryUserTaskDay($params){
 		$UserIDX = $params['UserIDX'];
 		$Query_Day = $params['Query_Day'];
@@ -1188,7 +1238,7 @@ class InterfaceController extends CController
 		
 	}
 
-	//获取微信授权URL
+	//»ñÈ¡Î¢ÐÅÊÚÈ¨URL
 	public function getWechatRedirectUrl($params){
 		$redirect_uri = "http://api.fumuwin.com/test/wxIndex?v=1";	//http%3A%2F%2Fapi.fumuwin.com%2Fsite%2FwxIndex%3Fv%3D1
 		$url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=".WxHelper::WX_APP_ID."&redirect_uri=". $redirect_uri ."&response_type=code&scope=snsapi_userinfo&state=2&connect_redirect=1#wechat_redirect";
@@ -1198,7 +1248,18 @@ class InterfaceController extends CController
 
 	}
 
-	//微信登录、注册 ，必须绑定系统手机账号
+	//Î¢ÐÅµÇÂ¼¡¢×¢²á £¬±ØÐë°ó¶¨ÏµÍ³ÊÖ»úÕËºÅ
+	public function getWeiboRedirectUrl($params){
+		$redirect_uri = "http://api.fumuwin.com/test/wbIndex";	//http%3A%2F%2Fapi.fumuwin.com%2Fsite%2FwxIndex%3Fv%3D1
+		// $url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=".WxHelper::WX_APP_ID."&redirect_uri=". $redirect_uri ."&response_type=code&scope=snsapi_userinfo&state=2&connect_redirect=1#wechat_redirect";
+		$url = 'https://api.weibo.com/oauth2/authorize?client_id=1465627348&response_type=code&redirect_uri='. $redirect_uri .'';
+		$data = array('url'=>$url);
+		$errno = 1 ;
+		$this->_echoResponse($errno,'',$data);
+
+	}
+
+	//ÃŽÂ¢ÃÃ…ÂµÃ‡Ã‚Â¼Â¡Â¢Ã—Â¢Â²Ã¡ Â£Â¬Â±Ã˜ÃÃ«Â°Ã³Â¶Â¨ÃÂµÃÂ³ÃŠÃ–Â»ÃºÃ•Ã‹ÂºÃ…
 	public function actionWechatBind(){
 		$code			=	Yii::app()->request->getParam('code',"");
 		$wxUser=WxHelper::getOpenId($code);
@@ -1224,8 +1285,8 @@ class InterfaceController extends CController
 		$this->_echoResponse($errno);
 
 	}
-	//微博登录，绑定系统手机账号,保存session
-	public function wbLogin(){
+	//Î¢²©µÇÂ¼£¬°ó¶¨ÏµÍ³ÊÖ»úÕËºÅ,±£´æsession
+	public function actionWbBind(){
 		$code			=	Yii::app()->request->getParam('code',"");
 
 		$wbUser=WbHelper::getOpenId($code);
@@ -1251,12 +1312,12 @@ class InterfaceController extends CController
 
 	}
 
-	//微信获取Tolen
+	//Î¢ÐÅ»ñÈ¡Tolen
 	public function wechatToken($params){
 
 	}
 
-	//微信签名
+	//Î¢ÐÅÇ©Ãû
 	public function wechatSign($params){
 		$url =	Yii::app()->request->getParam('url',"");
 		
@@ -1266,13 +1327,13 @@ class InterfaceController extends CController
 	}
 
 
-	// 上传图片
+	// ÉÏ´«Í¼Æ¬
 	public function actionUploadFile(){
 		if(isset($_FILES) && is_array($_FILES) && count($_FILES)>0){
 			foreach ($_FILES as $uploadedFile){
 				if(empty($uploadedFile["name"])==false){
 					$appConfig=LunaConfigMagt::getInstance()->getAppConfig();
-					var_dump($appConfig);die();
+					// var_dump($appConfig);die();
 					$imgName=CGuidManager::GetFullGuid().".jpg";
 					$img_path=$appConfig["UploadImage_Root"]."/".$imgName;
 					if(copy($uploadedFile["tmp_name"],$img_path)){
