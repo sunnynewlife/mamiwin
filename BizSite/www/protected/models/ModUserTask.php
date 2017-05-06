@@ -43,6 +43,43 @@ class ModUserTask {
 	}
 
 	/**
+	 * 按轮次查询用户任务
+	 * @param  [type]  $UserIDX   [description]
+	 * @param  integer $Task_Type [description]
+	 * @param  integer $Turn      [description]
+	 * @param  integer $page_size [description]
+	 * @param  integer $offSet    [description]
+	 * @return [type]             [description]
+	 */
+	public function getUserTaskListByTrun($UserIDX,$Task_Type = 0 ,$Turn = 0  ,$page_size = 10 ,$offSet = 0){
+		$page_size = (is_null($page_size)) ? 10 : $page_size;
+		$offSet = (is_null($offSet)) ? 0 : $offSet;
+			
+		$params=array();
+		$sql=" SELECT a.*,b.Task_Type,b.Task_Title,b.Min_Time,b.Max_Time from User_Tasks a,Task_Material b where  a.Task_IDX = b.IDX and  a.UserIDX = ? ";
+		$params[] = $UserIDX;			
+		if(!empty($Task_Type) ){
+			$sql .= " AND b.Task_Type = ? ";
+			$params[] = $Task_Type;			
+		}
+		if(!empty($Turn) ){
+			$sql .= " AND Turn = ? ";
+			$params[] = $Turn;			
+		}else{
+			// 默认按最大一轮次查询
+			$sql .= " AND Turn = (select Turn FROM User_Tasks where UserIDX = ? order by Turn desc limit 1 ) " ;
+			$params[] = $UserIDX;	
+		}
+		$sql .= " order by a.IDX asc " ;
+		$sql .= " limit $offSet,$page_size " ; 
+		$list=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
+		if(isset($list) && is_array($list) && count($list)>0){
+			return $list;
+		}
+		return array();
+	}
+
+	/**
 	 * 查询用户任务详情
 	 * @param  [type] $UserIDX  [description]
 	 * @param  [type] $Task_IDX [description]
@@ -90,10 +127,18 @@ class ModUserTask {
 		return LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params);
 	}
 
-	//随机分配任务给用户,具体业务逻辑待定TODO
-	public function generateUserTaskRandom($UserIDX,$Task_Type){
-		$sql = " INSERT INTO User_Tasks(UserIDX,Task_IDX) SELECT ?,IDX FROM Task_Material WHERE IDX not in (SELECT Task_IDX FROM User_Tasks)  ";
-		$params = array($UserIDX);
+	//随机分配任务给用户,具体业务逻辑待定 
+	// 如果当天有任务，不管是什么 任务的，当天都不再分配任务了
+	public function generateUserTaskRandom($UserIDX,$Task_Type,$Turn){
+		$sql_query = " SELECT * FROM User_Tasks where UserIDX = ? AND TO_DAYS(Assign_Date) = TO_DAYS(NOW()) " ; 
+		$params_query = array($UserIDX);
+		$list = LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql_query,$params_query,PDO::FETCH_ASSOC);
+		if(isset($list) && is_array($list) && count($list)>0){
+			return 0;
+		}
+
+		$sql = " INSERT INTO User_Tasks(UserIDX,Task_IDX,Turn) SELECT ?,IDX,? FROM Task_Material WHERE IDX not in (SELECT Task_IDX FROM User_Tasks)  ";
+		$params = array($UserIDX,$Turn);
 		if(empty($Task_Type) == false){
 			$sql .= " AND Task_Type = ? " ; 
 			$params[] = $Task_Type;

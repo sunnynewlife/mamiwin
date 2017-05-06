@@ -405,7 +405,7 @@ class InterfaceController extends CController
 		}
 
 		$hostname = php_uname('n'); //本地环境，免登录
-		if(in_array($hostname, array("ADMIN-PC","SUNNY-PC"))){
+		if(in_array($hostname, array("ADMIN-PC","SUNNY-PC","DESKTOP-D4K54MD"))){
 			$UserIDX =  2 ; 
 			$body = array_merge(array(
 				'LoginName'=>'15900828187',
@@ -561,29 +561,56 @@ class InterfaceController extends CController
 		$this->_echoResponse($errno,'',$ret); 
 	}
 
-	//查询用户任务列表，如果没有任务，则自动分配任务给用户
+	//查询用户任务列表，
+	//如果没有任务，则自动分配任务给用户
+	//如果所有的的任务都做完了，则自动分配任务给用户
 	private function getUserTaskList($params){
 		$UserIDX = $params['UserIDX'];
 		$Task_Type = isset($params['Task_Type']) ? $params['Task_Type'] : 0 ;
 		$mod = new ModUserTask();
-		$ret = $mod->getUserTaskList($UserIDX,$Task_Type);
+		$ret = $mod->getUserTaskListByTrun($UserIDX,$Task_Type);
 		if($ret === false){			
 			$errno = ConfTask::ERROR_QUEYR_USER_TASK_LIST ;
 			$this->_echoResponse($errno,'',$ret);
 			return;
 		}
+		// 没有任务，自动分配任务
 		if(empty($ret)){
-			$ret_user_task = $mod->generateUserTaskRandom($UserIDX,$Task_Type);
-		}
-		$ret = $mod->getUserTaskList($UserIDX,$Task_Type);
-		if($ret === false){			
-			$errno = ConfTask::ERROR_QUEYR_USER_TASK_LIST ;
-			$this->_echoResponse($errno,'',$ret);
-			return;
-		}
+			$Turn = 1 ;
+			$ret_user_task = $mod->generateUserTaskRandom($UserIDX,$Task_Type,$Turn + 1);
+		
+			$ret = $mod->getUserTaskListByTrun($UserIDX,$Task_Type,$Turn);
+			if($ret === false){			
+				$errno = ConfTask::ERROR_QUEYR_USER_TASK_LIST ;
+				$this->_echoResponse($errno,'',$ret);
+				return;
+			}
 
+		}
+		
+		$is_all_task_finished = true;
+		if(empty($ret) == false){
+			foreach ($ret as $key => $value) {
+				$Finish_Status = $value['Finish_Status'];
+				$Turn = $value['Turn'];
+				if($Finish_Status != DictionaryData::User_Task_Status_Finish){
+					$is_all_task_finished = false;
+				}
+			}
+			// 所有任务都已经完成，再分配新的任务
+			if(($is_all_task_finished)){				
+				$Next_Turn  = $Turn + 1 ;			
+				$ret_user_task = $mod->generateUserTaskRandom($UserIDX,$Task_Type,$Next_Turn);				
+				$ret = $mod->getUserTaskListByTrun($UserIDX,$Task_Type,$Next_Turn);
+			}
+		}
+		// 如果最终什么也没有查到，返回用户最后一轮次的任务列表 
+		if(empty($ret)){
+			$ret = $mod->getUserTaskListByTrun($UserIDX,$Task_Type,$Turn);
+		}
 		$errno = 1 ;
 		$this->_echoResponse($errno,'',$ret); 
+		
 	}
 
 	//开始任务

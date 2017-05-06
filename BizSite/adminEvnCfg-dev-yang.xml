@@ -41,7 +41,7 @@
 			<array key="appender">
 				<string key="persist" value="lib.log.YIILogerPersist" />
 				<array key="param">
-					<string key="dir" value="/logs/api.fumuwin.com" />
+					<string key="dir" value="/opt/logs/api.fumuwin.com" />
 				</array>
 			</array>
 		</array>
