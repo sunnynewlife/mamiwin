@@ -38,10 +38,17 @@ Class CommonHelper{
      * @return [type]            [description]
      */
     public static function getDateDiff($date1,$date2,$diff_type = 'd'){
-        if(self::isdate($date1) == false || self::isdate($date2) == false){
-            return false;
-        }
         $diff_divider = 24 * 60 * 60  ;  //时间间隔默认为天
+        // if(is_int($date1) && is_int($date2)) {
+        //     $d1 = $date1;
+        //     $d2 = $date2;
+        // }else{
+        //     if(self::isdate($date1) == false || self::isdate($date2) == false){
+        //         return false;
+        //     }
+        // }
+            
+        
         $d1 = strtotime($date1);
         $d2 = strtotime($date2);
 
@@ -69,7 +76,7 @@ Class CommonHelper{
                 # code...
                 break;
         }
-        return $diff / $diff_divider ; 
+        return ceil($diff / $diff_divider) ; 
 
     }
 

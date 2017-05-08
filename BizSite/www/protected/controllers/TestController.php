@@ -6,7 +6,7 @@ LunaLoader::import("luna_lib.util.LunaUtil");
 LunaLoader::import("luna_lib.log.LunaLogger");
 
 
-class SiteController extends CController 
+class TestController extends CController 
 {
 	public  $layout	="main_h5";
     
@@ -96,7 +96,7 @@ class SiteController extends CController
 		$this->layout="test_page_list";
 		$this->render("test_page_wxlogin",$data);
 	}
-	public function actionWbLogin()
+	public function actionWbIndex()
 	{
 		$data=array(
 				"code"		=>	Yii::app()->request->getParam('code',""),

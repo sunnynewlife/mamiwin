@@ -55,6 +55,7 @@ class ConfTask {
 	const ERROR_USER_PASSWORD_RESET		= -901000011;
 	const ERROR_WECHAT_CODE				= -902000001;
 	const ERROR_THIRD_USER_REGIST		= -902000002;
+	const ERROR_WEIBO_CODE				= -902000003;
 
 
 
@@ -108,6 +109,7 @@ class ConfTask {
 		self::ERROR_USER_PHONE_REGIST		=>	"手机号未注册" ,
 		self::ERROR_USER_PASSWORD_RESET		=>	"密码重设失败" ,
 		self::ERROR_WECHAT_CODE				=>	"微信CODE不正确" ,
+		self::ERROR_WEIBO_CODE				=>	"微博CODE不正确" ,
 		self::ERROR_THIRD_USER_REGIST		=>	"记录第3方账号出错" ,
 
 

@@ -12,19 +12,44 @@
 			<string key="Material_Root" value="/Xulong/homework/mamiwin/BizSite/www/static/material"  />
 	</array>
 	<array key="LunaSection" name="LUNA SDK 配置">
+		<array key="CodeVerify">
+			<string key="expire_seconds" value="300" />
+			<string key="code_lenth" value="4"	/>
+			<string key="enable_logger" value="true" />
+			<string key="max_sms_verify_counts"	value="10" />
+			<string key="max_img_verify_counts" value="1" />
+			
+			<array key="ImgParameters">
+				<string key="code_charset" value="0123456789" />
+				<string key="width"	value="160" />
+				<string key="height" value="50" />
+				<string key="regenerate_showing" value="true" />
+				<string key="drawing_method" value="0" name="使用的绘制图片的实现者" />
+				<array key="DrawImgImplementers">
+					<array key="0">
+						<string key="className"	value="luna_lib.verify.LunaImgElephant" />
+					</array>
+				</array>
+			</array>
+			<array key="SmsParameters">
+				<string key="code_charset" value="1234567890" />
+				<string key="senderClassName"  value="SMSSender" />
+				<string key="skip_sms_send" value="false" />
+			</array>
+		</array>
 		<array key="Logger" name="logger 配置">
 			<string key="level" value="all" name="logger Level 值:info,notice,warning,debug,error,fatal,none,all" />
 			<string key="enableColorLog" value="false" />
-			<string key="logSiteId" value="local.api.fumuwin.com" />
+			<string key="logSiteId" value="dd.f.sdo.com" />
 			<array key="appender">
-				<string key="persist" value="lib.log.YIILogerDbPersist" />
+				<string key="persist" value="lib.log.YIILogerPersist" />
 				<array key="param">
+<<<<<<< .mine
+					<string key="dir" value="/opt/logs/api.fumuwin.com" />					
+=======
 					<string key="db_dir" value="/logs/api.fumuwin.com" />
-					<string key="dir" value="/logs/api.fumuwin.com" />
-					
-					<string key="db_name" value="lunalog" name="日志库名"	/>
-					<string key="persist_type" value="file" name="file/udp" />
-					<string key="non_db" value="file" name="file/udp" />					
+>>>>>>> .theirs
+					<string key="dir" value="/logs/api.fumuwin.com" />				
 				</array>
 			</array>
 		</array>
@@ -42,8 +67,8 @@
 		<array key="Pdo" name="PDO MySQL 数据库访问配置">
 			<array key="global" name="全局配置">
 				<string key="dsn" value="mysql:host=127.0.0.1;port=3306;dbname=magtadmin" />
-				<string key="user" value="neil" />
-				<string key="pass" value="homework123" />
+				<string key="user" value="root" />
+				<string key="pass" value="qweasd" />
 			</array>
 			<array key="special" name="特殊类重载配置">
 				<array key="Admin" name="Admin用户和菜单管理">

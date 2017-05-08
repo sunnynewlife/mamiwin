@@ -18,7 +18,8 @@ class WbHelper
 					"client_id"			=>	WbHelper::WB_APP_ID,
 					"client_secret"		=>	WbHelper::WB_SECRET,
 					"grant_type"		=>	"authorization_code",
-					"redirect_uri"		=>	"http://api.fumuwin.com/site/wbLogin",
+					// "redirect_uri"		=>	"http://api.fumuwin.com/site/wbLogin",
+					"redirect_uri"		=>	"http://api.fumuwin.com/test/wbIndex",
 			);
 			$data=$http->submit($params);
 			if($data && is_array($data) && isset($data["uid"]) && empty($data["uid"])==false){
