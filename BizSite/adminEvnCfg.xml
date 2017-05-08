@@ -141,7 +141,10 @@
 					<array key="UserInfo" name="Userinfo">
 						<string key="url" value="2/users/show.json" />
 						<string key="method" value="GET" />
-					</array>					
+					</array>
+					<array key="Share" name="Share">
+						<string key="url" value="2/statuses/update.json" />
+					</array>										
 				</array>
 			</array>		
 		</array>

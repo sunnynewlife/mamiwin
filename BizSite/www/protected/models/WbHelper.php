@@ -3,6 +3,7 @@ LunaLoader::import("luna_lib.http.HttpInterface");
 LunaLoader::import("luna_lib.util.CGuidManager");
 LunaLoader::import("luna_lib.util.LunaMemcache");
 LunaLoader::import("luna_lib.log.LunaLogger");
+LunaLoader::import("luna_lib.util.LunaWebUtil");
 
 class WbHelper
 {
@@ -18,8 +19,8 @@ class WbHelper
 					"client_id"			=>	WbHelper::WB_APP_ID,
 					"client_secret"		=>	WbHelper::WB_SECRET,
 					"grant_type"		=>	"authorization_code",
-					// "redirect_uri"		=>	"http://api.fumuwin.com/site/wbLogin",
-					"redirect_uri"		=>	"http://api.fumuwin.com/test/wbIndex",
+					"redirect_uri"		=>	"http://api.fumuwin.com/site/wbLogin",
+					//"redirect_uri"		=>	"http://api.fumuwin.com/test/wbIndex",
 			);
 			$data=$http->submit($params);
 			if($data && is_array($data) && isset($data["uid"]) && empty($data["uid"])==false){
@@ -58,5 +59,27 @@ class WbHelper
 			}
 		}
 		return array();
+	}
+	public static function share($uid,$shareText,$sharePictureFileName)
+	{
+		$cacheCfgNodeName="Weibo";
+		$cacheKey=$uid."_Wb_AccessToken";
+		$accessToken =LunaMemcache::GetInstance($cacheCfgNodeName)->read($cacheKey);
+		LunaLogger::getInstance()->info($cacheKey);
+		LunaLogger::getInstance()->info($accessToken);
+		
+		if(isset($accessToken) &&  $accessToken!=false && empty($accessToken)==false ){
+			$http=new HttpInterface("WeiBo","Share");
+			$params=array(
+					"access_token"		=>	$accessToken,
+					"status"			=>	$shareText,
+					"rip"				=>	LunaWebUtil::getClientIp(),
+					"visible"			=>	"0",
+			);
+			$data=$http->submit($params);
+			if(isset($data) && is_array($data)){
+				return $data;
+			}
+		}
 	}
 }

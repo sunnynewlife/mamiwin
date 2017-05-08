@@ -239,5 +239,25 @@ class UserController extends CController
 				"AcctSource"	=>		BizDataDictionary::User_AcctSource_Sina_Wb,
 				"OpenUserInfo"	=>		$userInfo[0]["OpenUserInfo"],
 		));
+	}
+	public function actionWbShare()
+	{
+		$share_content			=	Yii::app()->request->getParam('share_content',"");
+		if(empty($share_content)){
+			return $this->_response(-99,"参数错误");
+		}
+		$userInfo=Yii::app()->session[$this->_USER_SESSION_KEY];
+		if(isset($userInfo) && isset($userInfo["AcctSource"]) && $userInfo["AcctSource"]== BizDataDictionary::User_AcctSource_Sina_Wb){
+			$wbShare=WbHelper::share($userInfo["OpenId"], $share_content, "");
+			if(isset($wbShare) && is_array($wbShare) && isset($wbShare["id"]) && $wbShare["id"]>0){
+				return $this->_response(0,"success",array(
+					"id"		=>		$wbShare["id"],
+				));
+			}else{
+				return $this->_response(-2,"分享到微博调用接口失败");
+			}
+		}else{
+			return $this->_response(-1,"非微博用户登录不能分享到微博");
+		}
 	}	
 }

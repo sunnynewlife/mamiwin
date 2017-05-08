@@ -11,6 +11,9 @@
 		<div class="f_b">
 			<a id="GetUserInfoBtn" href="#" class="btn" onclick="javascript:showUser();" style="display:none;">查看登录用户信息</a>
 		</div>
+		<div class="f_b">
+			<a id="ShareBtn" href="#" class="btn" onclick="javascript:showShare();" style="display:none;">分享到微博 </a>
+		</div>		
 		<div class="f_box">		
 			<div class="f_item">
 					<input id="txtOpenId" type="text" placeholder="OpenId">
@@ -47,6 +50,7 @@ function login()
           		$("#txtOpenId").val(loginInfo.LoginName);
           		$("#txtNickName").val(loginInfo.OpenUserInfo.screen_name);
           		$("#btnUserImg").attr("src",loginInfo.OpenUserInfo.avatar_large);
+          		$("#ShareBtn").show();
       		}else{
           		alert(data.message);
       		}
@@ -70,5 +74,25 @@ function showUser()
         		}           
          }
      });	
+}
+function showShare()
+{
+	 $.ajax({
+         async:false,
+         url: "http://api.fumuwin.com/user/wbShare",
+         type: "GET",
+         dataType: 'jsonp',
+         jsonp: "callback",
+         data: { 
+             	"share_content":"这是我在测试微博分享。。。",
+         },
+         success: function (data) {
+      		if(data.code==0){
+          		alert("微博分享成功");
+      		}else{
+          		alert(data.message);
+      		}
+         }
+     });
 }
 </script>
