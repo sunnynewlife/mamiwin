@@ -1326,7 +1326,9 @@ class InterfaceController extends CController
 		if(!empty($ret_user_info)){
 			Yii::app()->session[$this->_USER_SESSION_KEY]=$ret_user_info;	
 			$errno = 1 ;
-			$this->_echoResponse($errno);
+			$url = 'http://m.fumuwin.com/';
+			$data = array('url'=>$url);
+			$this->_echoResponse($errno,'',$data);
 			return ;		
 		}
 
@@ -1337,7 +1339,9 @@ class InterfaceController extends CController
 			if(empty($third_UserInfo["OpenId"])){		
 				$ret_user_info = $mod_user_info->bindThirdUserInfo($UserIDX,$third_UserInfo['OpenId'],$acctSource);
 				$errno = 1 ;
-				$this->_echoResponse($errno);
+				$url = 'http://m.fumuwin.com/';
+				$data = array('url'=>$url);
+				$this->_echoResponse($errno,'',$data);
 				return ;
 			}
 		}
