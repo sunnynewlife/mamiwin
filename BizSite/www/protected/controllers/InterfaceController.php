@@ -1286,7 +1286,7 @@ class InterfaceController extends CController
 
 	//微信登录、注册 ，必须绑定系统手机账号
 	public function getWeiboRedirectUrl($params){
-		$redirect_uri = "http://api.fumuwin.com/test/wbIndex";	//http%3A%2F%2Fapi.fumuwin.com%2Fsite%2FwxIndex%3Fv%3D1
+		$redirect_uri = "http://api.fumuwin.com/site/wbLogin";	//http%3A%2F%2Fapi.fumuwin.com%2Fsite%2FwxIndex%3Fv%3D1
 		// $url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=".WxHelper::WX_APP_ID."&redirect_uri=". $redirect_uri ."&response_type=code&scope=snsapi_userinfo&state=2&connect_redirect=1#wechat_redirect";
 		$url = 'https://api.weibo.com/oauth2/authorize?client_id=1465627348&response_type=code&redirect_uri='. $redirect_uri .'';
 		$data = array('url'=>$url);
@@ -1333,11 +1333,11 @@ class InterfaceController extends CController
 		}
 		$third_UserInfo = array();
 		$third_UserInfo["AcctSource"]	=	BizDataDictionary::User_AcctSource_Sina_Wb;
-		$third_UserInfo["OpenId"]	=	$wbUser["openid"] ;
+		$third_UserInfo["OpenId"]	=	$wbUser["uid"] ;
 		$third_UserInfo["OpenUserInfo"]=  WbHelper::getOpenIdUserInfo($wbUser["uid"]);
 
 		$mod_user_info = new ModUserInfo();
-		$ret_user_info = $mod_user_info->getUserInfoByOpenId($wbUser["openid"],BizDataDictionary::User_AcctSource_Sina_Wb);
+		$ret_user_info = $mod_user_info->getUserInfoByOpenId($wbUser["uid"],BizDataDictionary::User_AcctSource_Sina_Wb);
 		if(!empty($ret_user_info)){
 			Yii::app()->session[$this->_USER_SESSION_KEY]=$ret_user_info;
 		}

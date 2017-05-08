@@ -102,6 +102,7 @@ class SiteController extends CController
 				"code"		=>	Yii::app()->request->getParam('code',""),
 		);
 		$this->layout="test_page_list";
-		$this->render("test_page_wblogin",$data);
+		$this->render("test_page_wblogin",$data);		//测试
+		// $this->render("test_page_wbbind",$data);		//绑定
 	}	
 }

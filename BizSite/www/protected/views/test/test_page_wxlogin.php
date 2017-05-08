@@ -17,7 +17,7 @@ $(document).ready(
              },
              success: function (data) {
           		if(data.code==1){
-              		// alert("绑定成功");
+              		alert("绑定成功");
                     window.location.href="http://m.fumuwin.com" ;
               		// $("#JLoginBtn").hide();
               		// $("#GetUserInfoBtn").show();
@@ -30,6 +30,7 @@ $(document).ready(
               		// }
           		}else{
               		alert(data.message);
+                    window.location.href="http://m.fumuwin.com" ;
           		}
              }
          });
