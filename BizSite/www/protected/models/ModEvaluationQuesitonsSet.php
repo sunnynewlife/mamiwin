@@ -62,6 +62,25 @@ class ModEvaluationQuesitonsSet {
 		return array();
 	}
 
+	/**
+	 * 查询题集列表，及用户答题情况
+	 * @param  [type] $UserIDX [description]
+	 * @return [type]          [description]
+	 */
+	public  function getUserEvaluationQuesitonsSetList($UserIDX){
+		
+		$params=array();
+		$sql =" SELECT * FROM Evaluation_Questions_Set a LEFT JOIN (SELECT DISTINCT Question_Set_IDX,COUNT(Question_IDX)  AS Counts FROM User_Evaluation_Questions WHERE UserIDX = ?  GROUP BY Question_Set_IDX) b 
+ON a.IDX = b.Question_Set_IDX  ";
+		$params[] = $UserIDX; 
+		$sql .= " order by IDX asc ;" ;
+		
+		$list=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
+		if(isset($list) && is_array($list) && count($list)>0){
+			return $list;
+		}
+		return array();
+	}
 
 	
 

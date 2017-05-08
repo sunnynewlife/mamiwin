@@ -43,17 +43,17 @@ class ModUserInfo {
 	 */
 	public function bindThirdUserInfo($UserIDX,$openId,$acctSource)
 	{
-		$sql = "UPDATE User_Info SET AcctSource = ?  ";	
-		$params=array($acctSource);
+		$sql = "UPDATE User_Info SET   ";	
+		$params=array();
 		if($acctSource == BizDataDictionary::User_AcctSource_Tencent_Wx){
-			$sql .= " OpenId = ? , OpenId_Wechat = ? , " ;
+			$sql .= " OpenId = ? , OpenId_Wechat = ?  " ;
 			$params = array_merge($params,array($openId,$openId));
 		}else if($acctSource == BizDataDictionary::User_AcctSource_Sina_Wb){
-			$sql .= " OpenId = ? , OpenId_Weibo = ? , " ;
+			$sql .= " OpenId = ? , OpenId_Weibo = ?  " ;
 			$params = array_merge($params,array($openId,$openId));
 		}
-		$sql .= " ,Update_Time = NOW()  WHERE UserIDX = ?" ;
-		$params = array_merge($params,array($openId,$openId));
+		$sql .= " ,Update_Time = NOW()  WHERE IDX = ?" ;
+		$params = array_merge($params,array($UserIDX));
 		return (LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params)>0);		
 	}
 
@@ -61,8 +61,8 @@ class ModUserInfo {
 	//根据第三方账号查询用户信息
 	public function	getUserInfoByOpenId($OpenId,$acctSource)
 	{
-		$sql="select * from User_Info where  AcctSource=? ";
-		$params=array($acctSource);
+		$sql="select * from User_Info where  1 = 1  ";
+		$params=array();
 		if($acctSource == BizDataDictionary::User_AcctSource_Tencent_Wx){
 			$sql .= " AND OpenId_Wechat = ?  " ;
 			$params = array_merge($params,array($OpenId));

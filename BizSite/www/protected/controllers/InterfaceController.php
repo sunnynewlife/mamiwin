@@ -657,7 +657,7 @@ class InterfaceController extends CController
 	}
 
 	/**
-	 * 查询所有的评测题集
+	 * 查询所有的评测题集，如果用户登录，返回用户评测题是否已经做过的状态
 	 * @param  [type] $params [description]
 	 * @return [type]         [description]
 	 */
@@ -674,7 +674,15 @@ class InterfaceController extends CController
 		$Question_Set_IDX 	= isset($params['Question_Set_IDX']) ? $params['Question_Set_IDX'] : '';
 
 		$mod = new ModEvaluationQuesitonsSet();
-		$ret = $mod->getEvaluationQuesitonsSetList();
+		// $ret = $mod->getEvaluationQuesitonsSetList();
+		$UserIDX = isset($params['UserIDX']) ? $params['UserIDX'] : 0 ;
+		$ret = $mod->getUserEvaluationQuesitonsSetList($UserIDX);
+		if(!empty($ret)){
+			foreach ($ret as $key => &$value) {
+				$value['Counts'] = (empty($value['Counts'])) ? 0 : $value['Counts'];
+				$value['Question_Set_IDX'] = (!empty($value['Question_Set_IDX'])) ? $value['Question_Set_IDX'] : $value['IDX'];
+			}
+		}
 		$errno = 1 ;
 		$this->_echoResponse($errno,'',$ret);
 	}
@@ -824,23 +832,24 @@ class InterfaceController extends CController
 			$this->_echoResponse($errno);
 			return;
 		}
+		$UserIDX = $userInfo[0]['IDX'];
 		//登录成功后，判断session中是否有第三方OpenId，且与用户账号是否已经绑定，否则绑定第三方账号
-		// $third_UserInfo = Yii::app()->session[$this->_OPENID_SESSION_KEY] ; 
-		// if(empty($third_UserInfo) == false){
-		// 	$acctSource = $third_UserInfo['AcctSource'];
-		// 	if($acctSource == BizDataDictionary::User_AcctSource_Tencent_Wx){
-		// 		if(empty($userInfo[0]['OpenId_Wechat']) && !empty($third_UserInfo['OpenId'])){
-		// 			$mod_user_info = new ModUserInfo();
-		// 			$ret_user_info = $mod_user_info->bindThirdUserInfo($UserIDX,$third_UserInfo['OpenId'],$acctSource);
-		// 		}
-		// 	}
-		// 	if($acctSource == BizDataDictionary::User_AcctSource_Sina_Wb){
-		// 		if(empty($userInfo[0]['OpenId_Weibo']) && !empty($third_UserInfo['OpenId'])){
-		// 			$mod_user_info = new ModUserInfo();
-		// 			$ret_user_info = $mod_user_info->bindThirdUserInfo($UserIDX,$third_UserInfo['OpenId'],$acctSource);
-		// 		}
-		// 	}
-		// }
+		$third_UserInfo = Yii::app()->session[$this->_OPENID_SESSION_KEY] ; 
+		if(empty($third_UserInfo) == false){
+			$acctSource = $third_UserInfo['AcctSource'];
+			if($acctSource == BizDataDictionary::User_AcctSource_Tencent_Wx){
+				if(empty($userInfo[0]['OpenId_Wechat']) && !empty($third_UserInfo['OpenId'])){
+					$mod_user_info = new ModUserInfo();
+					$ret_user_info = $mod_user_info->bindThirdUserInfo($UserIDX,$third_UserInfo['OpenId'],$acctSource);
+				}
+			}
+			if($acctSource == BizDataDictionary::User_AcctSource_Sina_Wb){
+				if(empty($userInfo[0]['OpenId_Weibo']) && !empty($third_UserInfo['OpenId'])){
+					$mod_user_info = new ModUserInfo();
+					$ret_user_info = $mod_user_info->bindThirdUserInfo($UserIDX,$third_UserInfo['OpenId'],$acctSource);
+				}
+			}
+		}
 			
 		// $session_code_key="user";
 		Yii::app()->session[$this->_USER_SESSION_KEY]=$userInfo;
