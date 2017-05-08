@@ -678,9 +678,12 @@ class InterfaceController extends CController
 		$UserIDX = isset($params['UserIDX']) ? $params['UserIDX'] : 0 ;
 		$ret = $mod->getUserEvaluationQuesitonsSetList($UserIDX);
 		if(!empty($ret)){
+			$mod_question = new ModEvaluationQuesitons();
 			foreach ($ret as $key => &$value) {
-				$value['Counts'] = (empty($value['Counts'])) ? 0 : $value['Counts'];
-				$value['Question_Set_IDX'] = (!empty($value['Question_Set_IDX'])) ? $value['Question_Set_IDX'] : $value['IDX'];
+				$Set_IDX = $value['IDX'];
+				$value['Set_Qty'] = count($mod_question->getEvaluationQuesitonsList($Set_IDX,0,9999));
+				$value['Counts'] = (empty($value['Counts'])) ? 0 : intval($value['Counts']);
+				$value['Question_Set_IDX'] = (!empty($value['Question_Set_IDX'])) ? $value['Question_Set_IDX'] : $value['IDX'];				 
 			}
 		}
 		$errno = 1 ;
@@ -1093,6 +1096,11 @@ class InterfaceController extends CController
 		unset($ret['Option_F']);
 		$ret['Unfinish_Qty'] = $Unfinish_Qty;
 		$ret['Option_List'] = $Option_List;
+
+
+		$mod_question = new ModEvaluationQuesitons();
+		$ret['Set_Qty'] = count($mod_question->getEvaluationQuesitonsList($Question_Set_IDX,0,9999));
+
 		$errno = 1 ;
 		$this->_echoResponse($errno,'',$ret); 
 
@@ -1304,21 +1312,39 @@ class InterfaceController extends CController
 			$this->_echoResponse($errno);
 			return;
 		}
-		
+		$acctSource		  = BizDataDictionary::User_AcctSource_Tencent_Wx;
 		$third_UserInfo = array();
-		$third_UserInfo["AcctSource"]	=	BizDataDictionary::User_AcctSource_Tencent_Wx;
+		$third_UserInfo["AcctSource"]	=	$acctSource;
 		$third_UserInfo["OpenId"]	=	$wxUser["openid"] ;
 		$third_UserInfo["OpenUserInfo"]=  WxHelper::getOpenIdUserInfo($wxUser["openid"]);
 
+		Yii::app()->session[$this->_OPENID_SESSION_KEY]=$third_UserInfo;
+
 		$mod_user_info = new ModUserInfo();
+
 		$ret_user_info = $mod_user_info->getUserInfoByOpenId($wxUser["openid"],BizDataDictionary::User_AcctSource_Tencent_Wx);
 		if(!empty($ret_user_info)){
-			Yii::app()->session[$this->_USER_SESSION_KEY]=$ret_user_info;
+			Yii::app()->session[$this->_USER_SESSION_KEY]=$ret_user_info;	
+			$errno = 1 ;
+			$this->_echoResponse($errno);
+			return ;		
 		}
 
-		Yii::app()->session[$this->_OPENID_SESSION_KEY]=$third_UserInfo;
+		$userInfo=Yii::app()->session[$this->_USER_SESSION_KEY];
+		if(isset($userInfo)){
+			$LoginName = $userInfo[0]["LoginName"];
+			$UserIDX = $userInfo[0]["IDX"];			
+			if(empty($third_UserInfo["OpenId"])){		
+				$ret_user_info = $mod_user_info->bindThirdUserInfo($UserIDX,$third_UserInfo['OpenId'],$acctSource);
+				$errno = 1 ;
+				$this->_echoResponse($errno);
+				return ;
+			}
+		}
+		$url = 'http://m.fumuwin.com/#/signup?bind=weixin';
+		$data = array('url'=>$url);
 		$errno = 1 ;
-		$this->_echoResponse($errno);
+		$this->_echoResponse($errno,'',$data);
 
 	}
 	//微博绑定
