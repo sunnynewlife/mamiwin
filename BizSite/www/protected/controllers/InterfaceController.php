@@ -1438,7 +1438,7 @@ class InterfaceController extends CController
 			}
 		}	
 		$errno = ConfTask::ERROR_FILE_UPLOAD ;
-		$this->_echoResponse($errno,'',$ret);
+		$this->_echoResponse($errno);
 		return;
 	}
 
