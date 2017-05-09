@@ -1296,7 +1296,7 @@ class InterfaceController extends CController
 	public function getWeiboRedirectUrl($params){
 		$redirect_uri = "http://api.fumuwin.com/site/wbLogin";	//http%3A%2F%2Fapi.fumuwin.com%2Fsite%2FwxIndex%3Fv%3D1
 		// $url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=".WxHelper::WX_APP_ID."&redirect_uri=". $redirect_uri ."&response_type=code&scope=snsapi_userinfo&state=2&connect_redirect=1#wechat_redirect";
-		$url = 'https://api.weibo.com/oauth2/authorize?client_id=1465627348&response_type=code&redirect_uri='. $redirect_uri .'';
+		$url = 'https://api.weibo.com/oauth2/authorize?client_id='.WbHelper::WB_APP_ID.'&response_type=code&redirect_uri='. $redirect_uri .'';
 		$data = array('url'=>$url);
 		$errno = 1 ;
 		$this->_echoResponse($errno,'',$data);
@@ -1345,7 +1345,7 @@ class InterfaceController extends CController
 				return ;
 			}
 		}
-		$url = 'http://m.fumuwin.com/#/signup?bind=weixin';
+		$url = ('http://m.fumuwin.com/#/signup?bind=weixin');
 		$data = array('url'=>$url);
 		$errno = 1 ;
 		$this->_echoResponse($errno,'',$data);
@@ -1357,24 +1357,45 @@ class InterfaceController extends CController
 
 		$wbUser=WbHelper::getOpenId($code);
 		if($wbUser==false){
-			$errno = ConfTask::ERROR_WECHAT_CODE ;
+			$errno = ConfTask::ERROR_WEIBO_CODE ;
 			$this->_echoResponse($errno);
 			return;
 		}
+		$acctSource		  = BizDataDictionary::User_AcctSource_Sina_Wb;
 		$third_UserInfo = array();
-		$third_UserInfo["AcctSource"]	=	BizDataDictionary::User_AcctSource_Sina_Wb;
+		$third_UserInfo["AcctSource"]	=	$acctSource ;
 		$third_UserInfo["OpenId"]	=	$wbUser["uid"] ;
 		$third_UserInfo["OpenUserInfo"]=  WbHelper::getOpenIdUserInfo($wbUser["uid"]);
+		Yii::app()->session[$this->_OPENID_SESSION_KEY]=$third_UserInfo;
 
 		$mod_user_info = new ModUserInfo();
 		$ret_user_info = $mod_user_info->getUserInfoByOpenId($wbUser["uid"],BizDataDictionary::User_AcctSource_Sina_Wb);
 		if(!empty($ret_user_info)){
-			Yii::app()->session[$this->_USER_SESSION_KEY]=$ret_user_info;
+			Yii::app()->session[$this->_USER_SESSION_KEY]=$ret_user_info;	
+			$errno = 1 ;
+			$url = 'http://m.fumuwin.com/';
+			$data = array('url'=>$url);
+			$this->_echoResponse($errno,'',$data);
+			return ;		
 		}
 
-		Yii::app()->session[$this->_OPENID_SESSION_KEY]=$third_UserInfo;
+		$userInfo=Yii::app()->session[$this->_USER_SESSION_KEY];
+		if(isset($userInfo)){
+			$LoginName = $userInfo[0]["LoginName"];
+			$UserIDX = $userInfo[0]["IDX"];			
+			if(empty($third_UserInfo["OpenId"])){		
+				$ret_user_info = $mod_user_info->bindThirdUserInfo($UserIDX,$third_UserInfo['OpenId'],$acctSource);
+				$errno = 1 ;
+				$url = 'http://m.fumuwin.com/';
+				$data = array('url'=>$url);
+				$this->_echoResponse($errno,'',$data);
+				return ;
+			}
+		}
+		$url = ('http://m.fumuwin.com/#/signup?bind=weixin');
+		$data = array('url'=>$url);
 		$errno = 1 ;
-		$this->_echoResponse($errno);
+		$this->_echoResponse($errno,'',$data);
 
 	}
 

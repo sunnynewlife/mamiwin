@@ -7,8 +7,8 @@ LunaLoader::import("luna_lib.util.LunaWebUtil");
 
 class WbHelper
 {
-	const WB_APP_ID="1465627348";
-	const WB_SECRET="bdd2e3f1786375282f71c96b1f24a158";
+	const WB_APP_ID="4211639457";							//"1465627348";
+	const WB_SECRET="1e2fbda10d4c7dfc23b989d07c003218";		//"bdd2e3f1786375282f71c96b1f24a158";
 	
 	public static function getOpenId($code)
 	{

@@ -17,9 +17,8 @@ $(document).ready(
              },
              success: function (data) {
           		if(data.code==1){
-              		// alert("绑定成功");
-                    var url = data.data.url;
-                    window.location.href= url  ;
+              		var url = data.data.url;
+                  window.location.href= url  ;
               		// $("#JLoginBtn").hide();
               		// $("#GetUserInfoBtn").show();
               		// $("#ShareBtn").show();

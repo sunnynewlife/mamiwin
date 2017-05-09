@@ -5,7 +5,7 @@ $(document).ready(
   {
   	 $.ajax({
            async:false,
-           url: "http://api.fumuwin.com/interface/wbBind",
+           url: "/interface/wbBind",
            type: "GET",
            dataType: 'jsonp',
            jsonp: "callback",
@@ -14,7 +14,8 @@ $(document).ready(
            },
            success: function (data) {
         		if(data.code==1){
-                window.location.href="http://m.fumuwin.com" ;
+                var url = data.data.url;
+                location.href= url  ;
             		// alert("登录成功");
             		// $("#JLoginBtn").hide();
             		// $("#GetUserInfoBtn").show();
