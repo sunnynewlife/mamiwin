@@ -66,8 +66,10 @@ class EvQuestionsController extends TableMagtController
 			if(empty($Question_Stems) || empty($Option_A) || empty($Option_B) || empty($Point_A) ) {
 				$this->alert('error',"请正确设置评测题及选项AB");
 			}else{
-				
-				if($EvQuestionData->insertEvQuestion($Question_Set_IDX,$Ability_Type_ID,$Question_Stems,$Option_A,$Option_B,$Option_C,$Option_D,$Option_E,$Option_F,$Point_A,$Point_B,$Point_C,$Point_D,$Point_E,$Point_F,0)){
+				//查询当前题集已有题目数
+				$Question_List = $EvQuestionData->getEvQuestionList($Question_Set_IDX);
+				$Order_Index = (count($Question_List) + 1) * 10 ;
+				if($EvQuestionData->insertEvQuestion($Question_Set_IDX,$Ability_Type_ID,$Question_Stems,$Option_A,$Option_B,$Option_C,$Option_D,$Option_E,$Option_F,$Point_A,$Point_B,$Point_C,$Point_D,$Point_E,$Point_F,$Order_Index)){
 					$next_url = "/evQuestions/add";
 					return $this->exitWithSuccess("增加评测题成功",$next_url);
 				}
