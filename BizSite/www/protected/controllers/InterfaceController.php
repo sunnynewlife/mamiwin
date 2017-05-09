@@ -355,7 +355,7 @@ class InterfaceController extends CController
 	private  function checkMethodLoginin($type){
 
 	}
-	public function actionIndex(){		
+	public function actionIndex(){	
 		// $body	= file_get_contents("php://input");
 		$body = Yii::app()->request->getParam('body',"");
 		$bodys	= json_decode($body,true);
@@ -577,7 +577,7 @@ class InterfaceController extends CController
 		// 没有任务，自动分配任务
 		if(empty($ret)){
 			$Turn = 1 ;
-			$ret_user_task = $mod->generateUserTaskRandom($UserIDX,$Task_Type,$Turn + 1);
+			$ret_user_task = $mod->generateUserTaskRandom($UserIDX,$Task_Type,$Turn + 1 );
 		
 			$ret = $mod->getUserTaskListByTrun($UserIDX,$Task_Type,$Turn);
 			if($ret === false){			
@@ -606,7 +606,7 @@ class InterfaceController extends CController
 		}
 		// 如果最终什么也没有查到，返回用户最后一轮次的任务列表 
 		if(empty($ret)){
-			$ret = $mod->getUserTaskListByTrun($UserIDX,$Task_Type,$Turn);
+			$ret = $mod->getUserTaskListByTrun($UserIDX,$Task_Type,$Turn + 1);
 		}
 		$errno = 1 ;
 		$this->_echoResponse($errno,'',$ret); 
@@ -803,7 +803,8 @@ class InterfaceController extends CController
 		}
 		
 		if($bizAppData->registUserInfo($phone, BizDataDictionary::User_AcctSource_SelfSite, $md5password)){
-			// return $this->_response();
+			$userInfo=$bizAppData->getUserInfoByLoginName($phone, BizDataDictionary::User_AcctSource_SelfSite);
+			Yii::app()->session[$this->_USER_SESSION_KEY]=$userInfo;
 			$errno = 1 ;
 			$this->_echoResponse($errno);
 			return;
