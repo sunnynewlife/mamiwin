@@ -57,6 +57,26 @@ class ModUserInfo {
 		return (LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params)>0);		
 	}
 
+	/**
+	 * 第三方账号解绑
+	 * @param  [type] $UserIDX    [description]
+	 * @param  [type] $acctSource [description]
+	 * @return [type]             [description]
+	 */
+	public function unbindThirdUserInfo($UserIDX,$acctSource)
+	{
+		$sql = " UPDATE User_Info SET   ";	
+		$params=array();
+		if($acctSource == BizDataDictionary::User_AcctSource_Tencent_Wx){
+			$sql .= " OpenId_Wechat = ''  " ;
+		}else if($acctSource == BizDataDictionary::User_AcctSource_Sina_Wb){
+			$sql .= "  OpenId_Weibo = ''  " ;
+		}
+		$sql .= " ,Update_Time = NOW()  WHERE IDX = ?" ;
+		$params = array_merge($params,array($UserIDX));
+		return (LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params)>0);		
+	}
+
 
 	//根据第三方账号查询用户信息
 	public function	getUserInfoByOpenId($OpenId,$acctSource)
