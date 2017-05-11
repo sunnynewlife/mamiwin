@@ -13,7 +13,7 @@ class InterfaceController extends CController
 	public $_errorMessage;
 	private $_USER_SESSION_KEY="user";								//session key
 	private $_OPENID_SESSION_KEY="openid";							//第三方 openid session key
-	private $_need_login_method_type = array(1003,1004,1005,2003,2004,2005,2006,2007,2008,3003,3004,3005,4001,5001,9003,9004,9006,9007,9008);
+	private $_need_login_method_type = array(1003,1004,1005,2003,2004,2005,2006,2007,2008,3003,3004,3005,4001,5001,5002,003,9004,9006,9007,9008);
 
 	public function _echoResponse($errno, $attach_errmsg = '', $data = array(), $count = null) {
 		$origin = isset($_SERVER['HTTP_ORIGIN'])? $_SERVER['HTTP_ORIGIN'] : '*';  		
@@ -116,6 +116,9 @@ class InterfaceController extends CController
 			
 			case '5001':	// 任务评价
 				return 'taskEvaluate';
+				break;
+			case '5002':	// 任务评价
+				return 'queryTaskEvaluteList';
 				break;
 			case '8001':	// 图片上传
 				return 'uploadFile';
@@ -297,6 +300,12 @@ class InterfaceController extends CController
 				if(isset($params['Finish_Score']) == false || empty($params['Finish_Score'])){
 					$this->_errorNo = ConfTask::ERROR_PARAMS;
 					$this->_errorMessage = " Finish_Score " ;
+				}				
+				break;
+			case '5002':
+				if(isset($params['Task_IDX']) == false || empty($params['Task_IDX'])){
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
+					$this->_errorMessage = " Task_IDX " ;
 				}				
 				break;
 			case '9001':
@@ -648,7 +657,7 @@ class InterfaceController extends CController
 		}
 		// 如果最终什么也没有查到，返回用户最后一轮次的任务列表 
 		if(empty($ret)){
-			$ret = $mod->getUserTaskListByTrun($UserIDX,$Task_Type,$Turn + 1);
+			$ret = $mod->getUserTaskListByTrun($UserIDX,$Task_Type,$Turn );
 		}
 		$errno = 1 ;
 		$this->_echoResponse($errno,'',$ret); 
@@ -1004,7 +1013,8 @@ class InterfaceController extends CController
 					$diff_mi = CommonHelper::getDateDiff($Start_Date,$Finish_Date,'mi');
 					$Finish_Task_Minutes += $diff_mi;
 					$Finish_Task_Qty++;
-				}else if($Finish_Status == DictionaryData::User_Task_Status_Not_Yet || $Finish_Status == DictionaryData::User_Task_Status_Start){
+				// }else if($Finish_Status == DictionaryData::User_Task_Status_Not_Yet || $Finish_Status == DictionaryData::User_Task_Status_Start ){
+				}else{
 					$UnFinish_Task_Minutes += $Max_Time;
 					$UnFinish_Task_Qty++;
 				}
@@ -1017,8 +1027,8 @@ class InterfaceController extends CController
 			"User_Info"        => array(
                 "LoginName"            =>    $userInfo[0]["LoginName"],               
                 "UserExperiencePoint"  =>    $UserExperiencePoint,
-                "UserLevel"            =>     0,
-                "TodaySignIn"          =>     $TodaySignIn,
+                "UserLevel"            =>    TaskHelper::getUserLevelByExpPoints($UserExperiencePoint),
+                "TodaySignIn"          =>    $TodaySignIn,
                 ),
             "User_Evaluation_Info"    =>    array(
                 "UserBasicInfo"        =>    $UserBasicInfo,
@@ -1309,6 +1319,19 @@ class InterfaceController extends CController
 		$errno = 1 ;
 		$this->_echoResponse($errno);
 	}
+	// 查询任务评价信息
+	private function queryTaskEvaluteList($params){
+		$Task_IDX = $params['Task_IDX'];
+		$mod_user_task = new ModUserTask();
+		$ret_user_task = $mod_user_task->queryTaskEvaluteList($Task_IDX,1);
+		if($ret_user_task === false){
+			$errno = ConfTask::ERROR_QUEYR_USER_TASK_EVALUATION ;
+			$this->_echoResponse($errno,'',$ret_user_task);
+			return;
+		}
+		$errno = 1 ;
+		$this->_echoResponse($errno,'',$ret_user_task);
+	}
 
 	// 按月查询用户已完成任务数
 	public function queryUserTaskMonth($params){
@@ -1382,6 +1405,29 @@ class InterfaceController extends CController
 		$data = array('url'=>$url);
 		$errno = 1 ;
 		$this->_echoResponse($errno,'',$data);
+
+	}
+
+	//微信静默登录
+	public function actionWechatLogin(){
+		$code			=	Yii::app()->request->getParam('code',"");
+		$wxUser=WxHelper::getOpenId($code);
+		if($wxUser==false){
+			$errno = ConfTask::ERROR_WECHAT_CODE ;
+			$this->_echoResponse($errno);
+			return;
+		}
+		$acctSource		  = BizDataDictionary::User_AcctSource_Tencent_Wx;
+		$mod_user_info = new ModUserInfo();
+
+		$ret_user_info = $mod_user_info->getUserInfoByOpenId($wxUser["openid"],$acctSource);
+		if(!empty($ret_user_info)){
+			Yii::app()->session[$this->_USER_SESSION_KEY]=$ret_user_info;	
+					
+		}
+		$errno = 1 ;
+		$this->_echoResponse($errno);
+		
 
 	}
 

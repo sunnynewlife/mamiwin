@@ -96,6 +96,18 @@ class TestController extends CController
 		$this->layout="test_page_list";
 		$this->render("test_page_wxlogin",$data);
 	}
+	// 客户端自动跳转至微信 ，获取用户openid后，自动登录 
+	public function actionWxLogin()
+	{
+		$data=array(
+				"code"		=>	Yii::app()->request->getParam('code',""),
+				"state"		=>	Yii::app()->request->getParam('state',"1"),
+		);
+		$this->layout="test_page_list";
+		$this->render("test_page_wxautologin",$data);
+	}
+	
+
 	public function actionWbIndex()
 	{
 		$data=array(

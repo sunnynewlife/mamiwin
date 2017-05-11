@@ -210,6 +210,25 @@ class ModUserTask {
 		$params[] = $Task_IDX ;
 		return (LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params)>0);
 	}
+
+	/**
+	 * 按Task_IDX返回用户任务列表，包括评价
+	 * @param  [type] $Task_IDX [description]
+	 * @return [type]           [description]
+	 */
+	public function queryTaskEvaluteList($Task_IDX,$Is_Evalution){
+		$params=array();
+		$sql=" SELECT a.*,b.Task_Type,b.Task_Title from User_Tasks a,Task_Material b where  a.Task_IDX = b.IDX AND a.Task_IDX = ? ";		
+		$params[] = $Task_IDX;	
+		if($Is_Evalution){
+			$sql .= " AND  a.Finish_Score > 0 " ;		//已评价
+		}
+		$list=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
+		if(isset($list) && is_array($list) && count($list)>0){
+			return $list;
+		}		
+		return array();
+	}
 }	
 
 
