@@ -28,4 +28,29 @@ class UserInfoController extends TableMagtController
 		$this->_actionIndex("User_Info", $this->_searchName, $this->_next_url, $this->_tableName,"index");	
 	}
 
+	public function actionAdd()
+	{
+		$submit = trim(Yii::app()->request->getParam('submit',0));
+		$TaskConfigData	=new TaskConfigData();
+		
+		if ($submit){			
+			$LoginName =Yii::app()->request->getParam("LoginName","");
+			$LoginPwd=Yii::app()->request->getParam("LoginPwd","");
+			
+			if(empty($LoginName) || empty($LoginPwd)) {
+				$this->alert('error',"请正确设置字段");
+			}else{
+				if($TaskConfigData->updateTaskConfig($Config_Key,$Config_Value,$Config_Remark,$value)){
+					return $this->exitWithSuccess("修改任务配置项成功",$this->_next_url);
+				}
+				$this->alert('error',"修改任务配置项失败，请正确设置字段值");
+			}			
+		}
+
+		$TaskConfig = $TaskConfigData->getTaskConfigByIDX($value);
+		$this->renderData["TaskConfig"]=$TaskConfig;
+
+		$this->render("modify",$this->renderData);
+	}
+
 }
