@@ -13,7 +13,7 @@ class InterfaceController extends CController
 	public $_errorMessage;
 	private $_USER_SESSION_KEY="user";								//session key
 	private $_OPENID_SESSION_KEY="openid";							//第三方 openid session key
-	private $_need_login_method_type = array(1003,1004,2003,2004,2005,2006,2007,2008,3003,3004,3005,4001,5001,9003,9004,9006,9007,9008);
+	private $_need_login_method_type = array(1003,1004,1005,2003,2004,2005,2006,2007,2008,3003,3004,3005,4001,5001,9003,9004,9006,9007,9008);
 
 	public function _echoResponse($errno, $attach_errmsg = '', $data = array(), $count = null) {
 		$origin = isset($_SERVER['HTTP_ORIGIN'])? $_SERVER['HTTP_ORIGIN'] : '*';  		
@@ -490,14 +490,35 @@ class InterfaceController extends CController
 		$Parent_Marriage = $params['Parent_Marriage'] ;
 		$Child_Gender = $params['Child_Gender'] ;
 		$Child_Birthday = $params['Child_Birthday'] ;
+		$Avatar = isset($params['Avatar']) ? $params['Avatar'] : '' ;
 		$mod = new ModUserBasicInfo();
-		$ret = $mod->addUserBasicInfo($UserIDX,$Parent_Gender,$Parent_Marriage,$Child_Gender,$Child_Birthday);
+		$ret = $mod->addUserBasicInfo($UserIDX,$Parent_Gender,$Parent_Marriage,$Child_Gender,$Child_Birthday,$Avatar);
 		if($ret === false){			
 			$errno = ConfTask::ERROR_USER_BASICINFO_ADD ;
 			$this->_echoResponse($errno,'',$ret);
 			return;
 		}
+		// TODO ,基础资料录入完成之后 ，自动 分配任务 
 		// LibUserQuestions::distributeUserQuestsion($UserIDX,$Parent_Gender,$Parent_Marriage,$Child_Gender,$Child_Birthday);
+		$errno = 1 ;
+		$this->_echoResponse($errno,'',$ret); 
+	}
+
+	// 修改用户基础资料
+	private function updateUserBasicInfo($params){
+		$UserIDX = $params['UserIDX'] ;
+		$Parent_Gender = isset($params['Parent_Gender']) ? $params['Parent_Gender'] : '' ;
+		$Parent_Marriage = isset($params['Parent_Marriage']) ? $params['Parent_Marriage'] : '' ;
+		$Child_Gender = isset($params['Child_Gender']) ? $params['Child_Gender'] : '' ;
+		$Child_Birthday = isset($params['Child_Birthday']) ? $params['Child_Birthday'] : '' ;
+		$Avatar = isset($params['Avatar']) ? $params['Avatar'] : '' ;
+		$mod = new ModUserBasicInfo();
+		$ret = $mod->updateUserBasicInfo($UserIDX,$Parent_Gender,$Parent_Marriage,$Child_Gender,$Child_Birthday,$Avatar);
+		if($ret === false){			
+			$errno = ConfTask::ERROR_USER_BASICINFO_UPDATE ;
+			$this->_echoResponse($errno,'',$ret);
+			return;
+		}
 		$errno = 1 ;
 		$this->_echoResponse($errno,'',$ret); 
 	}
