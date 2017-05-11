@@ -13,7 +13,7 @@ class InterfaceController extends CController
 	public $_errorMessage;
 	private $_USER_SESSION_KEY="user";								//session key
 	private $_OPENID_SESSION_KEY="openid";							//第三方 openid session key
-	private $_need_login_method_type = array(1003,2003,2004,2005,2006,2007,2008,3003,3004,3005,4001,5001,9003,9004,9006,9007);
+	private $_need_login_method_type = array(1003,1004,2003,2004,2005,2006,2007,2008,3003,3004,3005,4001,5001,9003,9004,9006,9007,9008);
 
 	public function _echoResponse($errno, $attach_errmsg = '', $data = array(), $count = null) {
 		$origin = isset($_SERVER['HTTP_ORIGIN'])? $_SERVER['HTTP_ORIGIN'] : '*';  		
@@ -61,6 +61,9 @@ class InterfaceController extends CController
 				break;
 			case '1003':	//提交基础资料
 				return 'addUserBasicInfo';	
+				break;
+			case '1004':	//查询用户基础资料
+				return 'queryUserBasicInfo';	
 				break;
 			case '2001':		// 查询所有任务列表
 				return 'queryTaskMeterialList';
@@ -138,6 +141,9 @@ class InterfaceController extends CController
 				break;
 			case '9007':	//用户签到
 				return 'userSignIn';	
+				break;
+			case '9008':	//用户签到
+				return 'userUnBind';	
 				break;
 			case '9010':	//微信登录跳转URL
 				return 'getWechatRedirectUrl';	
@@ -334,6 +340,12 @@ class InterfaceController extends CController
 					$this->_errorMessage = " password " ;
 				}				
 				break;
+			case '9008':
+				if(isset($params['acctSource']) == false || empty($params['acctSource'])){
+					$this->_errorNo = ConfTask::ERROR_PARAMS;
+					$this->_errorMessage = " acctSource " ;
+				}				
+				break;
 			case '9012':
 				if(isset($params['url']) == false || empty($params['url'])){
 					$this->_errorNo = ConfTask::ERROR_PARAMS;
@@ -490,6 +502,15 @@ class InterfaceController extends CController
 		$this->_echoResponse($errno,'',$ret); 
 	}
 
+	//查询用户基础资料
+	private function queryUserBasicInfo($params){
+		$UserIDX = $params['UserIDX'] ;
+		$mod = new ModUserBasicInfo();
+		$ret = $mod->queryUserBasicInfo($UserIDX);
+		$errno = 1 ;
+		$this->_echoResponse($errno,'',$ret); 
+	}  
+
 	//查询任务列表
 	private function queryTaskMeterialList($params){
 		if(isset($params['page'])){
@@ -645,6 +666,16 @@ class InterfaceController extends CController
 		$Finish_Status = DictionaryData::User_Task_Status_Finish ;
 		$Finish_Date = time();
 
+		$mod = new ModTaskMaterial();
+		$task_info = $mod->getTaskMeterialDetail($Task_IDX);
+		if($task_info === false ||empty($task_info)){			
+			$errno = ConfTask::ERROR_QUEYR_TASK_DETAIL ;
+			$this->_echoResponse($errno);
+			return;
+		}
+		$Min_Time = $task_info['Min_Time'];
+
+
 		$mod_user_task = new ModUserTask();
 		$ret_user_task = $mod_user_task->updateUserTask($UserIDX,$Task_IDX,$Finish_Status,$Finish_Date,$Finish_Score,$Finish_Pic,$Finish_Document);
 		if($ret_user_task === false){
@@ -652,6 +683,17 @@ class InterfaceController extends CController
 			$this->_echoResponse($errno,'',$ret);
 			return;
 		}
+
+		// 先判断此是否已经获得过此任务经验值
+		// 根据任务最小需要完成的时间 * 10，做为经验值 发给用户
+		$Config_Key = 'Task_Finish_Point';
+		$DWType = DictionaryData::User_Experience_DW_Type_Increase ;
+		$Amount = $Min_Time * 10 ;
+		$DWMemo = '用户完成任务获得经验值';
+
+		LibUserExperience::recordUserExperience($UserIDX,$Config_Key,$DWType,$Amount,$DWMemo);
+		
+
 		$errno = 1 ;
 		$this->_echoResponse($errno);
 	}
@@ -857,6 +899,24 @@ class InterfaceController extends CController
 			
 		// $session_code_key="user";
 		Yii::app()->session[$this->_USER_SESSION_KEY]=$userInfo;
+		$errno = 1 ;
+		$this->_echoResponse($errno);
+		return ;
+	}
+
+	// 用户解绑
+	private function userUnBind($params){
+		$acctSource=$params['acctSource'] ;
+		if($acctSource == 1 ){
+			$acctSource = BizDataDictionary::User_AcctSource_Tencent_Wx;
+		}else if($acctSource == 2 ){
+			$acctSource = BizDataDictionary::User_AcctSource_Sina_Wb;
+		}else if($acctSource == 3 ){
+			$acctSource = BizDataDictionary::User_AcctSource_Tencent_Qq;
+		} 
+		$UserIDX =  $params['UserIDX'];
+		$mod_user_info = new ModUserInfo();
+		$ret = $mod_user_info->unbindThirdUserInfo($UserIDX,$acctSource);
 		$errno = 1 ;
 		$this->_echoResponse($errno);
 		return ;
@@ -1178,7 +1238,7 @@ class InterfaceController extends CController
 		$Config_Key = 'SignIn_Exp_Point';
 		$DWType = DictionaryData::User_Experience_DW_Type_Increase ;
 		$Amount = LibUserExperience::getValueByConfigKey($Config_Key);
-		$DWMemo = 'ÓÃ»§Ç©µ½£¬Ôö¼Ó¾­ÑéÖµ';
+		$DWMemo = '用户签到获得经验值';
 
 		LibUserExperience::recordUserExperience($UserIDX,$Config_Key,$DWType,$Amount,$DWMemo);
 		
