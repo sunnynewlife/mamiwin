@@ -10,7 +10,7 @@
 					<tr>						
 						<td >用户手机</td>
 						<td colspan=6>
-							<input type="text" maxlength="50" name="LoginName" value="" class="input-xlarge" required="true" autofocus="true" style="width:660px;" />
+							<input type="text" maxlength="20" name="LoginName" value="<?php echo $LoginName;?>" class="input-xlarge" required="true" autofocus="true" style="width:200px;" />
 						</td>
 						<td style="width:100px;"></td>
 						<td>													
@@ -19,7 +19,7 @@
 					<tr>						
 						<td >密码</td>
 						<td colspan=2>
-							<input type="text" maxlength="50" name="LoginPwd" value="" class="input-xlarge" required="true" autofocus="true" style="width:450px;" />
+							<input type="text" maxlength="20" name="LoginPwd" value="" class="input-xlarge" required="true" autofocus="true" style="width:200px;" />
 						</td>
 																
 					</tr>
