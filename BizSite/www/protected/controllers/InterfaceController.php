@@ -1038,7 +1038,7 @@ class InterfaceController extends CController
 				$Max_Time = $value['Max_Time'];
 				if($Finish_Status == DictionaryData::User_Task_Status_Finish){
 					$diff_mi = CommonHelper::getDateDiff($Start_Date,$Finish_Date,'mi');
-					$Finish_Task_Minutes += $diff_mi;
+					$Finish_Task_Minutes += intval($diff_mi);
 					$Finish_Task_Qty++;
 				// }else if($Finish_Status == DictionaryData::User_Task_Status_Not_Yet || $Finish_Status == DictionaryData::User_Task_Status_Start ){
 				}else{
