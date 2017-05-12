@@ -559,7 +559,7 @@ class InterfaceController extends CController
 		$this->_echoResponse($errno,'',$ret); 
 	}  
 
-	// »ñÈ¡ÈÎÎñÏêÇé
+	// 任务详情
 	private function getTaskMeterialDetail($params){
 		$IDX = $params['IDX'] ;
 		$mod = new ModTaskMaterial();
@@ -585,7 +585,14 @@ class InterfaceController extends CController
 				$ret['Finish_Status'] = $ret_user_task['Finish_Status'];
 			}
 		}
-		
+		// 返回任务平均分
+		$mod_user_task = new ModUserTask();
+		$ret_user_task = $mod_user_task->queryTaskAvgScore($IDX);
+		$task_avg_score = 0 ;		
+		if(!empty($ret_user_task)){
+			$task_avg_score = $ret_user_task['score'];
+		}
+		$ret['task_avg_score'] = $task_avg_score;
 		$errno = 1 ;
 		$this->_echoResponse($errno,'',$ret); 
 	}
@@ -731,7 +738,9 @@ class InterfaceController extends CController
 			if(!empty($user_task_list)){
 				$is_today_task_finished = true ;
 				foreach ($user_task_list as $key => $value) {
-					if(!empty($value['Assign_Date']) && !empty($value['Finish_Date'])){
+					if(empty($value['Finish_Date'])){
+						$is_today_task_finished = false;
+					}else if(!empty($value['Assign_Date']) && !empty($value['Finish_Date'])){
 						$Assign_Day = date('Y-m-d',strtotime($value['Assign_Date']));
 						$Finish_Day = date('Y-m-d',strtotime($value['Finish_Date']));
 						$diff_1 = CommonHelper::getDateDiff($Finish_Day,date('Y-m-d'),'d');
@@ -1358,8 +1367,19 @@ class InterfaceController extends CController
 			$this->_echoResponse($errno,'',$ret_user_task);
 			return;
 		}
+		// 返回任务平均分
+		$ret_avg_tak = $mod_user_task->queryTaskAvgScore($Task_IDX);
+		$task_avg_score = 0 ;		
+		if(!empty($ret_avg_tak)){
+			$task_avg_score = $ret_avg_tak['score'];
+		}
+
+		$data = array(
+			'list'	=> $ret_user_task,
+			'task_avg_score'	=> $task_avg_score,
+			);
 		$errno = 1 ;
-		$this->_echoResponse($errno,'',$ret_user_task);
+		$this->_echoResponse($errno,'',$data);
 	}
 
 	// 按月查询用户已完成任务数

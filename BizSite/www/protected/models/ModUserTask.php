@@ -229,6 +229,23 @@ class ModUserTask {
 		}		
 		return array();
 	}
+
+	/**
+	 * 查询 任务评价平均分
+	 * @param  [type] $Task_IDX [description]
+	 * @return [type]           [description]
+	 */
+	public function queryTaskAvgScore($Task_IDX){
+		$params=array();
+		$sql=" SELECT Task_IDX,AVG(Finish_Score) AS score  FROM User_Tasks WHERE Task_IDX = ? ";		
+		$params[] = $Task_IDX;	
+		$list=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
+		if(isset($list) && is_array($list) && count($list)>0){
+			return $list[0];
+		}		
+		return array();
+
+	}
 }	
 
 
