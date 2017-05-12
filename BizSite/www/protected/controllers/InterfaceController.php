@@ -722,10 +722,37 @@ class InterfaceController extends CController
 		$DWMemo = '用户完成任务获得经验值';
 
 		LibUserExperience::recordUserExperience($UserIDX,$Config_Key,$DWType,$Amount,$DWMemo);
-		
-
+		// 如果用户所有任务 为当天分配且当天完成，则提示用户，明天再来
+		$user_task_info = $mod_user_task->getUserTaskDetail($UserIDX,$Task_IDX);
+		if(!empty($user_task_info)){
+			$Turn = $user_task_info['Turn'];
+			$user_task_list = $mod_user_task->getUserTaskListByTrun($UserIDX, 0 ,$Turn );
+			
+			if(!empty($user_task_list)){
+				$is_today_task_finished = true ;
+				foreach ($user_task_list as $key => $value) {
+					if(!empty($value['Assign_Date']) && !empty($value['Finish_Date'])){
+						$Assign_Day = date('Y-m-d',strtotime($value['Assign_Date']));
+						$Finish_Day = date('Y-m-d',strtotime($value['Finish_Date']));
+						$diff_1 = CommonHelper::getDateDiff($Finish_Day,date('Y-m-d'),'d');
+						$diff_2 = CommonHelper::getDateDiff($Assign_Day,$Finish_Day,'d');
+						// var_dump($Assign_Day,$Finish_Day,date('Y-m-d'),$diff_1,$diff_2);echo("<br>");
+						if($diff_1 == 0  && $diff_2 != 0 ){
+							$is_today_task_finished = false;
+						}
+					}
+				}
+				if($is_today_task_finished){
+					$data = array('is_all_finished'=>1);
+					$errno = 1 ;
+					$this->_echoResponse($errno,'',$data);
+					return ;
+				}
+			}
+		}
 		$errno = 1 ;
 		$this->_echoResponse($errno);
+		
 	}
 
 	/**
@@ -1258,6 +1285,8 @@ class InterfaceController extends CController
 		$data = array();
 		if($Unfinish_Qty == 0 ){
 			$data = array('Finish_Point' => $Finish_Point);
+			// 根据评测结果，自动分配任务给用户
+			LibUserTasks::generateUserTaskEva($UserIDX,$Question_Set_IDX);
 		}
 		$errno = 1 ;
 		$this->_echoResponse($errno,'',$data); 

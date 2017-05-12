@@ -85,7 +85,7 @@ class ConfTask {
 		self::ERROR_USER_QUESTION_RECORD		=>	"记录评测题失败",	
 	
 
-		self::ERROR_QUEYR_TASK_DETAIL		=>	"查询资料失败",
+		self::ERROR_QUEYR_TASK_DETAIL		=>	"查询任务资料失败",
 		self::ERROR_USER_BASICINFO_ADD		=>	"用户基础资料录入失败" ,
 
 		self::ERROR_QUEYR_USER_TASK_LIST		=>	"查询用户任务列表失败",
