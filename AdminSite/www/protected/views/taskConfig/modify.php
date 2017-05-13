@@ -12,7 +12,7 @@
 			<form id="tab" method="post" action="" enctype="multipart/form-data">
 				<br/>
 				<label>配置项Key</label> 
-				<input type="text" maxlength="50" name="Confg_Key" value="<?php echo $TaskConfig["Confg_Key"];?>" class="input-xlarge" required="true" readonly="true" />
+				<input type="text" maxlength="50" name="Config_Key" value="<?php echo $TaskConfig["Config_Key"];?>" class="input-xlarge" required="true" readonly="true" />
 				<br/>
 				<label>配置项Value</label> 
 				<input type="text" maxlength="50" name="Config_Value" value="<?php echo $TaskConfig["Config_Value"];?>" class="input-xlarge" required="true" autofocus="true" />

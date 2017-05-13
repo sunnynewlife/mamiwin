@@ -111,7 +111,7 @@ class DictionaryData {
 		"2"	=>	"取"
 		);
 	const User_Experience_DW_Type_Increase = 1 ;
-	const User_Experience_DW_Type_Decrease = 1 ;
+	const User_Experience_DW_Type_Decrease = 2 ;
 
 	
 }

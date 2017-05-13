@@ -30,14 +30,14 @@ $rowsHtmlTag=<<<EndOfRowTag
 EndOfRowTag;
 			$titleLen=20;
 			foreach ($Task_Config as $item){
-				$Confg_Key=$item["Confg_Key"];
+				$Config_Key=$item["Config_Key"];
 				$Config_Value=$item["Config_Value"];
 				$Config_Remark=$item["Config_Remark"];
 				
 				
 				echo sprintf($rowsHtmlTag,
 					$item["IDX"],
-					$Confg_Key,
+					$Config_Key,
 					$Config_Value,
 					$Config_Remark,
 					$item["IDX"]

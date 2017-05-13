@@ -1,4 +1,6 @@
-
+<div class="btn-toolbar">
+	<a href="/userInfo/add" class="btn btn-primary"><i class="icon-plus"></i>新增用户</a>
+</div>
 <div class="block">
 	<a href="#page-stats" class="block-heading" data-toggle="collapse">注册用户列表</a>
 	<div id="search" class="in collapse">

@@ -62,7 +62,45 @@ class ModEvaluationQuesitonsSet {
 		return array();
 	}
 
+	/**
+	 * 查询题集列表，及用户答题情况
+	 * @param  [type] $UserIDX [description]
+	 * @return [type]          [description]
+	 */
+	public  function getUserEvaluationQuesitonsSetList($UserIDX){
+		
+		$params=array();
+		$sql =" SELECT * FROM Evaluation_Questions_Set a LEFT JOIN (SELECT DISTINCT Question_Set_IDX,COUNT(Question_IDX)  AS Counts FROM User_Evaluation_Questions WHERE UserIDX = ?  AND Option_Chose IS NOT NULL GROUP BY Question_Set_IDX) b 
+ON a.IDX = b.Question_Set_IDX  ";
+		$params[] = $UserIDX; 
+		$sql .= " order by IDX asc ;" ;
 
+		$list=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
+		if(isset($list) && is_array($list) && count($list)>0){
+			return $list;
+		}
+		return array();
+	}
+
+
+
+	public function getEvaluationQuesitonsSet($IDX){
+		$params=array();
+		$sql="select * from Evaluation_Questions_Set where IDX = ? ";
+		$params = array_merge($params,array($IDX));	
+		// if($del_flag === 1 || $del_flag === 0 ){
+		// 	$sql .= " AND del_flag = ? ";
+		// 	$params[] = $del_flag;
+		// 	// $params = array_merge($params,array($del_flag));			
+		// }
+		$sql .= " order by IDX asc ;" ;
+		
+		$data=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
+		if(isset($data) && is_array($data) && count($data)>0){
+			return $data[0];
+		}
+		return array();
+	}
 	
 
 

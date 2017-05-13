@@ -18,7 +18,7 @@ class ModUserTask {
 	 * @param  integer $pagesize [description]
 	 * @return [type]            [description]
 	 */
-	public function getUserTaskList($UserIDX,$Task_Type = 0 ,$Query_Day = 0  ,$page_size = 10 ,$offSet = 0){
+	public function getUserTaskList($UserIDX,$Task_Type = 0 ,$Query_Day = 0  ,$page_size = 10 ,$offSet = 0 ,$Finish_Status = ''){
 		$page_size = (is_null($page_size)) ? 10 : $page_size;
 		$offSet = (is_null($offSet)) ? 0 : $offSet;
 			
@@ -29,9 +29,14 @@ class ModUserTask {
 			$sql .= " AND b.Task_Type = ? ";
 			$params[] = $Task_Type;			
 		}
-		if(!empty($Query_Day) ){
-			$sql .= " AND TIMESTAMPDIFF(MONTH,?,a.Finish_Date) = 0 ";
-			$params[] = $Query_Day;			
+		if(!empty($Query_Day) ){			
+			$sql .= " AND YEAR('". $Query_Day ."') = YEAR(a.Finish_Date) " ;
+			$sql .= " AND MONTH('". $Query_Day ."') = MONTH(a.Finish_Date) " ;
+			$sql .= " AND DAY('". $Query_Day ."') = DAY(a.Finish_Date) " ;
+		}
+		if(!empty($Finish_Status) ){
+			$sql .= " AND a.Finish_Status = ? ";
+			$params[] = $Finish_Status;		
 		}
 		$sql .= " order by a.IDX asc " ;
 		$sql .= " limit $offSet,$page_size " ; 
@@ -40,6 +45,21 @@ class ModUserTask {
 			return $list;
 		}
 		return array();
+	}
+
+	/**
+	 * 查询用户当前任务轮次
+	 * @return [type] [description]
+	 */
+	public function getCurrentUserTaskTurn($UserIDX){
+		$sql = "select Turn FROM User_Tasks where UserIDX = ? order by Turn desc limit 1";
+		$params[] = $UserIDX;	
+		$list=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
+		if(isset($list) && is_array($list) && count($list)>0 && isset($list['Turn'])){
+			return $list['Turn'];
+		}
+		return 0;
+
 	}
 
 	/**
@@ -105,20 +125,26 @@ class ModUserTask {
 	 * @return [type]                [description]
 	 */
 	public function queryUserTaskMonth($UserIDX,$Query_Month,$Finish_Status){
-		$sql=" SELECT DISTINCT DATE_FORMAT(Finish_Date,'%Y-%m-%d'),COUNT(*) AS counts FROM user_tasks GROUP BY DATE_FORMAT(Finish_Date,'%Y-%m-%d')  where  UserIDX = ? and TIMESTAMPDIFF(MONTH,?,Finish_Date) = 0 ";
-		$params[] = $UserIDX;			
-		$params[] = $Query_Month;			
+		$sql=" SELECT DISTINCT DATE_FORMAT(Finish_Date,'%Y-%m-%d') as Finish_Date ,COUNT(*) AS Task_Qty FROM User_Tasks  where  UserIDX = ? ";
+
+		// $sql .= " AND YEAR('". $Query_Month ."') = YEAR(DATE_FORMAT(Finish_Date,'%Y-%m-%d')) " ;
+		// $sql .= " AND MONTH('". $Query_Month ."') = MONTH(DATE_FORMAT(Finish_Date,'%Y-%m-%d')) " ;
+		// $sql .= " AND DAY('". $Query_Month ."') = DAY(DATE_FORMAT(Finish_Date,'%Y-%m-%d')) " ;
+
+		$params[] = $UserIDX;				
 		if(!empty($Finish_Status) ){
 			$sql .= " AND Finish_Status = ? ";
 			$params[] = $Finish_Status;			
 		}
-		$sql .= " order by a.IDX asc ;" ;
+		$sql .= " GROUP BY DATE_FORMAT(Finish_Date,'%Y-%m-%d') " ;
+		
 		$list=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
 		if(isset($list) && is_array($list) && count($list)>0){
 			return $list;
 		}
 		return array();
 	}
+
 
 	//为用户分配任务
 	public function generateUserTask($UserIDX,$Task_IDX){
@@ -129,21 +155,26 @@ class ModUserTask {
 
 	//随机分配任务给用户,具体业务逻辑待定 
 	// 如果当天有任务，不管是什么 任务的，当天都不再分配任务了
-	public function generateUserTaskRandom($UserIDX,$Task_Type,$Turn){
+	public function generateUserTaskRandom($UserIDX,$Task_Type,$Turn,$Count){
 		$sql_query = " SELECT * FROM User_Tasks where UserIDX = ? AND TO_DAYS(Assign_Date) = TO_DAYS(NOW()) " ; 
 		$params_query = array($UserIDX);
+		if(empty($Task_Type) == false){
+			$sql_query .= " AND Task_Type = ? " ; 
+			$params_query[] = $Task_Type;
+		}		
 		$list = LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql_query,$params_query,PDO::FETCH_ASSOC);
 		if(isset($list) && is_array($list) && count($list)>0){
 			return 0;
 		}
 
-		$sql = " INSERT INTO User_Tasks(UserIDX,Task_IDX,Turn) SELECT ?,IDX,? FROM Task_Material WHERE IDX not in (SELECT Task_IDX FROM User_Tasks)  ";
+		$sql = " INSERT INTO User_Tasks(UserIDX,Task_IDX,Turn,Task_Type) SELECT ?,IDX,?,Task_Type FROM Task_Material WHERE IDX not in (SELECT Task_IDX FROM User_Tasks)  ";
 		$params = array($UserIDX,$Turn);
 		if(empty($Task_Type) == false){
 			$sql .= " AND Task_Type = ? " ; 
 			$params[] = $Task_Type;
+
 		}
-		$sql .= " order by RAND() limit 3 ";
+		$sql .= " order by RAND() limit  " . $Count . " ";
 		return LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params);
 	}
 
@@ -156,8 +187,9 @@ class ModUserTask {
 	}
 
 	//开始任务
+	//TODO Finish_Date 字段类型有问题，要去掉  on update CURRENT_TIMESTAMP 属性
 	public function startUserTask($UserIDX,$Task_IDX){
-		$sql="update User_Tasks set Assign_Date = now() ,Finish_Status=?,Update_Time=now() where UserIDX = ? and Task_IDX = ?";
+		$sql="update User_Tasks set Assign_Date = now() ,Finish_Status=?,Finish_Date='2000-01-01' , Update_Time=now() where UserIDX = ? and Task_IDX = ?";
 		$params=array($UserIDX,$Task_IDX);
 		return LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params);
 	}	
@@ -188,7 +220,7 @@ class ModUserTask {
 			$sql .= " ,Finish_Status = ?  ";
 			$params[] = $Finish_Status;
 			if(($Finish_Status == DictionaryData::User_Task_Status_Start)){
-				$sql .= " ,Start_Date = NOW()  ";				
+				$sql .= " ,Start_Date = NOW() , Finish_Date = '2000-01-01' ";				
 			}else if(($Finish_Status == DictionaryData::User_Task_Status_Finish)){
 				$sql .= " ,Finish_Date = NOW()  ";				
 			}
@@ -209,6 +241,42 @@ class ModUserTask {
 		$params[] = $UserIDX ;
 		$params[] = $Task_IDX ;
 		return (LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params)>0);
+	}
+
+	/**
+	 * 按Task_IDX返回用户任务列表，包括评价
+	 * @param  [type] $Task_IDX [description]
+	 * @return [type]           [description]
+	 */
+	public function queryTaskEvaluteList($Task_IDX,$Is_Evalution){
+		$params=array();
+		$sql=" SELECT a.*,b.Task_Type,b.Task_Title from User_Tasks a,Task_Material b where  a.Task_IDX = b.IDX AND a.Task_IDX = ? ";		
+		$params[] = $Task_IDX;	
+		if($Is_Evalution){
+			$sql .= " AND  a.Finish_Score > 0 " ;		//已评价
+		}
+		$list=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
+		if(isset($list) && is_array($list) && count($list)>0){
+			return $list;
+		}		
+		return array();
+	}
+
+	/**
+	 * 查询 任务评价平均分
+	 * @param  [type] $Task_IDX [description]
+	 * @return [type]           [description]
+	 */
+	public function queryTaskAvgScore($Task_IDX){
+		$params=array();
+		$sql=" SELECT Task_IDX,AVG(Finish_Score) AS score  FROM User_Tasks WHERE Task_IDX = ? ";		
+		$params[] = $Task_IDX;	
+		$list=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
+		if(isset($list) && is_array($list) && count($list)>0){
+			return $list[0];
+		}		
+		return array();
+
 	}
 }	
 
