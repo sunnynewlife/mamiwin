@@ -40,12 +40,15 @@ class InterfaceController extends CController
   //       	$showdata['count'] 	= $count;	
   //       }
 		// LibLogger::log(' return  #(showdata:),('.json_encode($showdata).')');
+		$str_return = json_encode($showdata);
+		
         $callback=Yii::app()->request->getParam('callback',"");
         if(empty($callback)){
         	echo(json_encode($showdata));
         }else{
         	echo $callback."(". json_encode($showdata).");";
         }
+        LunaLogger::getInstance()->info(($str_return));
     	
     	return ;
     }
@@ -634,8 +637,9 @@ class InterfaceController extends CController
 		}
 		// 没有任务，自动分配任务
 		if(empty($ret)){
-			$Turn = 1 ;
-			$ret_user_task = $mod->generateUserTaskRandom($UserIDX,$Task_Type,$Turn + 1 );
+			$Turn = $mod->getCurrentUserTaskTurn($UserIDX) ;
+			// $ret_user_task = $mod->generateUserTaskRandom($UserIDX,$Task_Type,$Turn + 1 );
+			$ret_user_task = LibUserTasks::generateUserTaskRandom($UserIDX,$Task_Type,$Turn + 1 );
 		
 			$ret = $mod->getUserTaskListByTrun($UserIDX,$Task_Type,$Turn);
 			if($ret === false){			
@@ -643,7 +647,6 @@ class InterfaceController extends CController
 				$this->_echoResponse($errno,'',$ret);
 				return;
 			}
-
 		}
 		
 		$is_all_task_finished = true;
@@ -658,12 +661,14 @@ class InterfaceController extends CController
 			// 所有任务都已经完成，再分配新的任务
 			if(($is_all_task_finished)){				
 				$Next_Turn  = $Turn + 1 ;			
-				$ret_user_task = $mod->generateUserTaskRandom($UserIDX,$Task_Type,$Next_Turn);				
+				// $ret_user_task = $mod->generateUserTaskRandom($UserIDX,$Task_Type,$Next_Turn);
+				$ret_user_task = LibUserTasks::generateUserTaskRandom($UserIDX,$Task_Type,$Turn + 1 );			
 				$ret = $mod->getUserTaskListByTrun($UserIDX,$Task_Type,$Next_Turn);
 			}
 		}
 		// 如果最终什么也没有查到，返回用户最后一轮次的任务列表 
 		if(empty($ret)){
+			$Turn = $mod->getCurrentUserTaskTurn($UserIDX) ;
 			$ret = $mod->getUserTaskListByTrun($UserIDX,$Task_Type,$Turn );
 		}
 		$errno = 1 ;
@@ -717,7 +722,7 @@ class InterfaceController extends CController
 		$ret_user_task = $mod_user_task->updateUserTask($UserIDX,$Task_IDX,$Finish_Status,$Finish_Date,$Finish_Score,$Finish_Pic,$Finish_Document);
 		if($ret_user_task === false){
 			$errno = ConfTask::ERROR_QUEYR_USER_TASK_START ;
-			$this->_echoResponse($errno,'',$ret);
+			$this->_echoResponse($errno,'',$ret_user_task);
 			return;
 		}
 
@@ -734,11 +739,13 @@ class InterfaceController extends CController
 		if(!empty($user_task_info)){
 			$Turn = $user_task_info['Turn'];
 			$user_task_list = $mod_user_task->getUserTaskListByTrun($UserIDX, 0 ,$Turn );
+
 			
 			if(!empty($user_task_list)){
 				$is_today_task_finished = true ;
 				foreach ($user_task_list as $key => $value) {
-					if(empty($value['Finish_Date'])){
+					// var_dump($value['Finish_Date'],$value['Finish_Status']);
+					if(empty($value['Finish_Date']) || $value['Finish_Status'] != DictionaryData::User_Task_Status_Finish ){
 						$is_today_task_finished = false;
 					}else if(!empty($value['Assign_Date']) && !empty($value['Finish_Date'])){
 						$Assign_Day = date('Y-m-d',strtotime($value['Assign_Date']));
@@ -749,6 +756,8 @@ class InterfaceController extends CController
 						if($diff_1 == 0  && $diff_2 != 0 ){
 							$is_today_task_finished = false;
 						}
+					}else{
+						$is_today_task_finished = false;
 					}
 				}
 				if($is_today_task_finished){
@@ -1418,13 +1427,13 @@ class InterfaceController extends CController
 
 	}
 
-	// 按日查询用户任务列表
+	// 按日查询用户已完成任务列表
 	public function queryUserTaskDay($params){
 		$UserIDX = $params['UserIDX'];
 		$Query_Day = $params['Query_Day'];
 		$Task_Type = isset($params['Task_Type']) ? $params['Task_Type'] : '';
 		$mod_user_task = new ModUserTask();		
-		$ret = $mod_user_task->getUserTaskList($UserIDX,$Task_Type,$Query_Day);
+		$ret = $mod_user_task->getUserTaskList($UserIDX,$Task_Type,$Query_Day,999,0,9);
 		if($ret === false){			
 			$errno = ConfTask::ERROR_QUEYR_USER_TASK_LIST ;
 			$this->_echoResponse($errno,'',$ret);
