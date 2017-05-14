@@ -55,8 +55,8 @@ class ModUserTask {
 		$sql = "select Turn FROM User_Tasks where UserIDX = ? order by Turn desc limit 1";
 		$params[] = $UserIDX;	
 		$list=LunaPdo::GetInstance($this->_PDO_NODE_NAME)->query_with_prepare($sql,$params,PDO::FETCH_ASSOC);
-		if(isset($list) && is_array($list) && count($list)>0 && isset($list['Turn'])){
-			return $list['Turn'];
+		if(isset($list) && is_array($list) && count($list)>0 && isset($list[0]['Turn'])){
+			return $list[0]['Turn'];
 		}
 		return 0;
 
@@ -169,6 +169,27 @@ class ModUserTask {
 
 		$sql = " INSERT INTO User_Tasks(UserIDX,Task_IDX,Turn,Task_Type) SELECT ?,IDX,?,Task_Type FROM Task_Material WHERE IDX not in (SELECT Task_IDX FROM User_Tasks)  ";
 		$params = array($UserIDX,$Turn);
+		if(empty($Task_Type) == false){
+			$sql .= " AND Task_Type = ? " ; 
+			$params[] = $Task_Type;
+
+		}
+		$sql .= " order by RAND() limit  " . $Count . " ";
+		return LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params);
+	}
+
+	/**
+	 * 分配任务,根据评测结果
+	 * @param  [type] $UserIDX   [description]
+	 * @param  [type] $Task_Type [description]
+	 * @param  [type] $Turn      [description]
+	 * @param  [type] $Count     [description]
+	 * @return [type]            [description]
+	 */
+	public function generateUserTaskForEva($UserIDX,$Task_Type,$Turn,$Count){
+		
+		$sql = " INSERT INTO User_Tasks(UserIDX,Task_IDX,Turn,Task_Type) SELECT ?,IDX,?,Task_Type FROM Task_Material WHERE IDX not in (SELECT Task_IDX FROM User_Tasks WHERE UserIDX = ?)  ";
+		$params = array($UserIDX,$Turn,$UserIDX);
 		if(empty($Task_Type) == false){
 			$sql .= " AND Task_Type = ? " ; 
 			$params[] = $Task_Type;

@@ -376,6 +376,14 @@ class InterfaceController extends CController
 		}
 	}
 
+	public function actionTest1(){
+		$UserIDX = 2 ;
+		$Question_Set_IDX = 2 ;
+		$ret = LibUserTasks::generateUserTaskEva($UserIDX,$Question_Set_IDX);
+		var_dump($ret);
+
+	}
+
 	private  function checkMethodLoginin($type){
 
 	}
@@ -626,10 +634,11 @@ class InterfaceController extends CController
 	//如果没有任务，则自动分配任务给用户
 	//如果所有的的任务都做完了，则自动分配任务给用户
 	private function getUserTaskList($params){
+		$max_user_task_count = DictionaryData::Max_User_Task_Count;
 		$UserIDX = $params['UserIDX'];
 		$Task_Type = isset($params['Task_Type']) ? $params['Task_Type'] : 0 ;
 		$mod = new ModUserTask();
-		$ret = $mod->getUserTaskListByTrun($UserIDX,$Task_Type);
+		$ret = $mod->getUserTaskListByTrun($UserIDX,$Task_Type,0,$max_user_task_count,0);
 		if($ret === false){			
 			$errno = ConfTask::ERROR_QUEYR_USER_TASK_LIST ;
 			$this->_echoResponse($errno,'',$ret);
@@ -641,7 +650,7 @@ class InterfaceController extends CController
 			// $ret_user_task = $mod->generateUserTaskRandom($UserIDX,$Task_Type,$Turn + 1 );
 			$ret_user_task = LibUserTasks::generateUserTaskRandom($UserIDX,$Task_Type,$Turn + 1 );
 		
-			$ret = $mod->getUserTaskListByTrun($UserIDX,$Task_Type,$Turn);
+			$ret = $mod->getUserTaskListByTrun($UserIDX,$Task_Type,$Turn,$max_user_task_count,0);
 			if($ret === false){			
 				$errno = ConfTask::ERROR_QUEYR_USER_TASK_LIST ;
 				$this->_echoResponse($errno,'',$ret);
@@ -663,14 +672,15 @@ class InterfaceController extends CController
 				$Next_Turn  = $Turn + 1 ;			
 				// $ret_user_task = $mod->generateUserTaskRandom($UserIDX,$Task_Type,$Next_Turn);
 				$ret_user_task = LibUserTasks::generateUserTaskRandom($UserIDX,$Task_Type,$Turn + 1 );			
-				$ret = $mod->getUserTaskListByTrun($UserIDX,$Task_Type,$Next_Turn);
+				$ret = $mod->getUserTaskListByTrun($UserIDX,$Task_Type,$Next_Turn,$max_user_task_count,0);
 			}
 		}
 		// 如果最终什么也没有查到，返回用户最后一轮次的任务列表 
 		if(empty($ret)){
 			$Turn = $mod->getCurrentUserTaskTurn($UserIDX) ;
-			$ret = $mod->getUserTaskListByTrun($UserIDX,$Task_Type,$Turn );
+			$ret = $mod->getUserTaskListByTrun($UserIDX,$Task_Type,$Turn,$max_user_task_count,0 );
 		}
+
 		$errno = 1 ;
 		$this->_echoResponse($errno,'',$ret); 
 		
@@ -742,6 +752,7 @@ class InterfaceController extends CController
 
 			
 			if(!empty($user_task_list)){
+				$user_finished_task_counts = 0 ;
 				$is_today_task_finished = true ;
 				foreach ($user_task_list as $key => $value) {
 					// var_dump($value['Finish_Date'],$value['Finish_Status']);
@@ -758,6 +769,12 @@ class InterfaceController extends CController
 						}
 					}else{
 						$is_today_task_finished = false;
+					}
+					if($value['Finish_Status'] == DictionaryData::User_Task_Status_Finish){
+						$user_finished_task_counts++;
+					}
+					if($user_finished_task_counts >=  DictionaryData::Max_User_Task_Count){
+						$is_today_task_finished = true;	//如果用户完成一天内最大数量，不能再做任务 了
 					}
 				}
 				if($is_today_task_finished){

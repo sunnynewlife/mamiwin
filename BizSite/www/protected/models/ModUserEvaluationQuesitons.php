@@ -106,17 +106,8 @@ class ModUserEvaluationQuesitons {
 
 	}
 
-	/**
-	 * 统计用户测评题，属性得分，
-	 * @param  [type] $UserIDX          [description]
-	 * @param  [type] $Question_Set_IDX [description]
-	 * @return [type]                   [description]
-	 */
-	public function calUserUserEvaluationResult($UserIDX,$Question_Set_IDX){
-		$params=array();
-		$sql=" INSERT INTO User_Evaluation_Result(UserIDX,Set_IDX,Ability_Type_IDX,Ability_Score)  SELECT DISTINCT ?,?,Ability_Type_ID,SUM(POINT) AS points FROM User_Evaluation_Questions  WHERE  UserIDX = ? and Question_Set_IDX = ? AND POINT > 0 GROUP BY Ability_Type_ID;";
-		$params = array($UserIDX,$Question_Set_IDX,$UserIDX,$Question_Set_IDX);
-		return LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params);		
-	}
+
+
+	
 }	
 ?>

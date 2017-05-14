@@ -5,6 +5,7 @@ class DictionaryData {
 	const Basic_User_Task_Count = 3 ;	//基本信息录入后系统分配的任务数
 	const Evaluation_User_Task_1_Count = 5 ; //评测题用户分配陪伴任务数
 	const Evaluation_User_Task_2_Count = 10 ; //评测题用户分配学习任务数
+	const Max_User_Task_Count  = 5 ;		//用户一天最多的任务数量
 	
 	const Material_Files_File_Type=array(
 			"1"		=>	"文本",
