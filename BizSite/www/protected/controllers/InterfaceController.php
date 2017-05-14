@@ -638,7 +638,9 @@ class InterfaceController extends CController
 		$UserIDX = $params['UserIDX'];
 		$Task_Type = isset($params['Task_Type']) ? $params['Task_Type'] : 0 ;
 		$mod = new ModUserTask();
-		$ret = $mod->getUserTaskListByTrun($UserIDX,$Task_Type,0,$max_user_task_count,0);
+		// $ret = $mod->getUserTaskListByTrun($UserIDX,$Task_Type,0,$max_user_task_count,0);
+		$ret = LibUserTasks::getUserTaskListByTrun($UserIDX,$Task_Type,0,$max_user_task_count,0);
+
 		if($ret === false){			
 			$errno = ConfTask::ERROR_QUEYR_USER_TASK_LIST ;
 			$this->_echoResponse($errno,'',$ret);
@@ -650,7 +652,8 @@ class InterfaceController extends CController
 			// $ret_user_task = $mod->generateUserTaskRandom($UserIDX,$Task_Type,$Turn + 1 );
 			$ret_user_task = LibUserTasks::generateUserTaskRandom($UserIDX,$Task_Type,$Turn + 1 );
 		
-			$ret = $mod->getUserTaskListByTrun($UserIDX,$Task_Type,$Turn,$max_user_task_count,0);
+			// $ret = $mod->getUserTaskListByTrun($UserIDX,$Task_Type,$Turn,$max_user_task_count,0);
+			$ret = LibUserTasks::getUserTaskListByTrun($UserIDX,$Task_Type,$Turn,$max_user_task_count,0);
 			if($ret === false){			
 				$errno = ConfTask::ERROR_QUEYR_USER_TASK_LIST ;
 				$this->_echoResponse($errno,'',$ret);
@@ -672,13 +675,15 @@ class InterfaceController extends CController
 				$Next_Turn  = $Turn + 1 ;			
 				// $ret_user_task = $mod->generateUserTaskRandom($UserIDX,$Task_Type,$Next_Turn);
 				$ret_user_task = LibUserTasks::generateUserTaskRandom($UserIDX,$Task_Type,$Turn + 1 );			
-				$ret = $mod->getUserTaskListByTrun($UserIDX,$Task_Type,$Next_Turn,$max_user_task_count,0);
+				// $ret = $mod->getUserTaskListByTrun($UserIDX,$Task_Type,$Next_Turn,$max_user_task_count,0);
+				$ret = LibUserTasks::getUserTaskListByTrun($UserIDX,$Task_Type,$Next_Turn,$max_user_task_count,0);
 			}
 		}
 		// 如果最终什么也没有查到，返回用户最后一轮次的任务列表 
 		if(empty($ret)){
 			$Turn = $mod->getCurrentUserTaskTurn($UserIDX) ;
-			$ret = $mod->getUserTaskListByTrun($UserIDX,$Task_Type,$Turn,$max_user_task_count,0 );
+			// $ret = $mod->getUserTaskListByTrun($UserIDX,$Task_Type,$Turn,$max_user_task_count,0 );
+			$ret = LibUserTasks::getUserTaskListByTrun($UserIDX,$Task_Type,$Turn,$max_user_task_count,0 );
 		}
 
 		$errno = 1 ;

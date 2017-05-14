@@ -31,6 +31,7 @@ class LibUserTasks{
 			}
 
 			foreach ($ret_user_eva_result as $key => $value) {
+				$Turn++;
 				$Ability_Type_IDX 	= $value['Ability_Type_IDX'];
 				$Ability_Score 		= $value['Ability_Score'];
 				$Ability_Percet 	= $Ability_Score / $sum_scores ;
@@ -42,8 +43,8 @@ class LibUserTasks{
 				// echo($Ability_Task_Qty.",".$Ability_Task1_Qty.",".$Ability_Task2_Qty);
 				// echo("<br>");
 				// 分配任务
-				$ret_user_task1 = $mod_user_task->generateUserTaskForEva($UserIDX,1,$Turn+1 ,$Ability_Task1_Qty );	
-				$ret_user_task2 = $mod_user_task->generateUserTaskForEva($UserIDX,2,$Turn+1 ,$Ability_Task2_Qty );	
+				$ret_user_task1 = $mod_user_task->generateUserTaskForEva($UserIDX,1,$Turn ,$Ability_Task1_Qty );	
+				$ret_user_task2 = $mod_user_task->generateUserTaskForEva($UserIDX,2,$Turn ,$Ability_Task2_Qty );	
 			}
 			
 		}
@@ -93,6 +94,23 @@ class LibUserTasks{
 		}
 		return $ret_user_task;
 		
+	}
+
+	//展示任务给用户时
+	//如果Task_Type不传时，要保证 学习任务、陪伴任务都要有
+	public static function getUserTaskListByTrun($UserIDX,$Task_Type ,$Turn  ,$page_size  ,$offSet ){
+		$mod_user_task = new ModUserTask();
+		if(empty($Task_Type)){
+			$Task_1_Qty = round($page_size * 0.7) ;
+			$Task_2_Qty = $page_size - $Task_1_Qty;
+			$ret1 = $mod_user_task->getUserTaskListByTrun($UserIDX,1,$Turn,$Task_1_Qty,0);
+			$ret2 = $mod_user_task->getUserTaskListByTrun($UserIDX,2,$Turn,$Task_2_Qty,0);
+			$ret = array_merge($ret1,$ret2);
+			return $ret;
+		}else{
+			$ret = $mod_user_task->getUserTaskListByTrun($UserIDX,$Task_Type ,$Turn  ,$page_size  ,$offSet );
+			return $ret;
+		}
 	}
 
 	/**
