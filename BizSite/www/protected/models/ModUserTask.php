@@ -174,6 +174,7 @@ class ModUserTask {
 			$params[] = $Task_Type;
 
 		}
+		$sql .= "  and Task_Status = 2  " ; 	//只分配公开的任务
 		$sql .= " order by RAND() limit  " . $Count . " ";
 		return LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params);
 	}
@@ -188,13 +189,14 @@ class ModUserTask {
 	 */
 	public function generateUserTaskForEva($UserIDX,$Task_Type,$Turn,$Count){
 		
-		$sql = " INSERT INTO User_Tasks(UserIDX,Task_IDX,Turn,Task_Type) SELECT ?,IDX,?,Task_Type FROM Task_Material WHERE IDX not in (SELECT Task_IDX FROM User_Tasks WHERE UserIDX = ?)  ";
+		$sql = " INSERT INTO User_Tasks(UserIDX,Task_IDX,Turn,Task_Type) SELECT ?,IDX,?,Task_Type FROM Task_Material WHERE IDX not in (SELECT Task_IDX FROM User_Tasks WHERE UserIDX = ?) ";
 		$params = array($UserIDX,$Turn,$UserIDX);
 		if(empty($Task_Type) == false){
 			$sql .= " AND Task_Type = ? " ; 
 			$params[] = $Task_Type;
 
 		}
+		$sql .= "  and Task_Status = 2  " ; 	//只分配公开的任务
 		$sql .= " order by RAND() limit  " . $Count . " ";
 		return LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params);
 	}
