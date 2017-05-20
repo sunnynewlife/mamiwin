@@ -68,6 +68,9 @@ class InterfaceController extends CController
 			case '1004':	//查询用户基础资料
 				return 'queryUserBasicInfo';	
 				break;
+			case '1005':	//更新用户基础资料
+				return 'updateUserBasicInfo';	
+				break;
 			case '2001':		// 查询所有任务列表
 				return 'queryTaskMeterialList';
 				break;

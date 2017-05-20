@@ -18,30 +18,30 @@ class ModUserBasicInfo {
 	}
 
 	public function updateUserBasicInfo($UserIDX,$Parent_Gender,$Parent_Marriage,$Child_Gender,$Child_Birthday,$Avatar){
-		$sql = "UPDATE User_Info SET   ";	
+		$sql = " UPDATE User_BasicInfo SET   ";	
 		$params=array();
-		if(!empyt($Parent_Gender)){
-			$sql .= " Parent_Gender = ? " ;
+		if(!empty($Parent_Gender)){
+			$sql .= " Parent_Gender = ? ," ;
 			$params = array_merge($params,array($Parent_Gender));
 		}
-		if(!empyt($Parent_Marriage)){
-			$sql .= " Parent_Marriage = ? " ;
+		if(!empty($Parent_Marriage)){
+			$sql .= " Parent_Marriage = ? ," ;
 			$params = array_merge($params,array($Parent_Marriage));
 		}
-		if(!empyt($Child_Gender)){
-			$sql .= " Child_Gender = ? " ;
+		if(!empty($Child_Gender)){
+			$sql .= " Child_Gender = ? ," ;
 			$params = array_merge($params,array($Child_Gender));
 		}
-		if(!empyt($Child_Birthday)){
-			$sql .= " Child_Birthday = ? " ;
+		if(!empty($Child_Birthday)){
+			$sql .= " Child_Birthday = ? ," ;
 			$params = array_merge($params,array($Child_Birthday));
 		}
-		if(!empyt($Avatar)){
-			$sql .= " Avatar = ? " ;
+		if(!empty($Avatar)){
+			$sql .= " Avatar = ? ," ;
 			$params = array_merge($params,array($Avatar));
 		}
 		
-		$sql .= " ,Update_Time = NOW()  WHERE UserIDX = ?" ;
+		$sql .= " Update_Time = NOW()  WHERE UserIDX = ?" ;
 		$params = array_merge($params,array($UserIDX));
 		return (LunaPdo::GetInstance($this->_PDO_NODE_NAME)->exec_with_prepare($sql,$params)>0);		
 	

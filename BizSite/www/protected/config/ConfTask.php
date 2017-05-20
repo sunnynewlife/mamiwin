@@ -87,6 +87,7 @@ class ConfTask {
 
 		self::ERROR_QUEYR_TASK_DETAIL		=>	"查询任务资料失败",
 		self::ERROR_USER_BASICINFO_ADD		=>	"用户基础资料录入失败" ,
+		self::ERROR_USER_BASICINFO_UPDATE	=>	"用户基础资料编辑失败" ,
 
 		self::ERROR_QUEYR_USER_TASK_LIST		=>	"查询用户任务列表失败",
 		self::ERROR_QUEYR_USER_TASK_DETAIL		=>	"查询用户任务详情失败",
